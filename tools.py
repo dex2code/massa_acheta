@@ -1,7 +1,8 @@
 import aiohttp
+import json
 from loguru import logger
-from init import app_config, app_results, telegram_queue
-
+from app_init import app_config, app_results, telegram_queue, results_obj
+from sys import exit as sys_exit
 
 
 @logger.catch
@@ -72,6 +73,36 @@ async def get_nodes_text() -> str:
         return "⭕ Nodes list is emtpy.\n\n➡ Use /help to learn how to add a node to watch."
     else:
         return nodes_list.rstrip()
+
+
+
+
+@logger.catch
+def save_results() -> bool:
+    logger.debug(f"-> Enter def")
+
+    composed_results = {}
+
+    for node_name in app_results:
+        composed_results[node_name] = {}
+        composed_results[node_name]['url'] = app_results[node_name]['url']
+        composed_results[node_name]['wallets'] = {}
+        for wallet_address in app_results[node_name]['wallets']:
+            composed_results[node_name]['wallets'][wallet_address] = {}
+
+    with open(results_obj, "w") as output_results:
+
+        try:
+            json.dump(fp=output_results, obj=composed_results, indent=4)
+        
+        except Exception as E:
+            logger.critical(f"Cannot save app_results into '{results_obj}' file: ({str(E)})")
+            return 1
+        
+        else:
+            logger.info(f"Successfully saved app_results into '{results_obj}' file!")
+            return 0
+
 
 
 

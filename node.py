@@ -1,4 +1,4 @@
-from init import app_results
+from app_init import app_results
 from loguru import logger
 from tools import send_telegram_message, pull_node_api
 from time import time as t_now

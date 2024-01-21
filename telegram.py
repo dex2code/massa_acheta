@@ -1,6 +1,6 @@
 from loguru import logger
 import asyncio
-from init import telegram_queue, tg_bot, app_config
+from app_init import telegram_queue, tg_bot, app_config
 from aiogram.enums import ParseMode
 
 

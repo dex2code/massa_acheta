@@ -1,10 +1,10 @@
 import asyncio
 import json
 from loguru import logger
-from init import app_results, app_config
+from app_init import app_results, app_config
 from node import check_node
 from wallet import check_wallet
-
+from tools import save_results
 
 
 
@@ -30,6 +30,8 @@ async def monitor() -> None:
 
         logger.info(f"Sleeping for {app_config['service']['loop_timeout_sec']} seconds...")
         await asyncio.sleep(delay=app_config['service']['loop_timeout_sec'])
+
+
 
 
 

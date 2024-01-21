@@ -8,7 +8,7 @@ from aiogram import types
 from aiogram.filters import CommandStart
 from aiogram.types import Message
 
-from init import app_config, app_results, tg_dp, tg_bot
+from app_init import app_config, app_results, tg_dp, tg_bot
 from tools import send_telegram_message, get_nodes_text
 from remote import monitor as remote_monitor
 from telegram import operate_telegram_queue

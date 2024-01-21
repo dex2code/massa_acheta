@@ -1,5 +1,5 @@
 from loguru import logger
-from init import app_results
+from app_init import app_results
 from tools import pull_node_api, send_telegram_message
 from time import time as t_now
 import json
