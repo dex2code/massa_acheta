@@ -9,7 +9,7 @@ async def pull_node_api(
         api_url: str="",
         api_header: object={"content-type": "application/json"},
         api_payload: object={},
-        api_timeout: int=app_config['service']['probe_timeout_seconds']) -> object:
+        api_timeout: int=app_config['service']['probe_timeout_sec']) -> object:
     logger.debug(f"-> Enter def")
 
     api_timeout = aiohttp.ClientTimeout(total=api_timeout)

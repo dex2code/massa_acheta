@@ -36,7 +36,7 @@ async def echo_handler(message: types.Message) -> None:
 async def main() -> None:
     logger.debug(f"-> Enter def")
 
-    await send_telegram_message(message_text=f"🔆 Service successfully started to watch the following nodes:\n\n<pre>{await get_nodes_text()}</pre>\n\n🐌 Main loop delay: <b>{app_config['service']['loop_timeout_seconds']}</b> seconds\n📶 Probe timeout: <b>{app_config['service']['probe_timeout_seconds']}</b> seconds\n")
+    await send_telegram_message(message_text=f"🔆 Service successfully started to watch the following nodes:\n\n<pre>{await get_nodes_text()}</pre>\n\n🐌 Main loop delay: <b>{app_config['service']['loop_timeout_sec']}</b> seconds\n📶 Probe timeout: <b>{app_config['service']['probe_timeout_sec']}</b> seconds\n")
 
     loop = asyncio.get_event_loop()
     loop.create_task(operate_telegram_queue())
@@ -66,7 +66,7 @@ if __name__ == "__main__":
             app_results[node_name]['wallets'][wallet_addr]['last_result'] = {}
 
     logger.debug(f"Results file loaded successfully:\n {json.dumps(obj=app_results, indent=4)}")
-    logger.info(f"Watching nodes with {app_config['service']['loop_timeout_seconds']} seconds loop delay and {app_config['service']['probe_timeout_seconds']} seconds probe timeout.")
+    logger.info(f"Watching nodes with {app_config['service']['loop_timeout_sec']} seconds loop delay and {app_config['service']['probe_timeout_sec']} seconds probe timeout.")
     logger.info(f"*** Service successfully started!")
 
     asyncio.run(main())

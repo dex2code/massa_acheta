@@ -10,5 +10,5 @@ telegram['sending_delay_sec'] = 3
 telegram['sending_timeout_sec'] = 5
 
 
-service['loop_timeout_seconds'] = 600
-service['probe_timeout_seconds'] = 15
+service['loop_timeout_sec'] = 600
+service['probe_timeout_sec'] = 15
