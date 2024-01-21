@@ -25,7 +25,7 @@ async def operate_telegram_queue() -> None:
             logger.error(f"Could not sent telegram message to chat_id '{app_config['telegram']['chat_id']}': ({str(E)})")
         
         else:
-            logger.info(f"Successfully sent message to chat_id '{app_config['telegram']['chat_id']}'")
+            logger.info(f"Successfully sent message to chat_id '{app_config['telegram']['chat_id']}' ({number_unsent_messages} unsent message(s) in queue)")
         
         finally:
             telegram_queue.popleft()
