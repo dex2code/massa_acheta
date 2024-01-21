@@ -1,15 +1,15 @@
-from app_init import app_results
 from loguru import logger
-from tools import send_telegram_message, pull_node_api
-from time import time as t_now
+
 import json
+from time import time as t_now
 
-
+from app_init import app_results
+from tools import send_telegram_message, pull_node_api
 
 
 @logger.catch
 async def check_node(node_name: str="") -> None:
-    logger.debug(f"-> Enter def")
+    logger.debug(f"-> Enter Def")
 
     payload = json.dumps({
         "id": 0,

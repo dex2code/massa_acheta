@@ -1,15 +1,15 @@
 from loguru import logger
+
+import json
+from time import time as t_now
+
 from app_init import app_results
 from tools import pull_node_api, send_telegram_message
-from time import time as t_now
-import json
-
-
 
 
 @logger.catch
 async def check_wallet(node_name: str="", wallet_addr: str="") -> None:
-    logger.debug(f"-> Enter def")
+    logger.debug(f"-> Enter Def")
 
     if app_results[node_name]['last_status'] != True:
         logger.warning(f"Will not watch wallet '{wallet_addr}' on node '{node_name}' because of its offline")

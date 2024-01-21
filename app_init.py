@@ -1,11 +1,10 @@
+from loguru import logger
+
 import json
 from pathlib import Path
 from sys import exit as sys_exit
-from loguru import logger
-
 from aiogram import Dispatcher, Bot
 from aiogram.enums import ParseMode
-
 from collections import deque
 
 from dev_config import *
@@ -21,6 +20,7 @@ results_path = "dev_results.json"
 #results_path = "app_results.json"
 
 results_obj = Path(results_path)
+
 
 app_results = {}
 

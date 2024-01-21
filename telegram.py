@@ -1,13 +1,14 @@
 from loguru import logger
+
 import asyncio
-from app_init import telegram_queue, tg_bot, app_config
 from aiogram.enums import ParseMode
 
-
+from app_init import telegram_queue, tg_bot, app_config
 
 
 @logger.catch
 async def operate_telegram_queue() -> None:
+    logger.debug("-> Enter Def")
 
     while True:
         await asyncio.sleep(delay=app_config['telegram']['sending_delay_sec'])

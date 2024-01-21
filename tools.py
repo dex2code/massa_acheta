@@ -1,9 +1,10 @@
+from loguru import logger
+
 import aiohttp
 import json
-from loguru import logger
+from aiofiles import open as aiof_open
+
 from app_init import app_config, app_results, telegram_queue, results_obj
-from sys import exit as sys_exit
-import aiofiles as aiof
 
 
 @logger.catch
@@ -13,7 +14,7 @@ async def pull_node_api(
         api_payload: object={},
         api_session_timeout: int=app_config['service']['http_session_timeout_sec'],
         api_probe_timeout: int=app_config['service']['http_probe_timeout_sec']) -> object:
-    logger.debug(f"-> Enter def")
+    logger.debug(f"-> Enter Def")
 
     api_session_timeout = aiohttp.ClientTimeout(total=api_session_timeout)
     api_probe_timeout = aiohttp.ClientTimeout(total=api_probe_timeout)
@@ -44,7 +45,7 @@ async def pull_node_api(
 
 @logger.catch
 async def send_telegram_message(message_text: str="") -> None:
-    logger.debug(f"-> Enter def")
+    logger.debug(f"-> Enter Def")
 
     try:
         telegram_queue.append(message_text)
@@ -62,7 +63,7 @@ async def send_telegram_message(message_text: str="") -> None:
 
 @logger.catch
 async def get_nodes_text() -> str:
-    logger.debug(f"-> Enter def")
+    logger.debug(f"-> Enter Def")
 
     nodes_list = ""
     for node_name in app_results:
@@ -80,7 +81,7 @@ async def get_nodes_text() -> str:
 
 @logger.catch
 async def save_results() -> bool:
-    logger.debug(f"-> Enter def")
+    logger.debug(f"-> Enter Def")
 
     composed_results = {}
 
@@ -91,7 +92,7 @@ async def save_results() -> bool:
         for wallet_address in app_results[node_name]['wallets']:
             composed_results[node_name]['wallets'][wallet_address] = {}
 
-    async with aiof.open(results_obj, "w") as output_results:
+    async with aiof_open(results_obj, "w") as output_results:
 
         try:
             await output_results.write(json.dumps(obj=composed_results, indent=4))
@@ -99,12 +100,11 @@ async def save_results() -> bool:
                     
         except Exception as E:
             logger.critical(f"Cannot save app_results into '{results_obj}' file: ({str(E)})")
-            return 1
+            return False
         
         else:
             logger.info(f"Successfully saved app_results into '{results_obj}' file!")
-            return 0
-
+            return True
 
 
 
