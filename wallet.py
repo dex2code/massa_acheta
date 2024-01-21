@@ -2,8 +2,8 @@ from loguru import logger
 from init import app_results
 from tools import pull_node_api, send_telegram_message
 from time import time as t_now
-
 import json
+
 
 
 
@@ -89,3 +89,9 @@ async def check_wallet(node_name: str="", wallet_addr: str="") -> None:
         logger.debug(f"API result for wallet '{wallet_addr}' on node '{node_name}':\n{json.dumps(obj=wallet_response, indent=4)}")
 
     return
+
+
+
+
+if __name__ == "__main__":
+    pass

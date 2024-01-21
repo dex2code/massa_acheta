@@ -8,21 +8,19 @@ from aiogram.enums import ParseMode
 
 from collections import deque
 
-telegram_queue = deque()
-
-
 from dev_config import *
 # from app_config import *
 
+
 app_config = {}
-app_config['telegram'] = telegram
-app_config['service'] = service
+app_config['telegram'] = config_telegram
+app_config['service'] = config_service
+
 
 results_path = "dev_results.json"
 #results_path = "app_results.json"
 
 results_obj = Path(results_path)
-
 
 app_results = {}
 
@@ -46,8 +44,11 @@ with open(file=results_obj, mode="r") as input_results:
         logger.info(f"Successfully loaded results from '{results_obj}' file!")
 
 
+telegram_queue = deque()
 tg_dp = Dispatcher()
-tg_bot = Bot(token=telegram['key'], parse_mode=ParseMode.HTML)
+tg_bot = Bot(token=app_config['telegram']['key'], parse_mode=ParseMode.HTML)
+
+
 
 
 if __name__ == "__main__":

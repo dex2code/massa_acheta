@@ -14,11 +14,15 @@ from remote import monitor as remote_monitor
 from telegram import operate_telegram_queue
 
 
+
+
 @tg_dp.message(CommandStart())
 @logger.catch
 async def command_start_handler(message: Message) -> None:
     logger.debug(f"-> Enter def")
     await message.answer(f"Hello, {message.from_user.full_name}!")
+
+
 
 
 @tg_dp.message()
@@ -30,6 +34,8 @@ async def echo_handler(message: types.Message) -> None:
         await message.send_copy(chat_id=message.chat.id)
     except TypeError:
         await message.answer("Nice try!")
+
+
 
 
 @logger.catch

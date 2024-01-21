@@ -1,8 +1,9 @@
 from loguru import logger
-
 import asyncio
 from init import telegram_queue, tg_bot, app_config
 from aiogram.enums import ParseMode
+
+
 
 
 @logger.catch
@@ -28,3 +29,9 @@ async def operate_telegram_queue() -> None:
         
         finally:
             telegram_queue.popleft()
+
+
+
+
+if __name__ == "__main__":
+    pass
