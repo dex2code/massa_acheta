@@ -6,42 +6,48 @@ from loguru import logger
 from aiogram import Dispatcher, Bot
 from aiogram.enums import ParseMode
 
+from collections import deque
+
+telegram_queue = deque()
 
 
+from dev_config import *
+# from app_config import *
 
-settings_path = ".settings.json"
-settings_obj = Path(settings_path)
+app_config = {}
+app_config['telegram'] = telegram
+app_config['service'] = service
+
+results_path = "dev_results.json"
+#results_path = "app_results.json"
+
+results_obj = Path(results_path)
 
 
+app_results = {}
 
-app_settings = {}
-
-if not settings_obj.exists():
-    logger.critical(f"No settings file '{settings_obj}' exists.")
+if not results_obj.exists():
+    logger.critical(f"No results file '{results_obj}' exists.")
     sys_exit(1)
 else:
-    logger.info(f"Loading settings from existing '{settings_obj}' file")
+    logger.info(f"Loading results from existing '{results_obj}' file...")
 
 
-with open(file=settings_obj, mode="r") as input_settings:
+with open(file=results_obj, mode="r") as input_results:
 
     try:
-        app_settings = json.load(fp=input_settings)
+        app_results = json.load(fp=input_results)
 
     except Exception as E:
-        logger.critical(f"Cannot load settings from '{settings_obj}': ({str(E)})")
+        logger.critical(f"Cannot load results from '{results_obj}': ({str(E)})")
         sys_exit(1)
 
     else:
-        logger.info(f"Successfully loaded settings from '{settings_obj}' file!")
-
-
+        logger.info(f"Successfully loaded results from '{results_obj}' file!")
 
 
 tg_dp = Dispatcher()
-tg_bot = Bot(token=app_settings['telegram']['key'], parse_mode=ParseMode.HTML)
-
-
+tg_bot = Bot(token=telegram['key'], parse_mode=ParseMode.HTML)
 
 
 if __name__ == "__main__":

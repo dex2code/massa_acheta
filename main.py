@@ -1,5 +1,5 @@
 from loguru import logger
-logger.add("main.log", format="\"{time}\", \"{level}\", \"{file}:{line}\", \"{module}:{function}\", \"{message}\"", level="DEBUG", rotation="1 week", compression="zip")
+logger.add("main.log", format="\"{time}\", \"{level}\", \"{file}:{line}\", \"{module}:{function}\", \"{message}\"", level="INFO", rotation="1 week", compression="zip")
 
 import asyncio
 import json
@@ -8,9 +8,10 @@ from aiogram import types
 from aiogram.filters import CommandStart
 from aiogram.types import Message
 
-from init import app_settings, tg_dp, tg_bot
+from init import app_config, app_results, tg_dp, tg_bot
 from tools import send_telegram_message, get_nodes_text
 from remote import monitor as remote_monitor
+from telegram import operate_telegram_queue
 
 
 @tg_dp.message(CommandStart())
@@ -35,9 +36,10 @@ async def echo_handler(message: types.Message) -> None:
 async def main() -> None:
     logger.debug(f"-> Enter def")
 
-    await send_telegram_message(message_text=f"🔆 Service successfully started to watch the following nodes:\n\n<pre>{await get_nodes_text()}</pre>\n\n🐌 Main loop delay: <b>{app_settings['loop_timeout_seconds']}</b> seconds\n")
+    await send_telegram_message(message_text=f"🔆 Service successfully started to watch the following nodes:\n\n<pre>{await get_nodes_text()}</pre>\n\n🐌 Main loop delay: <b>{app_config['service']['loop_timeout_seconds']}</b> seconds\n📶 Probe timeout: <b>{app_config['service']['probe_timeout_seconds']}</b> seconds\n")
 
     loop = asyncio.get_event_loop()
+    loop.create_task(operate_telegram_queue())
     loop.create_task(remote_monitor())
 
     await tg_dp.start_polling(tg_bot)
@@ -48,23 +50,23 @@ async def main() -> None:
 if __name__ == "__main__":
     logger.info(f"*** MASSA Acheta starting service...")
 
-    for node_name in app_settings['nodes']:
-        app_settings['nodes'][node_name]['last_status'] = "unknown"
-        app_settings['nodes'][node_name]['last_update'] = 0
-        app_settings['nodes'][node_name]['last_result'] = {}
+    for node_name in app_results:
+        app_results[node_name]['last_status'] = "unknown"
+        app_results[node_name]['last_update'] = 0
+        app_results[node_name]['last_result'] = {}
 
-        for wallet_addr in app_settings['nodes'][node_name]['wallets']:
-            app_settings['nodes'][node_name]['wallets'][wallet_addr] = {}
-            app_settings['nodes'][node_name]['wallets'][wallet_addr]['final_balance'] = "unknown"
-            app_settings['nodes'][node_name]['wallets'][wallet_addr]['candidate_rolls'] = "unknown"
-            app_settings['nodes'][node_name]['wallets'][wallet_addr]['active_rolls'] = "unknown"
-            app_settings['nodes'][node_name]['wallets'][wallet_addr]['missed_blocks'] = "unknown"
-            app_settings['nodes'][node_name]['wallets'][wallet_addr]['last_status'] = "unknown"
-            app_settings['nodes'][node_name]['wallets'][wallet_addr]['last_update'] = 0
-            app_settings['nodes'][node_name]['wallets'][wallet_addr]['last_result'] = {}
+        for wallet_addr in app_results[node_name]['wallets']:
+            app_results[node_name]['wallets'][wallet_addr] = {}
+            app_results[node_name]['wallets'][wallet_addr]['final_balance'] = 0
+            app_results[node_name]['wallets'][wallet_addr]['candidate_rolls'] = 0
+            app_results[node_name]['wallets'][wallet_addr]['active_rolls'] = 0
+            app_results[node_name]['wallets'][wallet_addr]['missed_blocks'] = 0
+            app_results[node_name]['wallets'][wallet_addr]['last_status'] = "unknown"
+            app_results[node_name]['wallets'][wallet_addr]['last_update'] = 0
+            app_results[node_name]['wallets'][wallet_addr]['last_result'] = {}
 
-    logger.debug(f"Settings file loaded successfully:\n {json.dumps(obj=app_settings['nodes'], indent=4)}")
-    logger.info(f"Watching nodes with {app_settings['loop_timeout_seconds']} seconds loop delay.")
+    logger.debug(f"Results file loaded successfully:\n {json.dumps(obj=app_results, indent=4)}")
+    logger.info(f"Watching nodes with {app_config['service']['loop_timeout_seconds']} seconds loop delay and {app_config['service']['probe_timeout_seconds']} seconds probe timeout.")
     logger.info(f"*** Service successfully started!")
 
     asyncio.run(main())

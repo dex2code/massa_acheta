@@ -1,7 +1,6 @@
 import aiohttp
 from loguru import logger
-from aiogram.enums import ParseMode
-from init import app_settings, tg_bot
+from init import app_config, app_results, telegram_queue
 
 
 
@@ -10,7 +9,7 @@ async def pull_node_api(
         api_url: str="",
         api_header: object={"content-type": "application/json"},
         api_payload: object={},
-        api_timeout: int=app_settings['probe_timeout_seconds']) -> object:
+        api_timeout: int=app_config['service']['probe_timeout_seconds']) -> object:
     logger.debug(f"-> Enter def")
 
     api_timeout = aiohttp.ClientTimeout(total=api_timeout)
@@ -43,13 +42,13 @@ async def send_telegram_message(message_text: str="") -> None:
     logger.debug(f"-> Enter def")
 
     try:
-        await tg_bot.send_message(chat_id=app_settings['telegram']['chat_id'], text=f"{app_settings['telegram']['service_nickname']}:\n\n{message_text}", parse_mode=ParseMode.HTML)
+        telegram_queue.append(message_text)
     
     except Exception as E:
-        logger.warning(f"Cannot send telegram message to chat_id '{app_settings['telegram']['chat_id']}': ({str(E)})")
+        logger.error(f"Cannot add telegram message to queue : ({str(E)})")
 
     else:
-        logger.info(f"Successfully sent telegram message to chat_id '{app_settings['telegram']['chat_id']}'")
+        logger.info(f"Successfully added telegram message to queue!")
 
     return
 
@@ -61,9 +60,9 @@ async def get_nodes_text() -> str:
     logger.debug(f"-> Enter def")
 
     nodes_list = ""
-    for node_name in app_settings['nodes']:
-        node_url = app_settings['nodes'][node_name]['url']
-        node_num_wallets = len(app_settings['nodes'][node_name]['wallets'])
+    for node_name in app_results:
+        node_url = app_results[node_name]['url']
+        node_num_wallets = len(app_results[node_name]['wallets'])
         nodes_list += f" • {node_name}: {node_url} - {node_num_wallets} wallet(s)\n"
 
     if nodes_list == "":
