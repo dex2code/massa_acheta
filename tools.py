@@ -3,6 +3,7 @@ import json
 from loguru import logger
 from app_init import app_config, app_results, telegram_queue, results_obj
 from sys import exit as sys_exit
+import aiofiles as aiof
 
 
 @logger.catch
@@ -78,7 +79,7 @@ async def get_nodes_text() -> str:
 
 
 @logger.catch
-def save_results() -> bool:
+async def save_results() -> bool:
     logger.debug(f"-> Enter def")
 
     composed_results = {}
@@ -90,11 +91,12 @@ def save_results() -> bool:
         for wallet_address in app_results[node_name]['wallets']:
             composed_results[node_name]['wallets'][wallet_address] = {}
 
-    with open(results_obj, "w") as output_results:
+    async with aiof.open(results_obj, "w") as output_results:
 
         try:
-            json.dump(fp=output_results, obj=composed_results, indent=4)
-        
+            await output_results.write(json.dumps(obj=composed_results, indent=4))
+            await output_results.flush()
+                    
         except Exception as E:
             logger.critical(f"Cannot save app_results into '{results_obj}' file: ({str(E)})")
             return 1

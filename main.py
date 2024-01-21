@@ -44,10 +44,10 @@ async def main() -> None:
 
     await send_telegram_message(message_text=f"🔆 Service successfully started to watch the following nodes:\n\n<pre>{await get_nodes_text()}</pre>\n\n🐌 Main loop delay: <b>{app_config['service']['loop_timeout_sec']}</b> seconds\n📶 Probe timeout: <b>{app_config['service']['http_probe_timeout_sec']}</b> seconds\n")
 
-    loop = asyncio.get_event_loop()
-    loop.create_task(operate_telegram_queue())
-    loop.create_task(remote_monitor())
-
+    aio_loop = asyncio.get_event_loop()
+    aio_loop.create_task(operate_telegram_queue())
+    aio_loop.create_task(remote_monitor())
+    
     await tg_dp.start_polling(tg_bot)
 
 
