@@ -27,7 +27,7 @@ async def monitor() -> None:
         await asyncio.gather(*wallet_coros)
 
         logger.debug(f"Current app_results:\n{json.dumps(obj=app_results, indent=4)}")
-        await save_results()
+        # await save_results()
 
         logger.info(f"Sleeping for {app_config['service']['loop_timeout_sec']} seconds...")
         await asyncio.sleep(delay=app_config['service']['loop_timeout_sec'])
