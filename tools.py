@@ -9,17 +9,20 @@ async def pull_node_api(
         api_url: str="",
         api_header: object={"content-type": "application/json"},
         api_payload: object={},
-        api_timeout: int=app_config['service']['probe_timeout_sec']) -> object:
+        api_session_timeout: int=app_config['service']['http_session_timeout_sec'],
+        api_probe_timeout: int=app_config['service']['http_probe_timeout_sec']) -> object:
     logger.debug(f"-> Enter def")
 
-    api_timeout = aiohttp.ClientTimeout(total=api_timeout)
-    async with aiohttp.ClientSession() as session:
+    api_session_timeout = aiohttp.ClientTimeout(total=api_session_timeout)
+    api_probe_timeout = aiohttp.ClientTimeout(total=api_probe_timeout)
+
+    async with aiohttp.ClientSession(timeout=api_session_timeout) as session:
 
         try:
             api_response = await session.post(url=api_url,
                                               headers=api_header,
                                               data=api_payload,
-                                              timeout=api_timeout)
+                                              timeout=api_probe_timeout)
             api_response_obj = await api_response.json()
             api_response_result = api_response_obj['result']
 
