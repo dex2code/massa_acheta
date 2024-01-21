@@ -4,6 +4,8 @@ lib64/
 lib64
 include/
 pyvenv.cfg
+dev_config.py
+dev_results.json
 
 
 # Byte-compiled / optimized / DLL files
