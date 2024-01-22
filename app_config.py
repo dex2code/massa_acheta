@@ -18,7 +18,7 @@ config_telegram['service_nickname'] = "🦗 <b>MASSA</b> Acheta"
 config_telegram['sending_delay_sec'] = 3
 config_telegram['sending_timeout_sec'] = 5
 
-config_service['loop_timeout_sec'] = 600
+config_service['main_loop_period_sec'] = 600
 config_service['http_probe_timeout_sec'] = 60
 config_service['http_session_timeout_sec'] = 300
 
