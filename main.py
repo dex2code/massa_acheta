@@ -10,20 +10,22 @@ from aiogram.types import Message
 from app_init import app_config, app_results, tg_dp, tg_bot
 from tools import send_telegram_message, get_nodes_text
 from remote import monitor as remote_monitor
+from heartbeat import planner as heartbeat_planner
 from telegram import operate_telegram_queue
 
 
 @tg_dp.message(CommandStart())
 @logger.catch
 async def command_start_handler(message: Message) -> None:
-    logger.debug(f"-> Enter def")
+    logger.debug(f"-> Enter Def")
+
     await message.answer(f"Hello, {message.from_user.full_name}!")
 
 
 @tg_dp.message()
 @logger.catch
 async def echo_handler(message: types.Message) -> None:
-    logger.debug(f"-> Enter def")
+    logger.debug(f"-> Enter Def")
 
     try:
         await message.send_copy(chat_id=message.chat.id)
@@ -33,13 +35,14 @@ async def echo_handler(message: types.Message) -> None:
 
 @logger.catch
 async def main() -> None:
-    logger.debug(f"-> Enter def")
+    logger.debug(f"-> Enter Def")
 
-    await send_telegram_message(message_text=f"🔆  Service successfully started to watch the following nodes:\n\n<pre>{await get_nodes_text()}</pre>\n\n❓  Use /help to learn how to manage settings.\n\n🐌  Main loop delay: <b>{app_config['service']['loop_timeout_sec']}</b> seconds\n📶  Probe timeout: <b>{app_config['service']['http_probe_timeout_sec']}</b> seconds")
+    await send_telegram_message(message_text=f"🔆 Service successfully started to watch the following nodes:\n\n<pre>{await get_nodes_text()}</pre>\n\n❓ Use /help to learn how to manage settings.\n\n⏳ Main loop delay: <b>{app_config['service']['loop_timeout_sec']}</b> seconds\n⚡ Probe timeout: <b>{app_config['service']['http_probe_timeout_sec']}</b> seconds")
 
     aio_loop = asyncio.get_event_loop()
     aio_loop.create_task(operate_telegram_queue())
     aio_loop.create_task(remote_monitor())
+    aio_loop.create_task(heartbeat_planner())
 
     await tg_dp.start_polling(tg_bot)
 

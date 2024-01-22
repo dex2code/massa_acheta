@@ -45,7 +45,7 @@ async def send_telegram_message(message_text: str="") -> None:
     logger.debug(f"-> Enter Def")
 
     try:
-        telegram_queue.append(message_text)
+        telegram_queue.append(f"{app_config['telegram']['service_nickname']}\n\n{message_text}")
     
     except Exception as E:
         logger.error(f"Cannot add telegram message to queue : ({str(E)})")
