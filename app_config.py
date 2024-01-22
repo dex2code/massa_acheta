@@ -19,5 +19,5 @@ config_telegram['sending_delay_sec'] = 3
 config_telegram['sending_timeout_sec'] = 5
 
 config_service['loop_timeout_sec'] = 600
-config_service['http_probe_timeout_sec'] = 15
-config_service['http_session_timeout_sec'] = 60
+config_service['http_probe_timeout_sec'] = 60
+config_service['http_session_timeout_sec'] = 300
