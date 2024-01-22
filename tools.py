@@ -22,12 +22,9 @@ async def pull_node_api(
     async with aiohttp.ClientSession(timeout=api_session_timeout) as session:
 
         try:
-            api_response = await session.post(url=api_url,
-                                              headers=api_header,
-                                              data=api_payload,
-                                              timeout=api_probe_timeout)
-            api_response_obj = await api_response.json()
-            api_response_result = api_response_obj['result']
+            async with session.post(url=api_url, headers=api_header, data=api_payload, timeout=api_probe_timeout) as api_response:
+                api_response_obj = await api_response.json()
+                api_response_result = api_response_obj['result']
 
         except Exception as E:
             logger.error(f"Exception in API request for URL '{api_url}': ({str(E)})")
@@ -72,7 +69,7 @@ async def get_nodes_text() -> str:
         nodes_list += f" • {node_name}: {node_url} - {node_num_wallets} wallet(s)\n"
 
     if nodes_list == "":
-        return "⭕ Nodes list is emtpy.\n\n➡ Use /help to learn how to add a node to watch."
+        return "⭕  Node list is empty."
     else:
         return nodes_list.rstrip()
 

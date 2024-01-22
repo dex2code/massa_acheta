@@ -48,7 +48,7 @@ async def check_wallet(node_name: str="", wallet_addr: str="") -> None:
 
         if app_results[node_name]['wallets'][wallet_addr]['last_status'] != False:
             app_results[node_name]['wallets'][wallet_addr]['last_status'] = False
-            await send_telegram_message(message_text=f"🙀 Node '<b>{node_name}</b>': Cannot get info for wallet:\n\n<pre>{wallet_addr}</pre>\n\n<code>💻  {wallet_response}</code>\n\n⚠ Check wallet address or node settings.")
+            await send_telegram_message(message_text=f"🏠 Node '<b>{node_name}</b>' ({app_results[node_name]['url']})\n\n🙀 Cannot get info for wallet:\n\n<pre>{wallet_addr}</pre>\n\n<code>💻 {wallet_response}</code>\n\n⚠ Check wallet address or node settings.")
 
     else:
         logger.info(f"Got wallet '{wallet_addr}' on node '{node_name}' info successfully!")
@@ -57,32 +57,32 @@ async def check_wallet(node_name: str="", wallet_addr: str="") -> None:
 
         if app_results[node_name]['wallets'][wallet_addr]['last_status'] != True:
             app_results[node_name]['wallets'][wallet_addr]['last_status'] = True
-            await send_telegram_message(message_text=f"👛 Node '<b>{node_name}</b>': Successfully got info for wallet:\n\n<pre>{wallet_addr}</pre>\n\n<pre> • Final balance: {wallet_final_balance}\n • Candidate rolls: {wallet_candidate_rolls}\n • Active rolls: {wallet_active_rolls}\n • Missed blocks: {wallet_missed_blocks}</pre>")
+            await send_telegram_message(message_text=f"🏠 Node '<b>{node_name}</b>' ({app_results[node_name]['url']})\n\n👛 Successfully got info for wallet:\n\n<pre>{wallet_addr}</pre>\n\n👁 Current values:\n\n<pre> • Final balance: {wallet_final_balance}\n • Candidate rolls: {wallet_candidate_rolls}\n • Active rolls: {wallet_active_rolls}\n • Missed blocks: {wallet_missed_blocks}</pre>")
 
         app_results[node_name]['wallets'][wallet_addr]['last_result'] = wallet_result
 
 
         # 1) Check if balance is decreased:
         if wallet_final_balance < app_results[node_name]['wallets'][wallet_addr]['final_balance']:
-            await send_telegram_message(message_text=f"💸 Node '<b>{node_name}</b>': Decreased balance on wallet:\n\n<pre>{wallet_addr}</pre>\n\nNew final balance:\n\n<pre>{app_results[node_name]['wallets'][wallet_addr]['final_balance']} → {wallet_final_balance}</pre>")
+            await send_telegram_message(message_text=f"🏠 Node '<b>{node_name}</b>' ({app_results[node_name]['url']})\n\n💸 Decreased balance on wallet:\n\n<pre>{wallet_addr}</pre>\n\n👁 New final balance:\n\n<pre>{app_results[node_name]['wallets'][wallet_addr]['final_balance']} → {wallet_final_balance}</pre>")
         app_results[node_name]['wallets'][wallet_addr]['final_balance'] = wallet_final_balance
 
 
         # 2) Check if candidate rolls changed:
         if wallet_candidate_rolls != app_results[node_name]['wallets'][wallet_addr]['candidate_rolls']:
-            await send_telegram_message(message_text=f"⚙ Node '<b>{node_name}</b>': Candidate rolls changed on wallet:\n\n<pre>{wallet_addr}</pre>\n\nNew candidate rolls number:\n\n<pre>{app_results[node_name]['wallets'][wallet_addr]['candidate_rolls']} → {wallet_candidate_rolls}</pre>")
+            await send_telegram_message(message_text=f"🏠 Node '<b>{node_name}</b>' ({app_results[node_name]['url']})\n\n⚙ Candidate rolls changed on wallet:\n\n<pre>{wallet_addr}</pre>\n\n👁 New candidate rolls number:\n\n<pre>{app_results[node_name]['wallets'][wallet_addr]['candidate_rolls']} → {wallet_candidate_rolls}</pre>")
         app_results[node_name]['wallets'][wallet_addr]['candidate_rolls'] = wallet_candidate_rolls
 
 
         # 3) Check if active rolls changed:
         if wallet_active_rolls != app_results[node_name]['wallets'][wallet_addr]['active_rolls']:
-            await send_telegram_message(message_text=f"⛽ Node '<b>{node_name}</b>': Active rolls changed on wallet:\n\n<pre>{wallet_addr}</pre>\n\nNew active rolls number:\n\n<pre>{app_results[node_name]['wallets'][wallet_addr]['active_rolls']} → {wallet_active_rolls}</pre>")
+            await send_telegram_message(message_text=f"🏠 Node '<b>{node_name}</b>' ({app_results[node_name]['url']})\n\n⚙ Active rolls changed on wallet:\n\n<pre>{wallet_addr}</pre>\n\n👁 New active rolls number:\n\n<pre>{app_results[node_name]['wallets'][wallet_addr]['active_rolls']} → {wallet_active_rolls}</pre>")
         app_results[node_name]['wallets'][wallet_addr]['active_rolls'] = wallet_active_rolls
 
 
         # 4) Check if new blocks missed:
         if wallet_missed_blocks > app_results[node_name]['wallets'][wallet_addr]['missed_blocks']:
-            await send_telegram_message(message_text=f"🥊 Node '<b>{node_name}</b>': New missed blocks on wallet:\n\n<pre>{wallet_addr}</pre>\n\nBlocks missed in last cycle:\n\n<pre>{wallet_last_cycle_missed_blocks}</pre>")
+            await send_telegram_message(message_text=f"🏠 Node '<b>{node_name}</b>' ({app_results[node_name]['url']})\n\n🥊 New missed blocks on wallet:\n\n<pre>{wallet_addr}</pre>\n\n👁 Blocks missed in last cycle:\n\n<pre>{wallet_last_cycle_missed_blocks}</pre>")
         app_results[node_name]['wallets'][wallet_addr]['missed_blocks'] = wallet_missed_blocks
 
     finally:
