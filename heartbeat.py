@@ -10,6 +10,8 @@ from tools import send_telegram_message
 async def planner() -> None:
     logger.debug(f"-> Enter Def")
 
+    global app_results
+
     while True:
 
         await asyncio.sleep(

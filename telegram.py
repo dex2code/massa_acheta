@@ -10,6 +10,8 @@ from app_init import telegram_queue, tg_bot, app_config
 async def operate_telegram_queue() -> None:
     logger.debug("-> Enter Def")
 
+    global telegram_queue
+
     while True:
         await asyncio.sleep(delay=app_config['telegram']['sending_delay_sec'])
 

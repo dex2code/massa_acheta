@@ -11,6 +11,8 @@ from tools import send_telegram_message, pull_node_api
 async def check_node(node_name: str="") -> None:
     logger.debug(f"-> Enter Def")
 
+    global app_results
+
     payload = json.dumps({
         "id": 0,
         "jsonrpc": "2.0",

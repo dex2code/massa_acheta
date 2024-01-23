@@ -24,18 +24,22 @@ async def pull_node_api(
         try:
             async with session.post(url=api_url, headers=api_header, data=api_payload, timeout=api_probe_timeout) as api_response:
                 api_response_obj = await api_response.json()
-                api_response_result = api_response_obj['result']
+            
+            api_response_result = api_response_obj['result']
 
         except Exception as E:
             logger.error(f"Exception in API request for URL '{api_url}': ({str(E)})")
             api_response_result = {"error": f"Exception: ({str(E)})"}
 
         else:
-            if api_response.status != 200:
+            if api_response.status == 200:
+                logger.info(f"Successfully pulled result from API '{api_url}'")
+            else:
                 logger.error(f"API URL '{api_url}' response status error: (HTTP {api_response.status})")
                 api_response_result = {"error": f"HTTP Error: ({api_response.status})"}
 
-    return api_response_result
+        finally:
+            return api_response_result
 
 
 
@@ -43,6 +47,8 @@ async def pull_node_api(
 @logger.catch
 async def send_telegram_message(message_text: str="") -> None:
     logger.debug(f"-> Enter Def")
+
+    global telegram_queue
 
     try:
         telegram_queue.append(f"{app_config['telegram']['service_nickname']}\n\n{message_text}")
@@ -102,6 +108,36 @@ async def save_results() -> bool:
         else:
             logger.info(f"Successfully saved app_results into '{results_obj}' file!")
             return True
+
+
+
+
+@logger.catch
+async def get_latest_massa_release(github_api_url: str=app_config['service']['github_api_url']) -> object:
+    logger.debug("-> Enter Def")
+
+    async with aiohttp.ClientSession() as session:
+
+        try:
+            async with session.get(url=github_api_url) as github_response:
+                github_response_obj = await github_response.json()
+            
+            latest_release = github_response_obj['name']
+            github_response_result = {"result": f"{latest_release}"}
+
+        except Exception as E:
+            logger.error(f"Exception in Github API request: ({str(E)})")
+            github_response_result = {"error": f"Exception: ({str(E)})"}
+
+        else:
+            if github_response.status == 200:
+                logger.info(f"Latest MASSA release version: '{latest_release}'")
+            else:
+                logger.error(f"Github API HTTP error: (HTTP {github_response.status})")
+                github_response_result = {"error": f"HTTP Error: ({github_response.status})"}
+        
+        finally:
+            return github_response_result
 
 
 

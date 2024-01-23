@@ -12,14 +12,17 @@ config_telegram['key'] = ""
 config_telegram['chat_id'] = ""
 
 
-
-
-config_telegram['service_nickname'] = "🦗 <b>MASSA</b> Acheta"
+config_telegram['service_nickname'] = "⪻ MASSA 🦗 ᗩcheta ⪼"
 config_telegram['sending_delay_sec'] = 3
 config_telegram['sending_timeout_sec'] = 5
+
+
+
 
 config_service['main_loop_period_sec'] = 600
 config_service['http_probe_timeout_sec'] = 60
 config_service['http_session_timeout_sec'] = 300
 
 config_service['heartbeat_period_hours'] = 4
+
+config_service['github_api_url'] = "https://api.github.com/repos/massalabs/massa/releases/latest"

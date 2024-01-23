@@ -11,6 +11,8 @@ from tools import pull_node_api, send_telegram_message
 async def check_wallet(node_name: str="", wallet_addr: str="") -> None:
     logger.debug(f"-> Enter Def")
 
+    global app_results
+
     if app_results[node_name]['last_status'] != True:
         logger.warning(f"Will not watch wallet '{wallet_addr}' on node '{node_name}' because of its offline")
         return
