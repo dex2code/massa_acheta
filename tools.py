@@ -3,8 +3,9 @@ from loguru import logger
 import aiohttp
 import json
 from aiofiles import open as aiof_open
+from aiogram import html
 
-from app_init import app_config, app_results, telegram_queue, results_obj
+from app_globals import app_config, app_results, results_obj
 
 
 @logger.catch
@@ -45,45 +46,7 @@ async def pull_node_api(
 
 
 @logger.catch
-async def send_telegram_message(message_text: str="") -> None:
-    logger.debug(f"-> Enter Def")
-
-    global telegram_queue
-
-    try:
-        telegram_queue.append(f"{app_config['telegram']['service_nickname']}\n\n{message_text}")
-    
-    except Exception as E:
-        logger.error(f"Cannot add telegram message to queue : ({str(E)})")
-
-    else:
-        logger.info(f"Successfully added telegram message to queue!")
-
-    return
-
-
-
-
-@logger.catch
-async def get_nodes_text() -> str:
-    logger.debug(f"-> Enter Def")
-
-    nodes_list = ""
-    for node_name in app_results:
-        node_url = app_results[node_name]['url']
-        node_num_wallets = len(app_results[node_name]['wallets'])
-        nodes_list += f" • {node_name}: {node_url} - {node_num_wallets} wallet(s)\n"
-
-    if nodes_list == "":
-        return "⭕  Node list is empty."
-    else:
-        return nodes_list.rstrip()
-
-
-
-
-@logger.catch
-async def save_results() -> bool:
+async def save_app_results() -> bool:
     logger.debug(f"-> Enter Def")
 
     composed_results = {}
@@ -108,36 +71,6 @@ async def save_results() -> bool:
         else:
             logger.info(f"Successfully saved app_results into '{results_obj}' file!")
             return True
-
-
-
-
-@logger.catch
-async def get_latest_massa_release(github_api_url: str=app_config['service']['github_api_url']) -> object:
-    logger.debug("-> Enter Def")
-
-    async with aiohttp.ClientSession() as session:
-
-        try:
-            async with session.get(url=github_api_url) as github_response:
-                github_response_obj = await github_response.json()
-            
-            latest_release = github_response_obj['name']
-            github_response_result = {"result": f"{latest_release}"}
-
-        except Exception as E:
-            logger.error(f"Exception in Github API request: ({str(E)})")
-            github_response_result = {"error": f"Exception: ({str(E)})"}
-
-        else:
-            if github_response.status == 200:
-                logger.info(f"Latest MASSA release version: '{latest_release}'")
-            else:
-                logger.error(f"Github API HTTP error: (HTTP {github_response.status})")
-                github_response_result = {"error": f"HTTP Error: ({github_response.status})"}
-        
-        finally:
-            return github_response_result
 
 
 
