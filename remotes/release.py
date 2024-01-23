@@ -25,6 +25,10 @@ async def get_latest_massa_release(github_api_url: str=app_config['service']['gi
             github_response_result = {"error": f"Exception: ({str(E)})"}
 
         else:
+            if latest_release == "":
+                logger.error(f"Got empty string as release version!")
+                github_response_result = {"error": "Empty string"}
+
             if github_response.status != 200:
                 logger.error(f"Github API HTTP error: (HTTP {github_response.status})")
                 github_response_result = {"error": f"HTTP Error: ({github_response.status})"}
@@ -53,10 +57,13 @@ async def release() -> None:
             logger.warning(f"Cannot get latest MASSA release version: ({str(E)}). Result: {release_result}")
 
         else:
-            logger.info(f"Got latest MASSA release version: {latest_release}")
+            logger.info(f"Got latest MASSA release version: '{latest_release}'")
 
-            if latest_release != current_massa_release:
-                await send_telegram_message(message_text=f"📩 New MASSA version released:\n\n<pre>{current_massa_release} → {latest_release}</pre>")
+            if current_massa_release == "":
+                await send_telegram_message(message_text=f"💾 Latest released MASSA version:\n\n<pre>{latest_release}</pre>")
+
+            elif current_massa_release != latest_release:
+                await send_telegram_message(message_text=f"💾 New MASSA version released:\n\n<pre>{current_massa_release} → {latest_release}</pre>")
             
             current_massa_release = latest_release
 

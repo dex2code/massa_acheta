@@ -55,7 +55,7 @@ tg_bot = Bot(token=app_config['telegram']['key'], parse_mode=ParseMode.HTML)
 
 
 
-current_massa_release = "Unknown"
+current_massa_release = ""
 
 
 
