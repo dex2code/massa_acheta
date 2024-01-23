@@ -6,7 +6,6 @@ import json
 from app_globals import app_results, app_config
 from remotes.node import check_node
 from remotes.wallet import check_wallet
-from tools import save_app_results
 
 
 @logger.catch
@@ -29,7 +28,6 @@ async def monitor() -> None:
         await asyncio.gather(*wallet_coros)
 
         logger.debug(f"Current app_results:\n{json.dumps(obj=app_results, indent=4)}")
-        await save_app_results()
 
         logger.info(f"Sleeping for {app_config['service']['main_loop_period_sec']} seconds...")
         await asyncio.sleep(delay=app_config['service']['main_loop_period_sec'])
