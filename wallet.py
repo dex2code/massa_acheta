@@ -44,14 +44,18 @@ async def check_wallet(node_name: str="", wallet_addr: str="") -> None:
     except Exception as E:
         logger.warning(f"Error watching wallet '{wallet_addr}' on '{node_name}': ({str(E)})")
 
-        if app_results[node_name]['wallets'][wallet_addr]['last_status'] != False:
-            await send_telegram_message(message_text=f"🏠 Node '<b>{node_name}</b>' ( {app_results[node_name]['url']} )\n\n🙀 Cannot get info for wallet:\n\n<pre>{wallet_addr}</pre>\n\n<code>💻 {wallet_response}</code>\n\n⚠ Check wallet address or node settings.")
-
         app_results[node_name]['wallets'][wallet_addr]['last_status'] = False
         app_results[node_name]['wallets'][wallet_addr]['last_result'] = wallet_response
 
+        if app_results[node_name]['wallets'][wallet_addr]['last_status'] != False:
+            await send_telegram_message(message_text=f"🏠 Node '<b>{node_name}</b>' ( {app_results[node_name]['url']} )\n\n🙀 Cannot get info for wallet:\n\n<pre>{wallet_addr}</pre>\n\n<code>💻 {wallet_response}</code>\n\n⚠ Check wallet address or node settings.")
+
     else:
         logger.info(f"Got wallet '{wallet_addr}' on node '{node_name}' info successfully!")
+
+        app_results[node_name]['wallets'][wallet_addr]['last_status'] = True
+        app_results[node_name]['wallets'][wallet_addr]['last_update'] = t_now()
+        app_results[node_name]['wallets'][wallet_addr]['last_result'] = wallet_result
 
         if app_results[node_name]['wallets'][wallet_addr]['last_status'] != True:
             await send_telegram_message(message_text=f"🏠 Node '<b>{node_name}</b>' ( {app_results[node_name]['url']} )\n\n👛 Successfully got info for wallet:\n\n<pre>{wallet_addr}</pre>\n\n👁 Current values:\n\n<pre> • Final balance: {wallet_final_balance}\n • Candidate rolls: {wallet_candidate_rolls}\n • Active rolls: {wallet_active_rolls}\n • Missed blocks: {wallet_missed_blocks}</pre>")
@@ -74,19 +78,14 @@ async def check_wallet(node_name: str="", wallet_addr: str="") -> None:
             if wallet_missed_blocks > app_results[node_name]['wallets'][wallet_addr]['missed_blocks']:
                 await send_telegram_message(message_text=f"🏠 Node '<b>{node_name}</b>' ( {app_results[node_name]['url']} )\n\n🥊 New missed blocks on wallet:\n\n<pre>{wallet_addr}</pre>\n\n👁 Blocks missed in last cycle:\n\n<pre>{wallet_last_cycle_missed_blocks}</pre>")
 
-
-        app_results[node_name]['wallets'][wallet_addr]['last_status'] = True
-        app_results[node_name]['wallets'][wallet_addr]['last_update'] = t_now()
-
         app_results[node_name]['wallets'][wallet_addr]['final_balance'] = wallet_final_balance
         app_results[node_name]['wallets'][wallet_addr]['candidate_rolls'] = wallet_candidate_rolls
         app_results[node_name]['wallets'][wallet_addr]['active_rolls'] = wallet_active_rolls
         app_results[node_name]['wallets'][wallet_addr]['missed_blocks'] = wallet_missed_blocks
 
-        app_results[node_name]['wallets'][wallet_addr]['last_result'] = wallet_result
-
     finally:
-        logger.debug(f"API result for wallet '{wallet_addr}' on node '{node_name}':\n{json.dumps(obj=wallet_response, indent=4)}")
+        logger.debug(f"API result for wallet '{wallet_addr}' on node '{node_name}':\n{json.dumps(obj=app_results[node_name]['wallets'][wallet_addr]['last_result'], indent=4)}")
+
 
     return
 
