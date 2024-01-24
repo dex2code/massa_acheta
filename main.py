@@ -15,7 +15,7 @@ from remotes.monitor import monitor as remote_monitor
 
 from telegram.queue import send_telegram_message, operate_telegram_queue
 
-from telegram.handlers import start, view_config, unknown
+from telegram.handlers import start, view_config, cancel, unknown
 
 
 @logger.catch
@@ -31,7 +31,7 @@ async def main() -> None:
     if nodes_list == "": nodes_list = "⭕  Node list is empty."
 
     await send_telegram_message(
-        message_text=f"🔆 Service successfully started to watch the following nodes:\n\n<pre>{nodes_list}</pre>\n\n❓ Use /help to learn how to manage settings.\n\n⏳ Main loop period: <b>{app_config['service']['main_loop_period_sec']}</b> seconds\n⚡ Probe timeout: <b>{app_config['service']['http_probe_timeout_sec']}</b> seconds"
+        message_text=f"🔆 Service successfully started to watch the following nodes:\n\n<pre>{nodes_list}</pre>\n❓ Use /help to learn how to manage settings.\n\n⏳ Main loop period: <b>{app_config['service']['main_loop_period_sec']}</b> seconds\n⚡ Probe timeout: <b>{app_config['service']['http_probe_timeout_sec']}</b> seconds"
     )
 
     aio_loop = asyncio.get_event_loop()
@@ -42,6 +42,7 @@ async def main() -> None:
 
     tg_dp.include_router(start.router)
     tg_dp.include_router(view_config.router)
+    tg_dp.include_router(cancel.router)
     tg_dp.include_router(unknown.router)
 
     await tg_bot.delete_webhook(drop_pending_updates=True)
