@@ -5,7 +5,7 @@ from time import time as t_now
 from aiogram import html
 
 from app_globals import app_results
-from tg_queue import send_telegram_message
+from telegram.queue import send_telegram_message
 from tools import pull_node_api
 
 

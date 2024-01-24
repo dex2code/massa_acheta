@@ -4,7 +4,7 @@ import asyncio
 import aiohttp
 
 from app_globals import app_config, current_massa_release
-from tg_queue import send_telegram_message
+from telegram.queue import send_telegram_message
 
 
 @logger.catch

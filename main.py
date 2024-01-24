@@ -6,10 +6,11 @@ import json
 from aiogram import types as tg_types
 from aiogram.filters import Command
 from aiogram import html
+from aiogram.utils.keyboard import ReplyKeyboardBuilder
 
 
 from app_globals import app_config, app_results, tg_dp, tg_bot
-from tg_queue import send_telegram_message, operate_telegram_queue
+from telegram.queue import send_telegram_message, operate_telegram_queue
 from remotes.heartbeat import heartbeat as remote_heartbeat
 from remotes.release import release as remote_release
 from remotes.monitor import monitor as remote_monitor
@@ -32,8 +33,14 @@ async def view_node_handler(message: tg_types.Message) -> None:
         resize_keyboard=True,
         input_field_placeholder="Tap node"
         )
+    
+    node_keyboard = ReplyKeyboardBuilder()
+    for node_name in app_results:
+        node_keyboard.button(text=node_name)
+    node_keyboard.adjust(len(app_results))
+    
 
-    await message.answer(f"Please select node:", reply_markup=node_keyboard)
+    await message.answer(f"Please select node:", reply_markup=node_keyboard.as_markup(resize_keyboard=True))
 
 
 @logger.catch

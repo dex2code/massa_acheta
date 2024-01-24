@@ -3,7 +3,6 @@ from loguru import logger
 import aiohttp
 import json
 from aiofiles import open as aiof_open
-from aiogram import html
 
 from app_globals import app_config, app_results, results_obj
 
