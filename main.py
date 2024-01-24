@@ -8,12 +8,14 @@ from aiogram.filters import Command
 from aiogram import html
 from aiogram.utils.keyboard import ReplyKeyboardBuilder
 
-
 from app_globals import app_config, app_results, tg_dp, tg_bot
-from telegram.queue import send_telegram_message, operate_telegram_queue
+
 from remotes.heartbeat import heartbeat as remote_heartbeat
 from remotes.release import release as remote_release
 from remotes.monitor import monitor as remote_monitor
+
+from telegram.queue import send_telegram_message, operate_telegram_queue
+from telegram.keyboards import kb_nodes, kb_wallets
 
 
 @tg_dp.message(Command("view_node"))
@@ -23,24 +25,7 @@ async def view_node_handler(message: tg_types.Message) -> None:
 
     if message.chat.id != app_config['telegram']['chat_id']: return
 
-    node_keyboard_list = [[]]
-
-    for node_name in app_results:
-        node_keyboard_list[0].append(tg_types.KeyboardButton(text=node_name))
-    
-    node_keyboard = tg_types.ReplyKeyboardMarkup(
-        keyboard=node_keyboard_list,
-        resize_keyboard=True,
-        input_field_placeholder="Tap node"
-        )
-    
-    node_keyboard = ReplyKeyboardBuilder()
-    for node_name in app_results:
-        node_keyboard.button(text=node_name)
-    node_keyboard.adjust(len(app_results))
-    
-
-    await message.answer(f"Please select node:", reply_markup=node_keyboard.as_markup(resize_keyboard=True))
+    await message.answer(f"Please select node:", reply_markup=kb_wallets(node_name="massa04"))
 
 
 @logger.catch

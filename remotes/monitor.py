@@ -24,8 +24,8 @@ async def monitor() -> None:
             for wallet_addr in app_results[node_name]['wallets']:
                 wallet_coros.add(check_wallet(node_name=node_name, wallet_addr=wallet_addr))
 
-        await asyncio.gather(*node_coros)
-        await asyncio.gather(*wallet_coros)
+        #await asyncio.gather(*node_coros)
+        #await asyncio.gather(*wallet_coros)
 
         logger.debug(f"Current app_results:\n{json.dumps(obj=app_results, indent=4)}")
 
