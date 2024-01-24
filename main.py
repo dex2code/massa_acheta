@@ -6,7 +6,6 @@ import json
 from aiogram import types as tg_types
 from aiogram.filters import Command
 from aiogram import html
-from aiogram.utils.keyboard import ReplyKeyboardBuilder
 
 from app_globals import app_config, app_results, tg_dp, tg_bot
 
@@ -15,17 +14,8 @@ from remotes.release import release as remote_release
 from remotes.monitor import monitor as remote_monitor
 
 from telegram.queue import send_telegram_message, operate_telegram_queue
-from telegram.keyboards import kb_nodes, kb_wallets
 
-
-@tg_dp.message(Command("view_node"))
-@logger.catch
-async def view_node_handler(message: tg_types.Message) -> None:
-    logger.debug(f"-> Enter Def")
-
-    if message.chat.id != app_config['telegram']['chat_id']: return
-
-    await message.answer(f"Please select node:", reply_markup=kb_wallets(node_name="massa04"))
+from telegram.handlers import start, view_config, unknown
 
 
 @logger.catch
@@ -46,9 +36,13 @@ async def main() -> None:
 
     aio_loop = asyncio.get_event_loop()
     aio_loop.create_task(operate_telegram_queue())
-    aio_loop.create_task(remote_monitor())
+    #aio_loop.create_task(remote_monitor())
     aio_loop.create_task(remote_heartbeat())
     aio_loop.create_task(remote_release())
+
+    tg_dp.include_router(start.router)
+    tg_dp.include_router(view_config.router)
+    tg_dp.include_router(unknown.router)
 
     await tg_bot.delete_webhook(drop_pending_updates=True)
     await tg_dp.start_polling(tg_bot)
