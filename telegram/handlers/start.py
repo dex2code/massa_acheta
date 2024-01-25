@@ -23,10 +23,9 @@ async def cmd_start(message: Message):
 
         as_line(Bold('📖 Commands'), ":"), ""
 
-        "  ⦙  /start or /help  →  This message",
-        "  ⦙  /view_config  →  View active service config",
-        "  ⦙  /cancel  →  Cancel ongoing scenario", "",
+        "  ⦙  /start or /help  →  This message", "",
 
+        "  ⦙  /view_config  →  View active service config",
         "  ⦙  /view_node  →  View a node status",
         "  ⦙  /view_wallet  →  View a wallet info",
         "  ⦙  /view_address  →  View any wallet address info", "",
@@ -36,6 +35,9 @@ async def cmd_start(message: Message):
 
         "  ⦙  /delete_node  →  Delete node from bot",
         "  ⦙  /delete_wallet  →  Delete wallet from bot", "",
+
+        "  ⦙  /cancel  →  Cancel any ongoing scenario",
+
 
         as_line("☝ ", Bold("Bot info"), ": https://github.com/dex2code/massa_acheta")
     )
