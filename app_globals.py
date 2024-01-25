@@ -4,11 +4,13 @@ import json
 from pathlib import Path
 from sys import exit as sys_exit
 from aiogram import Dispatcher, Bot
+from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.enums import ParseMode
 from collections import deque
+from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic import SecretStr
 
-from dev_config import app_config
-# from app_config import app_config
+from app_config import app_config
 
 
 '''
@@ -43,9 +45,18 @@ with open(file=results_obj, mode="r") as input_results:
 '''
 Init Telegram stuff
 '''
+class Settings(BaseSettings):
+    key: SecretStr
+    chat_id: int
+
+    model_config = SettingsConfigDict(env_file=".env", env_file_encoding='utf-8')
+
+bot = Settings()
+
+
 telegram_queue = deque()
-tg_dp = Dispatcher()
-tg_bot = Bot(token=app_config['telegram']['key'], parse_mode=ParseMode.HTML)
+tg_dp = Dispatcher(storage=MemoryStorage())
+tg_bot = Bot(token=bot.key.get_secret_value(), parse_mode=ParseMode.HTML)
 
 
 

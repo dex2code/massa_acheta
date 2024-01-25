@@ -4,11 +4,11 @@ import asyncio
 from aiogram.enums import ParseMode
 from aiogram import html
 
-from app_globals import telegram_queue, tg_bot, app_config
+from app_globals import telegram_queue, tg_bot, app_config, bot
 
 
 @logger.catch
-async def send_telegram_message(message_text: str="") -> None:
+async def queue_telegram_message(message_text: str="") -> None:
     logger.debug(f"-> Enter Def")
 
     global telegram_queue
@@ -41,13 +41,13 @@ async def operate_telegram_queue() -> None:
             continue
 
         try:
-            await tg_bot.send_message(chat_id=app_config['telegram']['chat_id'], text=telegram_queue[0], parse_mode=ParseMode.HTML, request_timeout=app_config['telegram']['sending_timeout_sec'])
+            await tg_bot.send_message(chat_id=bot.chat_id, text=telegram_queue[0], parse_mode=ParseMode.HTML, request_timeout=app_config['telegram']['sending_timeout_sec'])
 
         except Exception as E:
-            logger.error(f"Could not send telegram message to chat_id '{app_config['telegram']['chat_id']}': ({str(E)})")
+            logger.error(f"Could not send telegram message to chat_id '{bot.chat_id}': ({str(E)})")
         
         else:
-            logger.info(f"Successfully sent message to chat_id '{app_config['telegram']['chat_id']}' ({number_unsent_messages - 1} unsent message(s) in queue)")
+            logger.info(f"Successfully sent message to chat_id '{bot.chat_id}' ({number_unsent_messages - 1} unsent message(s) in queue)")
             telegram_queue.popleft()
 
 

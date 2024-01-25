@@ -3,10 +3,10 @@ from loguru import logger
 from aiogram import Router
 from aiogram.filters import Command
 from aiogram.types import Message
-from aiogram.utils.formatting import as_list, Bold
+from aiogram.utils.formatting import as_list, as_line, Bold
 from aiogram.enums import ParseMode
 
-from app_globals import app_config
+from app_globals import app_config, bot
 
 
 router = Router()
@@ -16,12 +16,12 @@ router = Router()
 @logger.catch
 async def cmd_start(message: Message):
     logger.debug("-> Enter Def")
-    if message.chat.id != app_config['telegram']['chat_id']: return
+    if message.chat.id != bot.chat_id: return
 
-    message_text = as_list(
+    t = as_list(
         app_config['telegram']['service_nickname'], "",
 
-        Bold("📖 Commands:"), "",
+        as_line(Bold('📖 Commands'), ":"), ""
 
         "  ⦙  /start or /help  →  This message",
         "  ⦙  /view_config  →  View active service config",
@@ -37,7 +37,7 @@ async def cmd_start(message: Message):
         "  ⦙  /delete_node  →  Delete node from bot",
         "  ⦙  /delete_wallet  →  Delete wallet from bot", "",
 
-        "☝ <b>Bot info</b>: https://github.com/dex2code/massa_acheta"
+        as_line("☝ ", Bold("Bot info"), ": https://github.com/dex2code/massa_acheta")
     )
 
-    await message.answer(text=message_text.as_html(), parse_mode=ParseMode.HTML)
+    await message.answer(text=t.as_html(), parse_mode=ParseMode.HTML, request_timeout=app_config['telegram']['sending_timeout_sec'])

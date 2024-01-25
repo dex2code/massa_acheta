@@ -3,17 +3,12 @@ app_config = {}
 app_config['telegram']  = {}
 app_config['service']   = {}
 
-
-app_config['telegram']['key'] = ""      # <-- Fill in your Telegram BOT key!
-app_config['telegram']['chat_id'] = 0   # <-- Fill in your Telegram ID (chat ID)
-
-
 app_config['telegram']['service_nickname'] = "⪻ MASSA 🦗 ᗩcheta ⪼"
 app_config['telegram']['sending_delay_sec'] = 3
 app_config['telegram']['sending_timeout_sec'] = 5
 
 
-app_config['service']['results_path'] = "app_results.json"
+app_config['service']['results_path'] = "dev_results.json"
 
 app_config['service']['main_loop_period_sec'] = 600
 

@@ -2,10 +2,10 @@ from loguru import logger
 
 import asyncio
 from time import time as t_now
-from aiogram import html
+from aiogram.utils.formatting import as_list, as_line, Pre, Bold
 
 from app_globals import app_config, app_results
-from telegram.queue import send_telegram_message
+from telegram.queue import queue_telegram_message
 
 
 async def heartbeat() -> None:
@@ -37,8 +37,11 @@ async def heartbeat() -> None:
                 diff_mins = (diff_time - (diff_hours * 3600)) // 60
                 last_updated = f"{diff_hours}h {diff_mins}m ago"
 
-            composed_node_message += f" {node_pic} Node {html.quote(node_name)} is {node_status}. Last seen: {last_updated}\n\n"
+            composed_node_message += f" {node_pic} Node {node_name} is {node_status}. Last seen: {last_updated}\n\n"
 
-        await send_telegram_message(
-            message_text=f"⏲ Heartbeat message:\n\n<pre>{composed_node_message}</pre>\n⏳ Heartbeat schedule: every <b>{app_config['service']['heartbeat_period_hours']}</b> hours"
+        t = as_list(
+            "⏲ Heartbeat message:", "",
+            Pre(composed_node_message),
+            as_line("⏳ Heartbeat schedule: every ", Bold(app_config['service']['heartbeat_period_hours']), " hours")
         )
+        await queue_telegram_message(message_text=t.as_html())

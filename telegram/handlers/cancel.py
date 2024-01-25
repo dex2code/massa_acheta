@@ -4,8 +4,9 @@ from aiogram import Router
 from aiogram.filters import Command
 from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram.enums import ParseMode
+from aiogram.utils.formatting import as_line
 
-from app_globals import app_config
+from app_globals import app_config, bot
 
 
 router = Router()
@@ -15,8 +16,7 @@ router = Router()
 @logger.catch
 async def cmd_cancel(message: Message):
     logger.debug("-> Enter Def")
-    if message.chat.id != app_config['telegram']['chat_id']: return
+    if message.chat.id != bot.chat_id: return
 
-    message_text = "❌ Action cancelled!"
-
-    await message.answer(text=message_text, parse_mode=ParseMode.HTML, reply_markup=ReplyKeyboardRemove())
+    t = as_line("❌ Action cancelled!")
+    await message.answer(text=t.as_html(), parse_mode=ParseMode.HTML, reply_markup=ReplyKeyboardRemove(), request_timeout=app_config['telegram']['sending_timeout_sec'])

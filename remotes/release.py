@@ -2,9 +2,10 @@ from loguru import logger
 
 import asyncio
 import aiohttp
+from aiogram.utils.formatting import as_list, Pre
 
 from app_globals import app_config, current_massa_release
-from telegram.queue import send_telegram_message
+from telegram.queue import queue_telegram_message
 
 
 @logger.catch
@@ -47,7 +48,7 @@ async def release() -> None:
 
     while True:
 
-        await asyncio.sleep(delay=app_config['service']['main_loop_period_sec'])
+        await asyncio.sleep(delay=(app_config['service']['main_loop_period_sec'] / 2))
 
         try:
             release_result = await get_latest_massa_release()
@@ -60,10 +61,18 @@ async def release() -> None:
             logger.info(f"Got latest MASSA release version: '{latest_release}'")
 
             if current_massa_release == "":
-                await send_telegram_message(message_text=f"💾 Latest released MASSA version:\n\n<pre>{latest_release}</pre>")
+                t = as_list(
+                    "💾 Latest released MASSA version:",
+                    Pre(latest_release)
+                )
+                await queue_telegram_message(message_text=t.as_html())
 
             elif current_massa_release != latest_release:
-                await send_telegram_message(message_text=f"💾 New MASSA version released:\n\n<pre>{current_massa_release} → {latest_release}</pre>")
+                t = as_list(
+                    "💾 New MASSA version released:",
+                    Pre(f"{current_massa_release} → {latest_release}")
+                )
+                await queue_telegram_message(message_text=t)
             
             current_massa_release = latest_release
 
