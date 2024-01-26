@@ -19,7 +19,7 @@ async def cmd_cancel(message: Message):
     if message.chat.id != bot.chat_id: return
 
     t = as_list(
-        app_config['telegram']['service_nickname'], "",
+        as_line(app_config['telegram']['service_nickname']),
         as_line("💾 Latest released MASSA version: ", Code(current_massa_release)),
         as_line(f"⏳ Service checks releases: every {int(app_config['service']['main_loop_period_sec'] / 2)} seconds")
     )

@@ -5,7 +5,7 @@ from aiogram.filters import Command
 from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram.enums import ParseMode
 from aiogram.fsm.context import FSMContext
-from aiogram.utils.formatting import as_list
+from aiogram.utils.formatting import as_list, as_line
 
 from app_globals import app_config, bot
 
@@ -23,7 +23,7 @@ async def cmd_cancel(message: Message, state: FSMContext):
     await state.clear()
 
     t = as_list(
-        app_config['telegram']['service_nickname'], "",
+        as_line(app_config['telegram']['service_nickname']),
         "❌ Action cancelled!"
     )
     await message.answer(

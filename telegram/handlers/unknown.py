@@ -2,7 +2,7 @@ from loguru import logger
 
 from aiogram import Router, F
 from aiogram.types import Message
-from aiogram.utils.formatting import as_list
+from aiogram.utils.formatting import as_list, as_line
 from aiogram.enums import ParseMode
 
 from app_globals import app_config, bot
@@ -18,7 +18,7 @@ async def cmd_unknown(message: Message):
     if message.chat.id != bot.chat_id: return
 
     t = as_list(
-        app_config['telegram']['service_nickname'], "",
+        as_line(app_config['telegram']['service_nickname']),
         "⁉ Unknown command.", "",
         "Try /cancel to quit ongoing scenario or /help to learn correct commands."
     )

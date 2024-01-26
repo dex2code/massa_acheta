@@ -38,7 +38,7 @@ async def cmd_view_node(message: Message, state: FSMContext):
 
 
     t = as_list(
-        app_config['telegram']['service_nickname'], "",
+        as_line(app_config['telegram']['service_nickname']),
         "❓ Tap the node to view info or /cancel to quit the scenario.",
     )
     await message.answer(
@@ -63,7 +63,7 @@ async def show_node(message: Message, state: FSMContext):
 
     if node_name not in app_results:
         t = as_list(
-            app_config['telegram']['service_nickname'], "",
+            as_line(app_config['telegram']['service_nickname']),
             "‼ Error. Unknown node.", "",
             "❓ Try /help to learn how to add a node to bot."
         )
@@ -111,7 +111,7 @@ async def show_node(message: Message, state: FSMContext):
         banned_peer_count = app_results[node_name]['last_result']['network_stats'].get("banned_peer_count", 0)
 
     t = as_list(
-        app_config['telegram']['service_nickname'], "",
+        as_line(app_config['telegram']['service_nickname']),
         as_line("🏠 Node: ", Code(node_name), end=""),
         f"📍 {app_results[node_name]['url']}",
         f"{wallets_attached}", "",

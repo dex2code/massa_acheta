@@ -4,7 +4,7 @@ from aiogram import Router
 from aiogram.filters import Command
 from aiogram.types import Message
 from aiogram.enums import ParseMode
-from aiogram.utils.formatting import as_list
+from aiogram.utils.formatting import as_list, as_line, Code
 
 from app_globals import app_config
 
@@ -18,9 +18,15 @@ async def cmd_cancel(message: Message):
     logger.debug("-> Enter Def")
 
     t = as_list(
-        app_config['telegram']['service_nickname'], "",
-        f"👤 User ID: {message.from_user.id}", "",
-        f"💬 Chat ID: {message.chat.id}",
+        as_line(app_config['telegram']['service_nickname']),
+        as_line(
+            "👤 User ID: ",
+            Code(message.from_user.id)
+        ),
+        as_line(
+            "💬 Chat ID: ",
+            Code(message.chat.id)
+        )
     )
     await message.answer(
         text=t.as_html(),

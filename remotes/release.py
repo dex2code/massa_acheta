@@ -65,7 +65,7 @@ async def release() -> None:
         else:
             logger.info(f"Got latest MASSA release version: '{latest_release}'")
 
-            if current_massa_release != latest_release:
+            if latest_release != current_massa_release:
                 t = as_list(
                     as_line("💾 New MASSA version released:"),
                     as_line(Code(current_massa_release), "  →  ", Code(latest_release))
