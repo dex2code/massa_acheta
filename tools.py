@@ -19,27 +19,26 @@ async def pull_node_api(
     api_session_timeout = aiohttp.ClientTimeout(total=api_session_timeout)
     api_probe_timeout = aiohttp.ClientTimeout(total=api_probe_timeout)
 
-    async with aiohttp.ClientSession(timeout=api_session_timeout) as session:
-
-        try:
+    try:
+        async with aiohttp.ClientSession(timeout=api_session_timeout) as session:
             async with session.post(url=api_url, headers=api_header, data=api_payload, timeout=api_probe_timeout) as api_response:
                 api_response_obj = await api_response.json()
-            
-            api_response_result = api_response_obj['result']
+        
+        api_response_result = api_response_obj['result']
 
-        except Exception as E:
-            logger.error(f"Exception in API request for URL '{api_url}': ({str(E)})")
-            api_response_result = {"error": f"Exception: ({str(E)})"}
+    except Exception as E:
+        logger.error(f"Exception in API request for URL '{api_url}': ({str(E)})")
+        api_response_result = {"error": f"Exception: ({str(E)})"}
 
+    else:
+        if api_response.status == 200:
+            logger.info(f"Successfully pulled result from API '{api_url}'")
         else:
-            if api_response.status == 200:
-                logger.info(f"Successfully pulled result from API '{api_url}'")
-            else:
-                logger.error(f"API URL '{api_url}' response status error: (HTTP {api_response.status})")
-                api_response_result = {"error": f"HTTP Error: ({api_response.status})"}
+            logger.error(f"API URL '{api_url}' response status error: (HTTP {api_response.status})")
+            api_response_result = {"error": f"HTTP Error: ({api_response.status})"}
 
-        finally:
-            return api_response_result
+    finally:
+        return api_response_result
 
 
 

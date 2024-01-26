@@ -9,33 +9,38 @@ from telegram.queue import queue_telegram_message
 
 
 @logger.catch
-async def get_latest_massa_release(github_api_url: str=app_config['service']['github_api_url']) -> object:
+async def get_latest_massa_release(
+    github_api_url: str=app_config['service']['github_api_url'],
+    api_session_timeout: int=app_config['service']['http_session_timeout_sec'],
+    api_probe_timeout: int=app_config['service']['http_probe_timeout_sec']) -> object:
     logger.debug("-> Enter Def")
 
-    async with aiohttp.ClientSession() as session:
+    api_session_timeout = aiohttp.ClientTimeout(total=api_session_timeout)
+    api_probe_timeout = aiohttp.ClientTimeout(total=api_probe_timeout)
 
-        try:
-            async with session.get(url=github_api_url) as github_response:
+    try:
+        async with aiohttp.ClientSession(timeout=api_session_timeout) as session:
+            async with session.get(url=github_api_url, timeout=api_probe_timeout) as github_response:
                 github_response_obj = await github_response.json()
-            
-            latest_release = github_response_obj['name']
-            github_response_result = {"result": f"{latest_release}"}
-
-        except Exception as E:
-            logger.error(f"Exception in Github API request: ({str(E)})")
-            github_response_result = {"error": f"Exception: ({str(E)})"}
-
-        else:
-            if latest_release == "":
-                logger.error(f"Got empty string as release version!")
-                github_response_result = {"error": "Empty string"}
-
-            if github_response.status != 200:
-                logger.error(f"Github API HTTP error: (HTTP {github_response.status})")
-                github_response_result = {"error": f"HTTP Error: ({github_response.status})"}
         
-        finally:
-            return github_response_result
+        latest_release = github_response_obj['name']
+        github_response_result = {"result": f"{latest_release}"}
+
+    except Exception as E:
+        logger.error(f"Exception in Github API request: ({str(E)})")
+        github_response_result = {"error": f"Exception: ({str(E)})"}
+
+    else:
+        if latest_release == "":
+            logger.error(f"Got empty string as release version!")
+            github_response_result = {"error": "Empty string"}
+
+        if github_response.status != 200:
+            logger.error(f"Github API HTTP error: (HTTP {github_response.status})")
+            github_response_result = {"error": f"HTTP Error: ({github_response.status})"}
+    
+    finally:
+        return github_response_result
 
 
 
