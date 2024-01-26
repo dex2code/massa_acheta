@@ -2,7 +2,7 @@ from loguru import logger
 
 import json
 from time import time as t_now
-from aiogram.utils.formatting import as_list, as_line, as_key_value, Bold, Code, Pre
+from aiogram.utils.formatting import as_list, as_line, Code, Pre
 
 from app_globals import app_results
 from telegram.queue import queue_telegram_message
@@ -50,13 +50,11 @@ async def check_wallet(node_name: str="", wallet_addr: str="") -> None:
 
         if app_results[node_name]['wallets'][wallet_addr]['last_status'] != False:
             t = as_list(
-                as_line("🏠 Node: ", Bold(node_name), f" [ {app_results[node_name]['url']} ]"),
-
+                as_line(f"🏠 Node: ", Code(node_name), end=""),
+                f"🖧 {app_results[node_name]['url']}", "",
                 "🙀 Cannot get info for wallet:",
                 Pre(wallet_addr), "",
-                
                 Code(f"💻 {wallet_response}"), "",
-
                 "⚠ Check wallet address or node settings!"
             )
             await queue_telegram_message(message_text=t.as_html())
@@ -69,19 +67,13 @@ async def check_wallet(node_name: str="", wallet_addr: str="") -> None:
 
         if app_results[node_name]['wallets'][wallet_addr]['last_status'] != True:
             t = as_list(
-                as_line("🏠 Node: ", Bold(node_name), f" [ {app_results[node_name]['url']} ]"),
-
+                as_line(f"🏠 Node: ", Code(node_name), end=""),
+                f"🖧 {app_results[node_name]['url']}", "",
                 "👛 Successfully got info for wallet:",
                 Pre(wallet_addr), "",
-
-                "👁 Current values:",
-                Pre(
-                    as_line("• Final balance: ", wallet_final_balance),
-                    as_line("• Candidate rolls: ", wallet_candidate_rolls),
-                    as_line("• Active rolls: ", wallet_active_rolls),
-                    as_line("• Missed blocks: ", wallet_missed_blocks)
-                )
-
+                f"💰 Final balance: {wallet_final_balance} Ⅿ", "",
+                f"⚙ Candidate/Active rolls: {wallet_candidate_rolls}/{wallet_active_rolls}", "",
+                f"🥊 Missed blocks: {wallet_missed_blocks}", ""
             )
             await queue_telegram_message(message_text=t.as_html())
 
@@ -90,44 +82,44 @@ async def check_wallet(node_name: str="", wallet_addr: str="") -> None:
             # 1) Check if balance is decreased:
             if wallet_final_balance < app_results[node_name]['wallets'][wallet_addr]['final_balance']:
                 t = as_list(
-                    as_line("🏠 Node: ", Bold(node_name), f" [ {app_results[node_name]['url']} ]"),
+                    as_line(f"🏠 Node: ", Code(node_name), end=""),
+                    f"🖧 {app_results[node_name]['url']}", "",
                     "💸 Decreased balance on wallet:",
                     Pre(wallet_addr), "",
-                    "👁 New final balance:",
-                    Pre(f"{app_results[node_name]['wallets'][wallet_addr]['final_balance']} → {wallet_final_balance}")
+                    f"👁 New final balance: {app_results[node_name]['wallets'][wallet_addr]['final_balance']} → {wallet_final_balance} Ⅿ"
                 )
                 await queue_telegram_message(message_text=t.as_html())
 
             # 2) Check if candidate rolls changed:
             if wallet_candidate_rolls != app_results[node_name]['wallets'][wallet_addr]['candidate_rolls']:
                 t = as_list(
-                    as_line("🏠 Node: ", Bold(node_name), f" [ {app_results[node_name]['url']} ]"),
+                    as_line(f"🏠 Node: ", Code(node_name), end=""),
+                    f"🖧 {app_results[node_name]['url']}", "",
                     "⚙ Candidate rolls changed on wallet:",
                     Pre(wallet_addr), "",
-                    "👁 New candidate rolls number:",
-                    Pre(f"{app_results[node_name]['wallets'][wallet_addr]['candidate_rolls']} → {wallet_candidate_rolls}")
+                    f"👁 New candidate rolls number: {app_results[node_name]['wallets'][wallet_addr]['candidate_rolls']} → {wallet_candidate_rolls}"
                 )
                 await queue_telegram_message(message_text=t.as_html())
 
             # 3) Check if active rolls changed:
             if wallet_active_rolls != app_results[node_name]['wallets'][wallet_addr]['active_rolls']:
                 t = as_list(
-                    as_line("🏠 Node: ", Bold(node_name), f" [ {app_results[node_name]['url']} ]"),
+                    as_line(f"🏠 Node: ", Code(node_name), end=""),
+                    f"🖧 {app_results[node_name]['url']}", "",
                     "⚙ Active rolls changed on wallet:",
                     Pre(wallet_addr), "",
-                    "👁 New active rolls number:",
-                    Pre(f"{app_results[node_name]['wallets'][wallet_addr]['active_rolls']} → {wallet_active_rolls}")
+                    f"👁 New active rolls number: {app_results[node_name]['wallets'][wallet_addr]['active_rolls']} → {wallet_active_rolls}"
                 )
                 await queue_telegram_message(message_text=t.as_html())
 
             # 4) Check if new blocks missed:
             if wallet_missed_blocks > app_results[node_name]['wallets'][wallet_addr]['missed_blocks']:
                 t = as_list(
-                    as_line("🏠 Node: ", Bold(node_name), f" [ {app_results[node_name]['url']} ]"),
+                    as_line(f"🏠 Node: ", Code(node_name), end=""),
+                    f"🖧 {app_results[node_name]['url']}", "",
                     "🥊 New missed blocks on wallet:",
                     Pre(wallet_addr), "",
-                    "👁 Blocks missed in last cycle:",
-                    Pre(wallet_last_cycle_missed_blocks)
+                    f"👁 Blocks missed in last cycle: {wallet_last_cycle_missed_blocks}"
                 )
                 await queue_telegram_message(message_text=t.as_html())
 

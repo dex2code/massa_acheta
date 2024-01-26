@@ -2,7 +2,7 @@ from loguru import logger
 
 import asyncio
 import aiohttp
-from aiogram.utils.formatting import as_list, Pre
+from aiogram.utils.formatting import as_list, as_line, Code
 
 from app_globals import app_config, current_massa_release
 from telegram.queue import queue_telegram_message
@@ -67,15 +67,15 @@ async def release() -> None:
 
             if current_massa_release == "":
                 t = as_list(
-                    "💾 Latest released MASSA version:",
-                    Pre(latest_release)
+                    as_line("💾 Latest released MASSA version:"),
+                    Code(latest_release)
                 )
                 await queue_telegram_message(message_text=t.as_html())
 
             elif current_massa_release != latest_release:
                 t = as_list(
-                    "💾 New MASSA version released:",
-                    Pre(f"{current_massa_release} → {latest_release}")
+                    as_line("💾 New MASSA version released:"),
+                    as_line(Code(current_massa_release), " → ", Code(latest_release))
                 )
                 await queue_telegram_message(message_text=t)
             

@@ -20,26 +20,24 @@ async def cmd_start(message: Message):
 
     t = as_list(
         app_config['telegram']['service_nickname'], "",
-
-        as_line(Bold('📖 Commands'), ":"), ""
-
-        "  ⦙  /start or /help  →  This message", "",
-
-        "  ⦙  /view_config  →  View active service config",
-        "  ⦙  /view_node  →  View a node status",
-        "  ⦙  /view_wallet  →  View a wallet info",
-        "  ⦙  /view_address  →  View any wallet address info", "",
-
-        "  ⦙  /add_node  →  Add a node to bot",
-        "  ⦙  /add_wallet  →  Add a wallet to bot", "",
-
-        "  ⦙  /delete_node  →  Delete node from bot",
-        "  ⦙  /delete_wallet  →  Delete wallet from bot", "",
-
-        "  ⦙  /cancel  →  Cancel any ongoing scenario",
-
-
-        as_line("☝ ", Bold("Bot info"), ": https://github.com/dex2code/massa_acheta")
+        "📖 Commands:", "",
+        " ⦙ /start or /help ⋅ This message", "",
+        " ⦙ /view_config ⋅ View service config", "",
+        " ⦙ /view_node ⋅ View a node status", "",
+        " ⦙ /view_wallet ⋅ View a wallet info", "",
+        " ⦙ /view_address ⋅ View any wallet info", "",
+        " ⦙ /add_node ⋅ Add a node to bot", "",
+        " ⦙ /add_wallet ⋅ Add a wallet to bot", "",
+        " ⦙ /delete_node ⋅ Delete node from bot", "",
+        " ⦙ /delete_wallet ⋅ Delete wallet from bot", "",
+        " ⦙ /release ⋅ Show actual MASSA release", "",
+        " ⦙ /id ⋅ Show chat_id", "",
+        " ⦙ /cancel ⋅ Cancel any scenario", "",
+        "☝ Bot info: https://github.com/dex2code/massa_acheta", ""
     )
 
-    await message.answer(text=t.as_html(), parse_mode=ParseMode.HTML, request_timeout=app_config['telegram']['sending_timeout_sec'])
+    await message.answer(
+        text=t.as_html(),
+        parse_mode=ParseMode.HTML,
+        request_timeout=app_config['telegram']['sending_timeout_sec']
+    )

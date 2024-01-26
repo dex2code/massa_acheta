@@ -1,5 +1,6 @@
 from loguru import logger
 
+from typing import Union
 import aiohttp
 import json
 from aiofiles import open as aiof_open
@@ -69,6 +70,53 @@ async def save_app_results() -> bool:
         else:
             logger.info(f"Successfully saved app_results into '{results_obj}' file!")
             return True
+
+
+
+
+@logger.catch
+def get_list_nodes() -> list:
+    logger.debug("-> Enter Def")
+
+    result_list = []
+
+    for node_name in app_results:
+        result_list.append(node_name)
+    
+    return result_list
+
+
+
+
+@logger.catch
+def get_list_wallets(node_name: str="") -> list:
+    logger.debug("-> Enter Def")
+
+    result_list = []
+
+    if node_name not in app_results:
+        return result_list
+    
+    for wallet_addr in app_results[node_name]['wallets']:
+        result_list.append(wallet_addr)
+    
+    return result_list
+
+
+
+
+@logger.catch
+def get_last_seen(last_time: float=0.0, current_time: float=0.0) -> str:
+    logger.debug("-> Enter Def")
+
+    if last_time == 0:
+        return "Never"
+    
+    diff_time = int(current_time - last_time)
+    diff_hours = diff_time // 3600
+    diff_mins = (diff_time - (diff_hours * 3600)) // 60
+
+    return f"{diff_hours}h {diff_mins}m ago"
 
 
 

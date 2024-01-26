@@ -3,7 +3,7 @@ logger.add("main.log", format="\"{time}\", \"{level}\", \"{file}:{line}\", \"{mo
 
 import asyncio
 import json
-from aiogram.utils.formatting import as_list, as_line, Pre, Bold
+from aiogram.utils.formatting import as_list, TextLink, as_line, Code
 
 from app_globals import app_config, app_results, tg_dp, tg_bot
 
@@ -13,27 +13,31 @@ from remotes.monitor import monitor as remote_monitor
 
 from telegram.queue import queue_telegram_message, operate_telegram_queue
 
-from telegram.handlers import start, view_config, cancel, unknown
+from telegram.handlers import start, cancel, unknown
+from telegram.handlers import view_config, view_node
+from telegram.handlers import id
 
 
 @logger.catch
 async def main() -> None:
     logger.debug(f"-> Enter Def")
 
-    nodes_list = ""
-    for node_name in app_results:
-        node_url = app_results[node_name]['url']
-        node_num_wallets = len(app_results[node_name]['wallets'])
-        nodes_list += f"• {node_name} ({node_url}): {node_num_wallets} wallet(s)\n"
+    nodes_list = []
 
-    if nodes_list == "": nodes_list = "⭕  Node list is empty."
+    if len(app_results) == 0:
+        nodes_list.append("⭕ Node list is empty.")
+    else:
+        for node_name in app_results:
+            nodes_list.append(as_line("\n", "🏠 Node: ", Code(node_name), f" ⋅ {len(app_results[node_name]['wallets'])} wallet(s)", end=""))
+            nodes_list.append(f"🖧 {app_results[node_name]['url']}")
+
 
     t = as_list(
         "🔆 Service successfully started to watch the following nodes:",
-        Pre(nodes_list),
-        "❓ Use /help to learn how to manage settings.", "",
-        as_line("⏳ Main loop period", ": ", Bold(app_config['service']['main_loop_period_sec']), " seconds", end=""),
-        as_line("⚡ Probe timeout", ": ", Bold(app_config['service']['http_probe_timeout_sec']), " seconds")
+        *nodes_list, "",
+        "❓ Try /help to learn how to manage settings.", "",
+        f"⏳ Main loop period: {app_config['service']['main_loop_period_sec']} seconds",
+        f"⚡ Probe timeout: {app_config['service']['http_probe_timeout_sec']} seconds"
     )
     await queue_telegram_message(message_text=t.as_html())
 
@@ -45,7 +49,9 @@ async def main() -> None:
 
     tg_dp.include_router(start.router)
     tg_dp.include_router(view_config.router)
+    tg_dp.include_router(view_node.router)
     tg_dp.include_router(cancel.router)
+    tg_dp.include_router(id.router)
     tg_dp.include_router(unknown.router)
 
     await tg_bot.delete_webhook(drop_pending_updates=True)

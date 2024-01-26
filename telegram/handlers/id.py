@@ -1,26 +1,26 @@
 from loguru import logger
 
-from aiogram import Router, F
+from aiogram import Router
+from aiogram.filters import Command
 from aiogram.types import Message
-from aiogram.utils.formatting import as_list
 from aiogram.enums import ParseMode
+from aiogram.utils.formatting import as_list
 
-from app_globals import app_config, bot
+from app_globals import app_config
 
 
 router = Router()
 
 
-@router.message(F)
+@router.message(Command("id"))
 @logger.catch
-async def cmd_unknown(message: Message):
+async def cmd_cancel(message: Message):
     logger.debug("-> Enter Def")
-    if message.chat.id != bot.chat_id: return
 
     t = as_list(
         app_config['telegram']['service_nickname'], "",
-        "⁉ Unknown command.", "",
-        "Try /cancel to quit ongoing scenario or /help to learn correct commands."
+        f"👤 User ID: {message.from_user.id}", "",
+        f"💬 Chat ID: {message.chat.id}",
     )
     await message.answer(
         text=t.as_html(),

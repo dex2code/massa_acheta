@@ -41,7 +41,12 @@ async def operate_telegram_queue() -> None:
             continue
 
         try:
-            await tg_bot.send_message(chat_id=bot.chat_id, text=telegram_queue[0], parse_mode=ParseMode.HTML, request_timeout=app_config['telegram']['sending_timeout_sec'])
+            await tg_bot.send_message(
+                chat_id=bot.chat_id,
+                text=telegram_queue[0],
+                parse_mode=ParseMode.HTML,
+                request_timeout=app_config['telegram']['sending_timeout_sec']
+            )
 
         except Exception as E:
             logger.error(f"Could not send telegram message to chat_id '{bot.chat_id}': ({str(E)})")

@@ -2,7 +2,7 @@ from loguru import logger
 
 import json
 from time import time as t_now
-from aiogram.utils.formatting import as_line, as_list, Bold, Code, Pre
+from aiogram.utils.formatting import as_list, as_line, Code
 
 from app_globals import app_results
 from telegram.queue import queue_telegram_message
@@ -32,8 +32,9 @@ async def check_node(node_name: str="") -> None:
 
         if app_results[node_name]['last_status'] != False:
             t = as_list(
-                as_line("🏠 Node: ", Bold(node_name), f" [ {app_results[node_name]['url']} ]"),
-                "☠  Seems dead or unavailable!", "",
+                as_line(f"🏠 Node: ", Code(node_name), end=""),
+                f"🖧 {app_results[node_name]['url']}", "",
+                "☠ Seems dead or unavailable!", "",
                 Code(f"💻 {node_result}"), "",
                 "⚠️ Check node or firewall settings!"
             )
@@ -47,9 +48,9 @@ async def check_node(node_name: str="") -> None:
 
         if app_results[node_name]['last_status'] != True:
             t = as_list(
-                as_line("🏠 Node: ", Bold(node_name), f" [ {app_results[node_name]['url']} ]"),
-                "🌿  Become alive with Chain ID:",
-                Pre(node_chain_id)
+                as_line(f"🏠 Node: ", Code(node_name), end=""),
+                f"🖧 {app_results[node_name]['url']}", "",
+                f"🌿 Become alive with Chain ID: {node_chain_id}",
             )
             await queue_telegram_message(message_text=t.as_html())
 
