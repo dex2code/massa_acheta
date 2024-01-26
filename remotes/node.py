@@ -33,7 +33,7 @@ async def check_node(node_name: str="") -> None:
         if app_results[node_name]['last_status'] != False:
             t = as_list(
                 as_line(f"🏠 Node: ", Code(node_name), end=""),
-                f"🖧 {app_results[node_name]['url']}", "",
+                f"📍 {app_results[node_name]['url']}", "",
                 "☠ Seems dead or unavailable!", "",
                 Code(f"💻 {node_result}"), "",
                 "⚠️ Check node or firewall settings!"
@@ -49,7 +49,7 @@ async def check_node(node_name: str="") -> None:
         if app_results[node_name]['last_status'] != True:
             t = as_list(
                 as_line(f"🏠 Node: ", Code(node_name), end=""),
-                f"🖧 {app_results[node_name]['url']}", "",
+                f"📍 {app_results[node_name]['url']}", "",
                 f"🌿 Become alive with Chain ID: {node_chain_id}",
             )
             await queue_telegram_message(message_text=t.as_html())

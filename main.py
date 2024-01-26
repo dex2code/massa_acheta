@@ -29,7 +29,7 @@ async def main() -> None:
     else:
         for node_name in app_results:
             nodes_list.append(as_line("\n", "🏠 Node: ", Code(node_name), f" ⋅ {len(app_results[node_name]['wallets'])} wallet(s)", end=""))
-            nodes_list.append(f"🖧 {app_results[node_name]['url']}")
+            nodes_list.append(f"📍 {app_results[node_name]['url']}")
 
 
     t = as_list(

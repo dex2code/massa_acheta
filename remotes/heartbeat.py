@@ -33,7 +33,7 @@ async def heartbeat() -> None:
                 )
 
                 heartbeat_list.append(as_line(f"🏠 Node: ", Code(node_name), end=""))
-                heartbeat_list.append(f"🖧 {app_results[node_name]['url']}")
+                heartbeat_list.append(f"📍 {app_results[node_name]['url']}")
                 heartbeat_list.append(f"{node_status} (Last seen: {last_seen})\n")
 
         t = as_list(

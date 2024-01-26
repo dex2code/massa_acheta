@@ -31,7 +31,7 @@ async def cmd_view_config(message: Message):
                     end=""
                 )
             )
-            config_list.append(f"🖧 {app_results[node_name]['url']}")
+            config_list.append(f"📍 {app_results[node_name]['url']}")
 
             if len(app_results[node_name]['wallets']) == 0:
                 config_list.append("⭕ No wallets attached")

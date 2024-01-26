@@ -113,7 +113,7 @@ async def show_node(message: Message, state: FSMContext):
     t = as_list(
         app_config['telegram']['service_nickname'], "",
         as_line("🏠 Node: ", Code(node_name), end=""),
-        f"🖧 {app_results[node_name]['url']}",
+        f"📍 {app_results[node_name]['url']}",
         f"{wallets_attached}", "",
         f"{node_status} (last seen: {last_seen})", "",
         f"Node 🆔:", Pre(node_id), "",
