@@ -65,17 +65,10 @@ async def release() -> None:
         else:
             logger.info(f"Got latest MASSA release version: '{latest_release}'")
 
-            if current_massa_release == "":
-                t = as_list(
-                    as_line("💾 Latest released MASSA version:"),
-                    Code(latest_release)
-                )
-                await queue_telegram_message(message_text=t.as_html())
-
-            elif current_massa_release != latest_release:
+            if current_massa_release != latest_release:
                 t = as_list(
                     as_line("💾 New MASSA version released:"),
-                    as_line(Code(current_massa_release), " → ", Code(latest_release))
+                    as_line("   ", Code(current_massa_release), " → ", Code(latest_release))
                 )
                 await queue_telegram_message(message_text=t)
             

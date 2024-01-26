@@ -78,7 +78,10 @@ async def show_node(message: Message, state: FSMContext):
 
     current_time = t_now()
 
-    wallets_num = len(app_results[node_name]['wallets'])
+    if len(app_results[node_name]['wallets']) == 0:
+        wallets_attached = "⭕ No wallets attached"
+    else:
+        wallets_attached = f"👛 Wallets attached: {len(app_results[node_name]['wallets'])}"
 
     if app_results[node_name]['last_status'] == True:
         node_status = "🌿 Online"
@@ -111,11 +114,11 @@ async def show_node(message: Message, state: FSMContext):
         app_config['telegram']['service_nickname'], "",
         as_line("🏠 Node: ", Code(node_name), end=""),
         f"🖧 {app_results[node_name]['url']}",
-        f"👛 Wallets attached: {wallets_num}", "",
+        f"{wallets_attached}", "",
         f"{node_status} (last seen: {last_seen})", "",
         f"Node 🆔:", Pre(node_id), "",
         f"↔ Routable IP: {node_ip}", "",
-        f"💾 Ver.: {node_version}", "",
+        f"💾 Release: {node_version}", "",
         f"🌀 Cycle: {current_cycle}", "",
         f"↔ In/Out connections: {in_connection_count}/{out_connection_count}", "",
         f"🙋 Known/Banned peers: {known_peer_count}/{banned_peer_count}", "",

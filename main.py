@@ -15,7 +15,7 @@ from telegram.queue import queue_telegram_message, operate_telegram_queue
 
 from telegram.handlers import start, cancel, unknown
 from telegram.handlers import view_config, view_node
-from telegram.handlers import id
+from telegram.handlers import release, id
 
 
 @logger.catch
@@ -51,6 +51,7 @@ async def main() -> None:
     tg_dp.include_router(view_config.router)
     tg_dp.include_router(view_node.router)
     tg_dp.include_router(cancel.router)
+    tg_dp.include_router(release.router)
     tg_dp.include_router(id.router)
     tg_dp.include_router(unknown.router)
 

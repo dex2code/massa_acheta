@@ -59,7 +59,7 @@ tg_dp = Dispatcher(storage=MemoryStorage())
 tg_bot = Bot(token=bot.key.get_secret_value(), disable_web_page_preview=True, parse_mode=ParseMode.HTML)
 
 
-current_massa_release = ""
+current_massa_release = "Unknown"
 
 
 
