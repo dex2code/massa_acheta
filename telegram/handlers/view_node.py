@@ -39,7 +39,7 @@ async def cmd_view_node(message: Message, state: FSMContext):
 
     t = as_list(
         as_line(app_globals.app_config['telegram']['service_nickname']),
-        "❓ Tap the node to view info or /cancel to quit the scenario.",
+        "❓ Tap the node to view or /cancel to quit the scenario.",
     )
     await message.answer(
         text=t.as_html(),
