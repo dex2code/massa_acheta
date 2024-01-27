@@ -5,7 +5,7 @@ from aiogram.types import Message
 from aiogram.utils.formatting import as_list, as_line
 from aiogram.enums import ParseMode
 
-from app_globals import app_config, bot
+import app_globals
 
 
 router = Router()
@@ -15,15 +15,15 @@ router = Router()
 @logger.catch
 async def cmd_unknown(message: Message):
     logger.debug("-> Enter Def")
-    if message.chat.id != bot.chat_id: return
+    if message.chat.id != app_globals.bot.chat_id: return
 
     t = as_list(
-        as_line(app_config['telegram']['service_nickname']),
+        as_line(app_globals.app_config['telegram']['service_nickname']),
         "⁉ Unknown command.", "",
         "Try /cancel to quit ongoing scenario or /help to learn correct commands."
     )
     await message.answer(
         text=t.as_html(),
         parse_mode=ParseMode.HTML,
-        request_timeout=app_config['telegram']['sending_timeout_sec']
+        request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
     )

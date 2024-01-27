@@ -4,15 +4,15 @@ import asyncio
 import aiohttp
 from aiogram.utils.formatting import as_list, as_line, Code
 
-from app_globals import app_config, current_massa_release
+import app_globals
 from telegram.queue import queue_telegram_message
 
 
 @logger.catch
-async def get_latest_massa_release(
-    github_api_url: str=app_config['service']['github_api_url'],
-    api_session_timeout: int=app_config['service']['http_session_timeout_sec'],
-    api_probe_timeout: int=app_config['service']['http_probe_timeout_sec']) -> object:
+async def get_latest_github_release(
+    github_api_url: str="",
+    api_session_timeout: int=app_globals.app_config['service']['http_session_timeout_sec'],
+    api_probe_timeout: int=app_globals.app_config['service']['http_probe_timeout_sec']) -> object:
     logger.debug("-> Enter Def")
 
     api_session_timeout = aiohttp.ClientTimeout(total=api_session_timeout)
@@ -49,14 +49,14 @@ async def get_latest_massa_release(
 async def release() -> None:
     logger.debug(f"-> Enter Def")
 
-    global current_massa_release
-
     while True:
 
-        await asyncio.sleep(delay=(app_config['service']['main_loop_period_sec'] / 2))
+        await asyncio.sleep(delay=(app_globals.app_config['service']['main_loop_period_sec'] / 2))
 
         try:
-            release_result = await get_latest_massa_release()
+            release_result = await get_latest_github_release(
+                github_api_url=app_globals.app_config['service']['massa_github_api_url']
+            )
             latest_release = release_result['result']
 
         except Exception as E:
@@ -65,14 +65,14 @@ async def release() -> None:
         else:
             logger.info(f"Got latest MASSA release version: '{latest_release}'")
 
-            if latest_release != current_massa_release:
+            if latest_release != app_globals.current_massa_release:
                 t = as_list(
                     as_line("💾 New MASSA version released:"),
-                    as_line(Code(current_massa_release), "  →  ", Code(latest_release))
+                    as_line(Code(app_globals.current_massa_release), "  →  ", Code(latest_release))
                 )
                 await queue_telegram_message(message_text=t.as_html())
             
-            current_massa_release = latest_release
+            app_globals.current_massa_release = latest_release
 
 
 

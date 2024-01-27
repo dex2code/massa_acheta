@@ -3,7 +3,7 @@ from loguru import logger
 from aiogram.types import ReplyKeyboardMarkup
 from aiogram.utils.keyboard import ReplyKeyboardBuilder
 
-from app_globals import app_results
+import app_globals
 
 
 def kb_nodes() -> ReplyKeyboardMarkup:
@@ -12,7 +12,7 @@ def kb_nodes() -> ReplyKeyboardMarkup:
     try:
         node_keyboard = ReplyKeyboardBuilder()
 
-        for node_name in app_results:
+        for node_name in app_globals.app_results:
             node_keyboard.button(text=node_name)
 
         node_keyboard.adjust(2)

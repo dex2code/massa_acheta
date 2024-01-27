@@ -59,7 +59,13 @@ tg_dp = Dispatcher(storage=MemoryStorage())
 tg_bot = Bot(token=bot.key.get_secret_value(), disable_web_page_preview=True, parse_mode=ParseMode.HTML)
 
 
+
+
+'''
+Releases stuff
+'''
 current_massa_release = "Unknown"
+current_bot_release = "ACHETA.1.0.0"
 
 
 

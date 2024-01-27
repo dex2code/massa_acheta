@@ -6,7 +6,7 @@ from aiogram.types import Message
 from aiogram.utils.formatting import as_list, as_line
 from aiogram.enums import ParseMode
 
-from app_globals import app_config, bot
+import app_globals
 
 
 router = Router()
@@ -16,10 +16,10 @@ router = Router()
 @logger.catch
 async def cmd_start(message: Message):
     logger.debug("-> Enter Def")
-    if message.chat.id != bot.chat_id: return
+    if message.chat.id != app_globals.bot.chat_id: return
 
     t = as_list(
-        as_line(app_config['telegram']['service_nickname']),
+        as_line(app_globals.app_config['telegram']['service_nickname']),
         "📖 Commands:", "",
         " ⦙ /start or /help ⋅ This message", "",
         " ⦙ /view_config ⋅ View service config", "",
@@ -30,7 +30,8 @@ async def cmd_start(message: Message):
         " ⦙ /add_wallet ⋅ Add a wallet to bot", "",
         " ⦙ /delete_node ⋅ Delete node from bot", "",
         " ⦙ /delete_wallet ⋅ Delete wallet from bot", "",
-        " ⦙ /release ⋅ Show actual MASSA release", "",
+        " ⦙ /massa_release ⋅ Show actual MASSA release", "",
+        " ⦙ /bot_release ⋅ Show actual ᗩcheta release", "",
         " ⦙ /id ⋅ Show chat_id", "",
         " ⦙ /cancel ⋅ Cancel any scenario", "",
         "☝ Bot info: https://github.com/dex2code/massa_acheta", ""
@@ -39,5 +40,5 @@ async def cmd_start(message: Message):
     await message.answer(
         text=t.as_html(),
         parse_mode=ParseMode.HTML,
-        request_timeout=app_config['telegram']['sending_timeout_sec']
+        request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
     )
