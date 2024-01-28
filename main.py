@@ -13,9 +13,10 @@ from remotes.monitor import monitor as remote_monitor
 
 from telegram.queue import queue_telegram_message, operate_telegram_queue
 
-from telegram.handlers import start, cancel, unknown
-from telegram.handlers import view_config, view_node
-from telegram.handlers import massa_release, bot_release, id
+from telegram.handlers import start
+from telegram.handlers import view_config, view_node, view_wallet
+from telegram.handlers import massa_release
+from telegram.handlers import id, cancel, unknown
 
 
 @logger.catch
@@ -55,10 +56,12 @@ async def main() -> None:
     aio_loop.create_task(remote_heartbeat())
     aio_loop.create_task(remote_github_release())
 
+
     app_globals.tg_dp.include_router(start.router)
 
     app_globals.tg_dp.include_router(view_config.router)
     app_globals.tg_dp.include_router(view_node.router)
+    app_globals.tg_dp.include_router(view_wallet.router)
 
     app_globals.tg_dp.include_router(massa_release.router)
 
@@ -79,7 +82,7 @@ if __name__ == "__main__":
     for node_name in app_globals.app_results:
         app_globals.app_results[node_name]['last_status'] = "unknown"
         app_globals.app_results[node_name]['last_update'] = 0
-        app_globals.app_results[node_name]['last_result'] = {}
+        app_globals.app_results[node_name]['last_result'] = {"unknown": "Never updated before"}
 
         for wallet_addr in app_globals.app_results[node_name]['wallets']:
             app_globals.app_results[node_name]['wallets'][wallet_addr] = {}
@@ -89,7 +92,7 @@ if __name__ == "__main__":
             app_globals.app_results[node_name]['wallets'][wallet_addr]['missed_blocks'] = 0
             app_globals.app_results[node_name]['wallets'][wallet_addr]['last_status'] = "unknown"
             app_globals.app_results[node_name]['wallets'][wallet_addr]['last_update'] = 0
-            app_globals.app_results[node_name]['wallets'][wallet_addr]['last_result'] = {}
+            app_globals.app_results[node_name]['wallets'][wallet_addr]['last_result'] = {"unknown": "Never updated before"}
 
     logger.debug(f"Results file loaded successfully:\n {json.dumps(obj=app_globals.app_results, indent=4)}")
     logger.info(f"Watching nodes with {app_globals.app_config['service']['main_loop_period_sec']} seconds loop period and {app_globals.app_config['service']['http_probe_timeout_sec']} seconds probe timeout.")

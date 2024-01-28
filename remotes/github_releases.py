@@ -51,28 +51,32 @@ async def release() -> None:
 
     while True:
 
-        await asyncio.sleep(delay=(app_globals.app_config['service']['main_loop_period_sec'] / 2))
-
         try:
-            release_result = await get_latest_github_release(
+            massa_release_result = await get_latest_github_release(
                 github_api_url=app_globals.app_config['service']['massa_github_api_url']
             )
-            latest_release = release_result['result']
+            massa_latest_release = massa_release_result['result']
 
         except Exception as E:
-            logger.warning(f"Cannot get latest MASSA release version: ({str(E)}). Result: {release_result}")
+            logger.warning(f"Cannot get latest MASSA release version: ({str(E)}). Result: {massa_release_result}")
 
         else:
-            logger.info(f"Got latest MASSA release version: '{latest_release}'")
+            logger.info(f"Got latest MASSA release version: '{massa_latest_release}' (current is: '{app_globals.current_massa_release}')")
 
-            if latest_release != app_globals.current_massa_release:
+            if app_globals.current_massa_release == "":
+                pass
+
+            elif app_globals.current_massa_release != massa_latest_release:
                 t = as_list(
                     as_line("💾 New MASSA version released:"),
-                    as_line(Code(app_globals.current_massa_release), "  →  ", Code(latest_release))
+                    as_line(Code(app_globals.current_massa_release), "  →  ", Code(massa_latest_release))
                 )
                 await queue_telegram_message(message_text=t.as_html())
             
-            app_globals.current_massa_release = latest_release
+            app_globals.current_massa_release = massa_latest_release
+
+
+        await asyncio.sleep(delay=(app_globals.app_config['service']['main_loop_period_sec'] / 2))
 
 
 

@@ -4,6 +4,7 @@ from aiogram.types import ReplyKeyboardMarkup
 from aiogram.utils.keyboard import ReplyKeyboardBuilder
 
 import app_globals
+from tools import get_short_address
 
 
 def kb_wallets(node_name: str="") -> ReplyKeyboardMarkup:

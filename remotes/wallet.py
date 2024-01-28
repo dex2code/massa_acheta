@@ -49,12 +49,15 @@ async def check_wallet(node_name: str="", wallet_addr: str="") -> None:
         if app_globals.app_results[node_name]['wallets'][wallet_addr]['last_status'] != False:
             t = as_list(
                 as_line(f"🏠 Node: ", Code(node_name), end=""),
-                f"📍 {app_globals.app_results[node_name]['url']}", "",
-                "🚨 Cannot get info for wallet: ",
-                TextLink(
-                    get_short_address(address=wallet_addr),
-                    url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_addr}"
-                ), "",
+                as_line(f"📍 {app_globals.app_results[node_name]['url']}"),
+                as_line(
+                    "🚨 Cannot get info for wallet: ",
+                    TextLink(
+                        get_short_address(address=wallet_addr),
+                        url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_addr}"
+                    )
+                ),
+                as_line("💻 Result: ", Code(wallet_response)),
                 "⚠ Check wallet address or node settings!"
             )
             await queue_telegram_message(message_text=t.as_html())
@@ -68,15 +71,22 @@ async def check_wallet(node_name: str="", wallet_addr: str="") -> None:
         if app_globals.app_results[node_name]['wallets'][wallet_addr]['last_status'] != True:
             t = as_list(
                 as_line(f"🏠 Node: ", Code(node_name), end=""),
-                f"📍 {app_globals.app_results[node_name]['url']}", "",
-                "👛 Successfully got info for wallet: ",
-                TextLink(
-                    get_short_address(address=wallet_addr),
-                    url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_addr}"
-                ), "",
-                f"💰 Final balance: {wallet_final_balance} MASSA", "",
-                f"🧻 Candidate/Active rolls: {wallet_candidate_rolls}/{wallet_active_rolls}", "",
-                f"🥊 Missed blocks: {wallet_missed_blocks}", ""
+                as_line(f"📍 {app_globals.app_results[node_name]['url']}"),
+                as_line(
+                    "👛 Successfully got info for wallet: ",
+                    TextLink(
+                        get_short_address(address=wallet_addr),
+                        url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_addr}"
+                    )
+                ),
+                as_line(
+                    "💰 Final balance: ",
+                    Code(wallet_final_balance),
+                    " MASSA",
+                    end=""
+                ),
+                f"🧻 Candidate/Active rolls: {wallet_candidate_rolls}/{wallet_active_rolls}",
+                f"🥊 Missed blocks: {wallet_missed_blocks}"
             )
             await queue_telegram_message(message_text=t.as_html())
 
@@ -86,13 +96,21 @@ async def check_wallet(node_name: str="", wallet_addr: str="") -> None:
             if wallet_final_balance < app_globals.app_results[node_name]['wallets'][wallet_addr]['final_balance']:
                 t = as_list(
                     as_line(f"🏠 Node: ", Code(node_name), end=""),
-                    f"📍 {app_globals.app_results[node_name]['url']}", "",
-                    "💸 Decreased balance on wallet: ",
-                    TextLink(
-                        get_short_address(address=wallet_addr),
-                        url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_addr}"
-                    ), "",
-                    f"👁 New final balance: {app_globals.app_results[node_name]['wallets'][wallet_addr]['final_balance']} → {wallet_final_balance} MASSA"
+                    as_line(f"📍 {app_globals.app_results[node_name]['url']}"),
+                    as_line(
+                        "💸 Decreased balance on wallet: ",
+                        TextLink(
+                            get_short_address(address=wallet_addr),
+                            url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_addr}"
+                        )
+                    ),
+                    as_line(
+                        "👁 New final balance: ",
+                        Code(app_globals.app_results[node_name]['wallets'][wallet_addr]['final_balance']),
+                        " → ",
+                        Code(wallet_final_balance),
+                        " MASSA"
+                    )
                 )
                 await queue_telegram_message(message_text=t.as_html())
 
@@ -100,13 +118,20 @@ async def check_wallet(node_name: str="", wallet_addr: str="") -> None:
             if wallet_candidate_rolls != app_globals.app_results[node_name]['wallets'][wallet_addr]['candidate_rolls']:
                 t = as_list(
                     as_line(f"🏠 Node: ", Code(node_name), end=""),
-                    f"📍 {app_globals.app_results[node_name]['url']}", "",
-                    "🧻 Candidate rolls changed on wallet:",
-                    TextLink(
-                        get_short_address(address=wallet_addr),
-                        url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_addr}"
-                    ), "",
-                    f"👁 New candidate rolls number: {app_globals.app_results[node_name]['wallets'][wallet_addr]['candidate_rolls']} → {wallet_candidate_rolls}"
+                    as_line(f"📍 {app_globals.app_results[node_name]['url']}"),
+                    as_line(
+                        "🧻 Candidate rolls changed on wallet:",
+                        TextLink(
+                            get_short_address(address=wallet_addr),
+                            url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_addr}"
+                        )
+                    ),
+                    as_line(
+                        "👁 New candidate rolls number: ",
+                        Code(app_globals.app_results[node_name]['wallets'][wallet_addr]['candidate_rolls']),
+                        " → ",
+                        Code(wallet_candidate_rolls)
+                    )
                 )
                 await queue_telegram_message(message_text=t.as_html())
 
@@ -114,13 +139,20 @@ async def check_wallet(node_name: str="", wallet_addr: str="") -> None:
             if wallet_active_rolls != app_globals.app_results[node_name]['wallets'][wallet_addr]['active_rolls']:
                 t = as_list(
                     as_line(f"🏠 Node: ", Code(node_name), end=""),
-                    f"📍 {app_globals.app_results[node_name]['url']}", "",
-                    "🧻 Active rolls changed on wallet:",
-                    TextLink(
-                        get_short_address(address=wallet_addr),
-                        url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_addr}"
-                    ), "",
-                    f"👁 New active rolls number: {app_globals.app_results[node_name]['wallets'][wallet_addr]['active_rolls']} → {wallet_active_rolls}"
+                    as_line(f"📍 {app_globals.app_results[node_name]['url']}"),
+                    as_line(
+                        "🧻 Active rolls changed on wallet:",
+                        TextLink(
+                            get_short_address(address=wallet_addr),
+                            url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_addr}"
+                        )
+                    ),
+                    as_line(
+                        "👁 New active rolls number: ",
+                        Code(app_globals.app_results[node_name]['wallets'][wallet_addr]['active_rolls']),
+                        " → ",
+                        Code(wallet_active_rolls)
+                    )
                 )
                 await queue_telegram_message(message_text=t.as_html())
 
@@ -128,13 +160,18 @@ async def check_wallet(node_name: str="", wallet_addr: str="") -> None:
             if wallet_missed_blocks > app_globals.app_results[node_name]['wallets'][wallet_addr]['missed_blocks']:
                 t = as_list(
                     as_line(f"🏠 Node: ", Code(node_name), end=""),
-                    f"📍 {app_globals.app_results[node_name]['url']}", "",
-                    "🥊 New missed blocks on wallet:",
-                    TextLink(
-                        get_short_address(address=wallet_addr),
-                        url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_addr}"
-                    ), "",
-                    f"👁 Blocks missed in last cycle: {wallet_last_cycle_missed_blocks}"
+                    as_line(f"📍 {app_globals.app_results[node_name]['url']}"),
+                    as_line(
+                        "🥊 New missed blocks on wallet:",
+                        TextLink(
+                            get_short_address(address=wallet_addr),
+                            url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_addr}"
+                        )
+                    ),
+                    as_line(
+                        "👁 Blocks missed in last cycle: ",
+                        Code(wallet_last_cycle_missed_blocks)
+                    )
                 )
                 await queue_telegram_message(message_text=t.as_html())
 

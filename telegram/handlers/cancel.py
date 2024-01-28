@@ -15,12 +15,9 @@ router = Router()
 
 @router.message(Command("cancel"))
 @logger.catch
-async def cmd_cancel(message: Message, state: FSMContext):
+async def cmd_cancel(message: Message, state: FSMContext) -> None:
     logger.debug("-> Enter Def")
     if message.chat.id != app_globals.bot.chat_id: return
-
-    await state.set_data({})
-    await state.clear()
 
     t = as_list(
         as_line(app_globals.app_config['telegram']['service_nickname']),
@@ -32,3 +29,7 @@ async def cmd_cancel(message: Message, state: FSMContext):
         reply_markup=ReplyKeyboardRemove(),
         request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
     )
+
+    await state.clear()
+    return
+

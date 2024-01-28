@@ -13,7 +13,7 @@ router = Router()
 
 @router.message(F)
 @logger.catch
-async def cmd_unknown(message: Message):
+async def cmd_unknown(message: Message) -> None:
     logger.debug("-> Enter Def")
     if message.chat.id != app_globals.bot.chat_id: return
 
@@ -27,3 +27,5 @@ async def cmd_unknown(message: Message):
         parse_mode=ParseMode.HTML,
         request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
     )
+
+    return

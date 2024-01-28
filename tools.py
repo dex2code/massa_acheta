@@ -43,7 +43,6 @@ async def pull_node_api(
 
 
 
-
 @logger.catch
 async def save_app_results() -> bool:
     logger.debug(f"-> Enter Def")
@@ -73,7 +72,6 @@ async def save_app_results() -> bool:
 
 
 
-
 @logger.catch
 def get_list_nodes() -> list:
     logger.debug("-> Enter Def")
@@ -84,7 +82,6 @@ def get_list_nodes() -> list:
         result_list.append(node_name)
     
     return result_list
-
 
 
 
@@ -104,6 +101,19 @@ def get_list_wallets(node_name: str="") -> list:
 
 
 
+@logger.catch
+def get_all_wallets() -> list:
+    logger.debug("-> Enter Def")
+
+    result_list = []
+
+    for node_name in app_globals.app_results:
+        for wallet_addr in app_globals.app_results[node_name]['wallets']:
+            result_list.append(wallet_addr)
+    
+    return result_list
+
+
 
 @logger.catch
 def get_last_seen(last_time: float=0.0, current_time: float=0.0) -> str:
@@ -120,12 +130,10 @@ def get_last_seen(last_time: float=0.0, current_time: float=0.0) -> str:
 
 
 
-
 @logger.catch
 def get_short_address(address: str="") -> str:
     logger.debug("-> Enter Def")
-    return f"{address[0:9]} ... {address[-6:]}"
-
+    return f"{address[0:9]}...{address[-6:]}"
 
 
 

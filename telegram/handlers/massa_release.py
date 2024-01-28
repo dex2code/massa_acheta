@@ -14,7 +14,7 @@ router = Router()
 
 @router.message(Command("massa_release"))
 @logger.catch
-async def cmd_cancel(message: Message):
+async def cmd_cancel(message: Message) -> None:
     logger.debug("-> Enter Def")
     if message.chat.id != app_globals.bot.chat_id: return
 
@@ -28,3 +28,5 @@ async def cmd_cancel(message: Message):
         parse_mode=ParseMode.HTML,
         request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
     )
+
+    return

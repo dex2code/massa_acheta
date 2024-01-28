@@ -33,7 +33,7 @@ async def check_node(node_name: str="") -> None:
                 as_line("🏠 Node: ", Code(node_name), end=""),
                 f"📍 {app_globals.app_results[node_name]['url']}", "",
                 "☠ Seems dead or unavailable!", "",
-                Code(f"💻 {node_result}"), "",
+                as_line("💻 Result: ", Code(node_result)),
                 "⚠️ Check node or firewall settings!"
             )
             await queue_telegram_message(message_text=t.as_html())
