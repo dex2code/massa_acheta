@@ -1,6 +1,7 @@
 from loguru import logger
 
 from time import time as t_now
+from datetime import datetime
 from aiogram import Router, F
 from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram.filters import Command, StateFilter
@@ -153,19 +154,21 @@ async def select_wallet(message: Message, state: FSMContext) -> None:
 
 
     current_time = t_now()
+
     wallet_last_seen = get_last_seen(
         last_time=app_globals.app_results[node_name]['wallets'][wallet_address]['last_update'],
         current_time=current_time
     )
+    
     node_last_seen = get_last_seen(
         last_time=app_globals.app_results[node_name]['last_update'],
         current_time=current_time
     )
-    if app_globals.app_results[node_name]['last_status'] != True:
-        node_status = f"☠️ Offline (last seen: {node_last_seen})"
+    
+    if app_globals.app_results[node_name]['last_status'] == True:
+        node_status = f"🌿 Status: online (last seen: {node_last_seen})"
     else:
-        node_status = f"🌿 Online (last seen: {node_last_seen})"
-
+        node_status = f"☠️ Status: offline (last seen: {node_last_seen})"
 
     if app_globals.app_results[node_name]['wallets'][wallet_address]['last_status'] != True:
         wallet_status = as_list(
@@ -201,6 +204,45 @@ async def select_wallet(message: Message, state: FSMContext) -> None:
         wallet_active_rolls = app_globals.app_results[node_name]['wallets'][wallet_address]['active_rolls']
         wallet_missed_blocks = app_globals.app_results[node_name]['wallets'][wallet_address]['missed_blocks']
 
+        cycles_list = []
+        wallet_cycles = app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'].get("cycle_infos", "")
+        if len(wallet_cycles) == 0:
+            cycles_list.append("🌀 Cycles info: No data")
+        else:
+            cycles_list.append("🌀 Cycles info (produced/missed blocks):")
+            for wallet_cycle in wallet_cycles:
+                cycle_num = wallet_cycle.get("cycle", 0)
+                ok_count = wallet_cycle.get("ok_count", 0)
+                nok_count = wallet_cycle.get("nok_count", 0)
+                cycles_list.append(f" ⋅ Cycle {cycle_num}: {ok_count}/{nok_count}")
+        
+
+        credit_list = []
+        wallet_credits = app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'].get("deferred_credits", "")
+        if len(wallet_credits) == 0:
+            credit_list.append("💳 Deferred credits: No data")
+        else:
+            credit_list.append("💳 Deferred credits: ")
+            for wallet_credit in wallet_credits:
+                credit_amount = round(
+                    float(wallet_credit['amount']),
+                    4
+                )
+                credit_period = int(wallet_credit['slot']['period'])
+                credit_unix = 1705312800 + (credit_period * 16)
+                credit_date = datetime.utcfromtimestamp(credit_unix).strftime("%b %d, %Y %I:%M %p UTC")
+
+                credit_list.append(
+                    as_line(
+                      " ⋅ ",
+                      credit_date,
+                      ": ",
+                      Code(credit_amount),
+                      " MASSA",
+                      end=""
+                    )
+                )
+
         t = as_list(
             as_line(app_globals.app_config['telegram']['service_nickname']),
             as_line("🏠 Node: ", Code(node_name), end=""),
@@ -218,7 +260,9 @@ async def select_wallet(message: Message, state: FSMContext) -> None:
             f"💰 Final balance: {wallet_final_balance} MASSA",
             f"🧻 Candidate/Active rolls: {wallet_candidate_rolls}/{wallet_active_rolls}",
             f"🥊 Missed blocks: {wallet_missed_blocks}", "",
-            "🔎 Detailed info:", "Not implemented yet!", "",
+            "🔎 Detailed info:", "",
+            *cycles_list, "",
+            *credit_list, "",
             f"⏳ Service checks updates: every {app_globals.app_config['service']['main_loop_period_sec']} seconds"
         )
 

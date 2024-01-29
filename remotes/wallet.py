@@ -10,18 +10,18 @@ from tools import pull_node_api, get_short_address
 
 
 @logger.catch
-async def check_wallet(node_name: str="", wallet_addr: str="") -> None:
+async def check_wallet(node_name: str="", wallet_address: str="") -> None:
     logger.debug(f"-> Enter Def")
 
     if app_globals.app_results[node_name]['last_status'] != True:
-        logger.warning(f"Will not watch wallet '{wallet_addr}' on node '{node_name}' because of its offline")
+        logger.warning(f"Will not watch wallet '{wallet_address}' on node '{node_name}' because of its offline")
         return
 
     payload = json.dumps({
         "id": 0,
         "jsonrpc": "2.0",
         "method": "get_addresses",
-        "params": [[wallet_addr]]
+        "params": [[wallet_address]]
     })
 
     try:
@@ -44,17 +44,17 @@ async def check_wallet(node_name: str="", wallet_addr: str="") -> None:
         wallet_last_cycle_missed_blocks = int(wallet_result['cycle_infos'][-1]['nok_count'])
 
     except Exception as E:
-        logger.warning(f"Error watching wallet '{wallet_addr}' on '{node_name}': ({str(E)})")
+        logger.warning(f"Error watching wallet '{wallet_address}' on '{node_name}': ({str(E)})")
 
-        if app_globals.app_results[node_name]['wallets'][wallet_addr]['last_status'] != False:
+        if app_globals.app_results[node_name]['wallets'][wallet_address]['last_status'] != False:
             t = as_list(
                 as_line(f"🏠 Node: ", Code(node_name), end=""),
                 as_line(f"📍 {app_globals.app_results[node_name]['url']}"),
                 as_line(
                     "🚨 Cannot get info for wallet: ",
                     TextLink(
-                        get_short_address(address=wallet_addr),
-                        url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_addr}"
+                        get_short_address(address=wallet_address),
+                        url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_address}"
                     )
                 ),
                 as_line("💻 Result: ", Code(wallet_response)),
@@ -62,21 +62,21 @@ async def check_wallet(node_name: str="", wallet_addr: str="") -> None:
             )
             await queue_telegram_message(message_text=t.as_html())
 
-        app_globals.app_results[node_name]['wallets'][wallet_addr]['last_status'] = False
-        app_globals.app_results[node_name]['wallets'][wallet_addr]['last_result'] = wallet_response
+        app_globals.app_results[node_name]['wallets'][wallet_address]['last_status'] = False
+        app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'] = wallet_response
 
     else:
-        logger.info(f"Got wallet '{wallet_addr}' on node '{node_name}' info successfully!")
+        logger.info(f"Got wallet '{wallet_address}' on node '{node_name}' info successfully!")
 
-        if app_globals.app_results[node_name]['wallets'][wallet_addr]['last_status'] != True:
+        if app_globals.app_results[node_name]['wallets'][wallet_address]['last_status'] != True:
             t = as_list(
                 as_line(f"🏠 Node: ", Code(node_name), end=""),
                 as_line(f"📍 {app_globals.app_results[node_name]['url']}"),
                 as_line(
                     "👛 Successfully got info for wallet: ",
                     TextLink(
-                        get_short_address(address=wallet_addr),
-                        url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_addr}"
+                        get_short_address(address=wallet_address),
+                        url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_address}"
                     )
                 ),
                 as_line(
@@ -93,20 +93,20 @@ async def check_wallet(node_name: str="", wallet_addr: str="") -> None:
         else:
 
             # 1) Check if balance is decreased:
-            if wallet_final_balance < app_globals.app_results[node_name]['wallets'][wallet_addr]['final_balance']:
+            if wallet_final_balance < app_globals.app_results[node_name]['wallets'][wallet_address]['final_balance']:
                 t = as_list(
                     as_line(f"🏠 Node: ", Code(node_name), end=""),
                     as_line(f"📍 {app_globals.app_results[node_name]['url']}"),
                     as_line(
                         "💸 Decreased balance on wallet: ",
                         TextLink(
-                            get_short_address(address=wallet_addr),
-                            url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_addr}"
+                            get_short_address(address=wallet_address),
+                            url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_address}"
                         )
                     ),
                     as_line(
                         "👁 New final balance: ",
-                        Code(app_globals.app_results[node_name]['wallets'][wallet_addr]['final_balance']),
+                        Code(app_globals.app_results[node_name]['wallets'][wallet_address]['final_balance']),
                         " → ",
                         Code(wallet_final_balance),
                         " MASSA"
@@ -115,20 +115,20 @@ async def check_wallet(node_name: str="", wallet_addr: str="") -> None:
                 await queue_telegram_message(message_text=t.as_html())
 
             # 2) Check if candidate rolls changed:
-            if wallet_candidate_rolls != app_globals.app_results[node_name]['wallets'][wallet_addr]['candidate_rolls']:
+            if wallet_candidate_rolls != app_globals.app_results[node_name]['wallets'][wallet_address]['candidate_rolls']:
                 t = as_list(
                     as_line(f"🏠 Node: ", Code(node_name), end=""),
                     as_line(f"📍 {app_globals.app_results[node_name]['url']}"),
                     as_line(
                         "🧻 Candidate rolls changed on wallet:",
                         TextLink(
-                            get_short_address(address=wallet_addr),
-                            url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_addr}"
+                            get_short_address(address=wallet_address),
+                            url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_address}"
                         )
                     ),
                     as_line(
                         "👁 New candidate rolls number: ",
-                        Code(app_globals.app_results[node_name]['wallets'][wallet_addr]['candidate_rolls']),
+                        Code(app_globals.app_results[node_name]['wallets'][wallet_address]['candidate_rolls']),
                         " → ",
                         Code(wallet_candidate_rolls)
                     )
@@ -136,20 +136,20 @@ async def check_wallet(node_name: str="", wallet_addr: str="") -> None:
                 await queue_telegram_message(message_text=t.as_html())
 
             # 3) Check if active rolls changed:
-            if wallet_active_rolls != app_globals.app_results[node_name]['wallets'][wallet_addr]['active_rolls']:
+            if wallet_active_rolls != app_globals.app_results[node_name]['wallets'][wallet_address]['active_rolls']:
                 t = as_list(
                     as_line(f"🏠 Node: ", Code(node_name), end=""),
                     as_line(f"📍 {app_globals.app_results[node_name]['url']}"),
                     as_line(
                         "🧻 Active rolls changed on wallet:",
                         TextLink(
-                            get_short_address(address=wallet_addr),
-                            url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_addr}"
+                            get_short_address(address=wallet_address),
+                            url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_address}"
                         )
                     ),
                     as_line(
                         "👁 New active rolls number: ",
-                        Code(app_globals.app_results[node_name]['wallets'][wallet_addr]['active_rolls']),
+                        Code(app_globals.app_results[node_name]['wallets'][wallet_address]['active_rolls']),
                         " → ",
                         Code(wallet_active_rolls)
                     )
@@ -157,15 +157,15 @@ async def check_wallet(node_name: str="", wallet_addr: str="") -> None:
                 await queue_telegram_message(message_text=t.as_html())
 
             # 4) Check if new blocks missed:
-            if wallet_missed_blocks > app_globals.app_results[node_name]['wallets'][wallet_addr]['missed_blocks']:
+            if wallet_missed_blocks > app_globals.app_results[node_name]['wallets'][wallet_address]['missed_blocks']:
                 t = as_list(
                     as_line(f"🏠 Node: ", Code(node_name), end=""),
                     as_line(f"📍 {app_globals.app_results[node_name]['url']}"),
                     as_line(
                         "🥊 New missed blocks on wallet:",
                         TextLink(
-                            get_short_address(address=wallet_addr),
-                            url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_addr}"
+                            get_short_address(address=wallet_address),
+                            url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_address}"
                         )
                     ),
                     as_line(
@@ -175,18 +175,18 @@ async def check_wallet(node_name: str="", wallet_addr: str="") -> None:
                 )
                 await queue_telegram_message(message_text=t.as_html())
 
-        app_globals.app_results[node_name]['wallets'][wallet_addr]['last_status'] = True
-        app_globals.app_results[node_name]['wallets'][wallet_addr]['last_update'] = t_now()
+        app_globals.app_results[node_name]['wallets'][wallet_address]['last_status'] = True
+        app_globals.app_results[node_name]['wallets'][wallet_address]['last_update'] = t_now()
 
-        app_globals.app_results[node_name]['wallets'][wallet_addr]['final_balance'] = wallet_final_balance
-        app_globals.app_results[node_name]['wallets'][wallet_addr]['candidate_rolls'] = wallet_candidate_rolls
-        app_globals.app_results[node_name]['wallets'][wallet_addr]['active_rolls'] = wallet_active_rolls
-        app_globals.app_results[node_name]['wallets'][wallet_addr]['missed_blocks'] = wallet_missed_blocks
+        app_globals.app_results[node_name]['wallets'][wallet_address]['final_balance'] = wallet_final_balance
+        app_globals.app_results[node_name]['wallets'][wallet_address]['candidate_rolls'] = wallet_candidate_rolls
+        app_globals.app_results[node_name]['wallets'][wallet_address]['active_rolls'] = wallet_active_rolls
+        app_globals.app_results[node_name]['wallets'][wallet_address]['missed_blocks'] = wallet_missed_blocks
 
-        app_globals.app_results[node_name]['wallets'][wallet_addr]['last_result'] = wallet_result
+        app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'] = wallet_result
 
     finally:
-        logger.debug(f"API result for wallet '{wallet_addr}' on node '{node_name}':\n{json.dumps(obj=app_globals.app_results[node_name]['wallets'][wallet_addr]['last_result'], indent=4)}")
+        logger.debug(f"API result for wallet '{wallet_address}' on node '{node_name}':\n{json.dumps(obj=app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'], indent=4)}")
 
 
     return

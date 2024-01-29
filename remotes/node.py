@@ -32,7 +32,7 @@ async def check_node(node_name: str="") -> None:
             t = as_list(
                 as_line("🏠 Node: ", Code(node_name), end=""),
                 f"📍 {app_globals.app_results[node_name]['url']}", "",
-                "☠ Seems dead or unavailable!", "",
+                "☠ Seems dead or unavailable", "",
                 as_line("💻 Result: ", Code(node_result)),
                 "⚠️ Check node or firewall settings!"
             )

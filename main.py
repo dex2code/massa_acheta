@@ -4,6 +4,7 @@ logger.add("main.log", format="\"{time}\", \"{level}\", \"{file}:{line}\", \"{mo
 import asyncio
 import json
 from aiogram.utils.formatting import as_list, as_line, Code
+from aiogram.types import BotCommand
 
 import app_globals
 
@@ -16,17 +17,36 @@ from telegram.queue import queue_telegram_message, operate_telegram_queue
 from telegram.handlers import start
 from telegram.handlers import view_config, view_node, view_wallet
 from telegram.handlers import massa_release
-from telegram.handlers import id, cancel, unknown
+from telegram.handlers import ping, id, cancel, unknown
 
 
 @logger.catch
 async def main() -> None:
     logger.debug(f"-> Enter Def")
 
+    bot_commands = [
+        BotCommand(command="/help", description="Help page"),
+        BotCommand(command="/view_config", description="View service config"),
+        BotCommand(command="/view_node", description="View node status"),
+        BotCommand(command="/view_wallet", description="View wallet info"),
+        BotCommand(command="/view_address", description="View any wallet info"),
+        BotCommand(command="/add_node", description="Add node to bot"),
+        BotCommand(command="/add_wallet", description="Add wallet to bot"),
+        BotCommand(command="/delete_node", description="Delete node from bot"),
+        BotCommand(command="/delete_wallet", description="Delete wallet from bot"),
+        BotCommand(command="/massa_release", description="Show actual MASSA release"),
+        BotCommand(command="/bot_release", description="Show actual Acheta release"),
+        BotCommand(command="/ping", description="Pong!"),
+        BotCommand(command="/id", description="Show User and Chat ID"),
+        BotCommand(command="/cancel", description="Cancel any scenario")
+    ]
+
+    await app_globals.tg_bot.set_my_commands(bot_commands)
+
     nodes_list = []
 
     if len(app_globals.app_results) == 0:
-        nodes_list.append("⭕ Node list is empty.")
+        nodes_list.append("⭕ Node list is empty")
     else:
         for node_name in app_globals.app_results:
             nodes_list.append(
@@ -65,6 +85,7 @@ async def main() -> None:
 
     app_globals.tg_dp.include_router(massa_release.router)
 
+    app_globals.tg_dp.include_router(ping.router)
     app_globals.tg_dp.include_router(id.router)
     app_globals.tg_dp.include_router(cancel.router)
 
@@ -84,15 +105,15 @@ if __name__ == "__main__":
         app_globals.app_results[node_name]['last_update'] = 0
         app_globals.app_results[node_name]['last_result'] = {"unknown": "Never updated before"}
 
-        for wallet_addr in app_globals.app_results[node_name]['wallets']:
-            app_globals.app_results[node_name]['wallets'][wallet_addr] = {}
-            app_globals.app_results[node_name]['wallets'][wallet_addr]['final_balance'] = 0
-            app_globals.app_results[node_name]['wallets'][wallet_addr]['candidate_rolls'] = 0
-            app_globals.app_results[node_name]['wallets'][wallet_addr]['active_rolls'] = 0
-            app_globals.app_results[node_name]['wallets'][wallet_addr]['missed_blocks'] = 0
-            app_globals.app_results[node_name]['wallets'][wallet_addr]['last_status'] = "unknown"
-            app_globals.app_results[node_name]['wallets'][wallet_addr]['last_update'] = 0
-            app_globals.app_results[node_name]['wallets'][wallet_addr]['last_result'] = {"unknown": "Never updated before"}
+        for wallet_address in app_globals.app_results[node_name]['wallets']:
+            app_globals.app_results[node_name]['wallets'][wallet_address] = {}
+            app_globals.app_results[node_name]['wallets'][wallet_address]['final_balance'] = 0
+            app_globals.app_results[node_name]['wallets'][wallet_address]['candidate_rolls'] = 0
+            app_globals.app_results[node_name]['wallets'][wallet_address]['active_rolls'] = 0
+            app_globals.app_results[node_name]['wallets'][wallet_address]['missed_blocks'] = 0
+            app_globals.app_results[node_name]['wallets'][wallet_address]['last_status'] = "unknown"
+            app_globals.app_results[node_name]['wallets'][wallet_address]['last_update'] = 0
+            app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'] = {"unknown": "Never updated before"}
 
     logger.debug(f"Results file loaded successfully:\n {json.dumps(obj=app_globals.app_results, indent=4)}")
     logger.info(f"Watching nodes with {app_globals.app_config['service']['main_loop_period_sec']} seconds loop period and {app_globals.app_config['service']['http_probe_timeout_sec']} seconds probe timeout.")

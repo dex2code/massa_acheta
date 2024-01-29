@@ -3,7 +3,7 @@ app_config = {}
 app_config['telegram']  = {}
 app_config['service']   = {}
 
-app_config['telegram']['service_nickname'] = "⪻ MASSA 🦗 ᗩcheta ⪼"
+app_config['telegram']['service_nickname'] = "MASSA 🦗 Acheta:"
 app_config['telegram']['sending_delay_sec'] = 3
 app_config['telegram']['sending_timeout_sec'] = 5
 

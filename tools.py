@@ -94,8 +94,8 @@ def get_list_wallets(node_name: str="") -> list:
     if node_name not in app_globals.app_results:
         return result_list
     
-    for wallet_addr in app_globals.app_results[node_name]['wallets']:
-        result_list.append(wallet_addr)
+    for wallet_address in app_globals.app_results[node_name]['wallets']:
+        result_list.append(wallet_address)
     
     return result_list
 
@@ -108,8 +108,8 @@ def get_all_wallets() -> list:
     result_list = []
 
     for node_name in app_globals.app_results:
-        for wallet_addr in app_globals.app_results[node_name]['wallets']:
-            result_list.append(wallet_addr)
+        for wallet_address in app_globals.app_results[node_name]['wallets']:
+            result_list.append(wallet_address)
     
     return result_list
 

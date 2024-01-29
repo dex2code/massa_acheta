@@ -21,8 +21,8 @@ async def monitor() -> None:
         for node_name in app_globals.app_results:
             node_coros.add(check_node(node_name=node_name))
 
-            for wallet_addr in app_globals.app_results[node_name]['wallets']:
-                wallet_coros.add(check_wallet(node_name=node_name, wallet_addr=wallet_addr))
+            for wallet_address in app_globals.app_results[node_name]['wallets']:
+                wallet_coros.add(check_wallet(node_name=node_name, wallet_address=wallet_address))
 
         await asyncio.gather(*node_coros)
         await asyncio.gather(*wallet_coros)

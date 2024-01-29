@@ -2,11 +2,11 @@ from loguru import logger
 
 import asyncio
 from time import time as t_now
-from aiogram.utils.formatting import as_list, as_line, Code
+from aiogram.utils.formatting import as_list, as_line, Code, TextLink, as_numbered_list
 
 import app_globals
 from telegram.queue import queue_telegram_message
-from tools import get_last_seen
+from tools import get_last_seen, get_short_address
 
 
 async def heartbeat() -> None:
@@ -20,21 +20,66 @@ async def heartbeat() -> None:
         current_time = t_now()
 
         heartbeat_list = []
+
         if len(app_globals.app_results) == 0:
-            heartbeat_list.append("⭕ Node list is empty.\n")
+            heartbeat_list.append("⭕ Node list is empty\n")
+
         else:
+
             for node_name in app_globals.app_results:
-                if app_globals.app_results[node_name]['last_status'] == True: node_status = "🌿 Online"
-                else: node_status = "☠️ Offline"
+                heartbeat_list.append(as_line(f"🏠 Node: ", Code(node_name), end=""))
+                heartbeat_list.append(f"📍 {app_globals.app_results[node_name]['url']}")
 
                 last_seen = get_last_seen(
                     last_time=app_globals.app_results[node_name]['last_update'],
                     current_time=current_time
                 )
 
-                heartbeat_list.append(as_line(f"🏠 Node: ", Code(node_name), end=""))
-                heartbeat_list.append(f"📍 {app_globals.app_results[node_name]['url']}")
-                heartbeat_list.append(f"{node_status} (Last seen: {last_seen})\n")
+                if app_globals.app_results[node_name]['last_status'] == True:
+                    heartbeat_list.append(f"🌿 Status: online ({last_seen})")
+
+                    num_wallets = len(app_globals.app_results[node_name]['wallets'])
+                    if num_wallets == 0:
+                        heartbeat_list.append("⭕ No wallets attached\n")
+                    else:
+                        heartbeat_list.append(f"👛 {num_wallets} wallet(s) attached:\n")
+
+                        wallet_list = []
+                        for wallet_address in app_globals.app_results[node_name]['wallets']:
+
+                            if app_globals.app_results[node_name]['wallets'][wallet_address]['last_status'] == True:
+                                wallet_list.append(
+                                    as_line(
+                                        TextLink(
+                                            get_short_address(address=wallet_address),
+                                            url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_address}"
+                                        ),
+                                        ": ",
+                                        Code(app_globals.app_results[node_name]['wallets'][wallet_address]['final_balance']), " MASSA",
+                                    )
+                                )
+                            else:
+                                wallet_list.append(
+                                    as_line(
+                                        TextLink(
+                                            get_short_address(address=wallet_address),
+                                            url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_address}"
+                                        ),
+                                        ": ",
+                                        Code("Unknown")
+                                    )
+                                )
+                        
+                        heartbeat_list.append(
+                            as_numbered_list(*wallet_list)
+                        )
+
+                else:
+                    heartbeat_list.append(f"☠️ Status: offline ({last_seen})")
+                    heartbeat_list.append("⭕ No wallets info available")
+
+
+                heartbeat_list.append("")
 
         t = as_list(
             "⏲ Heartbeat message:", "",
