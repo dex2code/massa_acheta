@@ -63,7 +63,7 @@ tg_bot = Bot(token=bot.key.get_secret_value(), disable_web_page_preview=True, pa
 Releases stuff
 '''
 latest_massa_release = ""
-local_acheta_release = "ACHETA.0.0.0"
+local_acheta_release = "ACHETA.1.0.0"
 latest_acheta_release = ""
 
 

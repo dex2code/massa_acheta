@@ -35,7 +35,7 @@ async def main() -> None:
         BotCommand(command="/delete_node", description="Delete node from bot"),
         BotCommand(command="/delete_wallet", description="Delete wallet from bot"),
         BotCommand(command="/massa_release", description="Show latest MASSA release"), # Done!
-        BotCommand(command="/acheta_release", description="Show latest Acheta release"),
+        BotCommand(command="/acheta_release", description="Show latest Acheta release"), # Done!
         BotCommand(command="/ping", description="Pong!"), # Done!
         BotCommand(command="/id", description="Show User and Chat ID"), # Done!
         BotCommand(command="/cancel", description="Cancel any scenario") # Done!
