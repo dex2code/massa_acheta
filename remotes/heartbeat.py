@@ -31,9 +31,9 @@ async def heartbeat() -> None:
                 heartbeat_list.append(f"📍 {app_globals.app_results[node_name]['url']}")
 
                 last_seen = get_last_seen(
-                    last_time=app_globals.app_results[node_name]['last_update'],
-                    current_time=current_time
-                )
+                                last_time=app_globals.app_results[node_name]['last_update'],
+                                current_time=current_time
+                            )
 
                 if app_globals.app_results[node_name]['last_status'] == True:
                     heartbeat_list.append(f"🌿 Status: Online ({last_seen})")
@@ -45,6 +45,7 @@ async def heartbeat() -> None:
                         heartbeat_list.append(f"👛 {num_wallets} wallet(s) attached:\n")
 
                         wallet_list = []
+
                         for wallet_address in app_globals.app_results[node_name]['wallets']:
 
                             if app_globals.app_results[node_name]['wallets'][wallet_address]['last_status'] == True:
@@ -70,19 +71,19 @@ async def heartbeat() -> None:
                                     )
                                 )
                         
-                        heartbeat_list.append(
-                            as_numbered_list(*wallet_list)
-                        )
+                        heartbeat_list.append(as_numbered_list(*wallet_list))
 
                 else:
                     heartbeat_list.append(f"☠️ Status: Offline ({last_seen})")
                     heartbeat_list.append("⭕ No wallets info available")
 
-
                 heartbeat_list.append("")
 
         t = as_list(
-            "⏲ Heartbeat message:", "",
-            *heartbeat_list,
-            f"⏳ Heartbeat schedule: every {app_globals.app_config['service']['heartbeat_period_hours']} hours")
+                "⏲ Heartbeat message:", "",
+                *heartbeat_list,
+                f"⏳ Heartbeat schedule: every {app_globals.app_config['service']['heartbeat_period_hours']} hours"
+            )
         await queue_telegram_message(message_text=t.as_html())
+
+        return

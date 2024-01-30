@@ -20,9 +20,9 @@ async def cmd_cancel(message: Message, state: FSMContext) -> None:
     if message.chat.id != app_globals.bot.chat_id: return
 
     t = as_list(
-        as_line(app_globals.app_config['telegram']['service_nickname']),
-        "❌ Action cancelled!"
-    )
+            as_line(app_globals.app_config['telegram']['service_nickname']),
+            "❌ Action cancelled!"
+        )
     await message.answer(
         text=t.as_html(),
         parse_mode=ParseMode.HTML,

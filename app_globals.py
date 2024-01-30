@@ -41,7 +41,6 @@ with open(file=results_obj, mode="r") as input_results:
 
 
 
-
 '''
 Init Telegram stuff
 '''
@@ -60,12 +59,12 @@ tg_bot = Bot(token=bot.key.get_secret_value(), disable_web_page_preview=True, pa
 
 
 
-
 '''
 Releases stuff
 '''
-current_massa_release = ""
-current_bot_release = "ACHETA.1.0.0"
+latest_massa_release = ""
+local_acheta_release = "ACHETA.0.0.0"
+latest_acheta_release = ""
 
 
 

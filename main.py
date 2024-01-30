@@ -9,14 +9,14 @@ from aiogram.types import BotCommand
 import app_globals
 
 from remotes.heartbeat import heartbeat as remote_heartbeat
-from remotes.github_releases import release as remote_github_release
+from remotes.releases import releases as remote_releases
 from remotes.monitor import monitor as remote_monitor
 
 from telegram.queue import queue_telegram_message, operate_telegram_queue
 
 from telegram.handlers import start
 from telegram.handlers import view_config, view_node, view_wallet
-from telegram.handlers import massa_release
+from telegram.handlers import massa_release, acheta_release
 from telegram.handlers import ping, id, cancel, unknown
 
 
@@ -25,20 +25,20 @@ async def main() -> None:
     logger.debug(f"-> Enter Def")
 
     bot_commands = [
-        BotCommand(command="/help", description="Help page"),
-        BotCommand(command="/view_config", description="View service config"),
-        BotCommand(command="/view_node", description="View node status"),
-        BotCommand(command="/view_wallet", description="View wallet info"),
+        BotCommand(command="/help", description="Help page"), # Done!
+        BotCommand(command="/view_config", description="View service config"), # Done!
+        BotCommand(command="/view_node", description="View node status"), # Done!
+        BotCommand(command="/view_wallet", description="View wallet info"), # Done!
         BotCommand(command="/view_address", description="View any wallet info"),
         BotCommand(command="/add_node", description="Add node to bot"),
         BotCommand(command="/add_wallet", description="Add wallet to bot"),
         BotCommand(command="/delete_node", description="Delete node from bot"),
         BotCommand(command="/delete_wallet", description="Delete wallet from bot"),
-        BotCommand(command="/massa_release", description="Show actual MASSA release"),
-        BotCommand(command="/bot_release", description="Show actual Acheta release"),
-        BotCommand(command="/ping", description="Pong!"),
-        BotCommand(command="/id", description="Show User and Chat ID"),
-        BotCommand(command="/cancel", description="Cancel any scenario")
+        BotCommand(command="/massa_release", description="Show latest MASSA release"), # Done!
+        BotCommand(command="/acheta_release", description="Show latest Acheta release"),
+        BotCommand(command="/ping", description="Pong!"), # Done!
+        BotCommand(command="/id", description="Show User and Chat ID"), # Done!
+        BotCommand(command="/cancel", description="Cancel any scenario") # Done!
     ]
 
     await app_globals.tg_bot.set_my_commands(bot_commands)
@@ -74,7 +74,7 @@ async def main() -> None:
     aio_loop.create_task(operate_telegram_queue())
     aio_loop.create_task(remote_monitor())
     aio_loop.create_task(remote_heartbeat())
-    aio_loop.create_task(remote_github_release())
+    aio_loop.create_task(remote_releases())
 
 
     app_globals.tg_dp.include_router(start.router)
@@ -84,6 +84,7 @@ async def main() -> None:
     app_globals.tg_dp.include_router(view_wallet.router)
 
     app_globals.tg_dp.include_router(massa_release.router)
+    app_globals.tg_dp.include_router(acheta_release.router)
 
     app_globals.tg_dp.include_router(ping.router)
     app_globals.tg_dp.include_router(id.router)
@@ -93,6 +94,8 @@ async def main() -> None:
 
     await app_globals.tg_bot.delete_webhook(drop_pending_updates=True)
     await app_globals.tg_dp.start_polling(app_globals.tg_bot)
+
+    return
 
 
 

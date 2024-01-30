@@ -13,10 +13,8 @@ async def monitor() -> None:
     logger.debug(f"-> Enter Def")
 
     while True:
-
         node_coros = set()
         wallet_coros = set()
-
 
         for node_name in app_globals.app_results:
             node_coros.add(check_node(node_name=node_name))

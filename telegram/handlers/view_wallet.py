@@ -20,6 +20,7 @@ class WalletViewer(StatesGroup):
     waiting_node_name = State()
     waiting_wallet_address = State()
 
+
 router = Router()
 
 
@@ -31,10 +32,10 @@ async def cmd_view_wallet(message: Message, state: FSMContext) -> None:
     
     if len(app_globals.app_results) == 0:
         t = as_list(
-            app_globals.app_config['telegram']['service_nickname'], "",
-            "⭕ Node list is empty.", "",
-            "❓ Try /help to learn how to add a node to bot."
-        )
+                app_globals.app_config['telegram']['service_nickname'], "",
+                "⭕ Node list is empty.", "",
+                "❓ Try /help to learn how to add a node to bot."
+            )
         await message.answer(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
@@ -46,9 +47,9 @@ async def cmd_view_wallet(message: Message, state: FSMContext) -> None:
 
 
     t = as_list(
-        as_line(app_globals.app_config['telegram']['service_nickname']),
-        "❓ Tap the node to select or /cancel to quit the scenario.",
-    )
+            as_line(app_globals.app_config['telegram']['service_nickname']),
+            "❓ Tap the node to select or /cancel to quit the scenario.",
+        )
     await message.answer(
         text=t.as_html(),
         parse_mode=ParseMode.HTML,
@@ -72,10 +73,10 @@ async def select_wallet(message: Message, state: FSMContext) -> None:
 
     if node_name not in app_globals.app_results:
         t = as_list(
-            as_line(app_globals.app_config['telegram']['service_nickname']),
-            "‼ Error. Unknown node.", "",
-            "❓ Try /help to learn how to add a node to bot."
-        )
+                as_line(app_globals.app_config['telegram']['service_nickname']),
+                "‼ Error. Unknown node.", "",
+                "❓ Try /help to learn how to add a node to bot."
+            )
         await message.answer(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
@@ -85,14 +86,13 @@ async def select_wallet(message: Message, state: FSMContext) -> None:
 
         await state.clear()
         return
-
 
     if len(app_globals.app_results[node_name]['wallets']) == 0:
         t = as_list(
-            as_line(app_globals.app_config['telegram']['service_nickname']),
-            "⭕ No wallets attached to selected node!", "",
-            "❓ Try /help to learn how to add a wallet to bot."
-        )
+                as_line(app_globals.app_config['telegram']['service_nickname']),
+                "⭕ No wallets attached to selected node!", "",
+                "❓ Try /help to learn how to add a wallet to bot."
+            )
         await message.answer(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
@@ -103,11 +103,10 @@ async def select_wallet(message: Message, state: FSMContext) -> None:
         await state.clear()
         return
 
-
     t = as_list(
-        as_line(app_globals.app_config['telegram']['service_nickname']),
-        "❓ Tap the wallet to select or /cancel to quit the scenario.",
-    )
+            as_line(app_globals.app_config['telegram']['service_nickname']),
+            "❓ Tap the wallet to select or /cancel to quit the scenario.",
+        )
     await message.answer(
         text=t.as_html(),
         parse_mode=ParseMode.HTML,
@@ -132,18 +131,17 @@ async def select_wallet(message: Message, state: FSMContext) -> None:
 
     if wallet_address not in app_globals.app_results[node_name]['wallets']:
         t = as_list(
-            as_line(app_globals.app_config['telegram']['service_nickname']),
-            as_line(
-                "‼ Error. Wallet ",
-                TextLink(
-                    get_short_address(address=wallet_address),
-                    url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_address}"
+                as_line(app_globals.app_config['telegram']['service_nickname']),
+                as_line(
+                    "‼ Error. Wallet ",
+                    TextLink(
+                        get_short_address(address=wallet_address),
+                        url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_address}"
+                    ),
+                    f" is not attached to node {node_name}. Try another one."
                 ),
-                f" is not attached to node {node_name}. Try another one."
-
-            ),
-            "❓ Try /help to learn how to add a wallet to bot."
-        )
+                "❓ Try /help to learn how to add a wallet to bot."
+            )
         await message.answer(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
@@ -152,18 +150,17 @@ async def select_wallet(message: Message, state: FSMContext) -> None:
 
         return
 
-
     current_time = t_now()
 
-    wallet_last_seen = get_last_seen(
-        last_time=app_globals.app_results[node_name]['wallets'][wallet_address]['last_update'],
-        current_time=current_time
-    )
+    wallet_last_seen =  get_last_seen(
+                            last_time=app_globals.app_results[node_name]['wallets'][wallet_address]['last_update'],
+                            current_time=current_time
+                        )
     
-    node_last_seen = get_last_seen(
-        last_time=app_globals.app_results[node_name]['last_update'],
-        current_time=current_time
-    )
+    node_last_seen =    get_last_seen(
+                            last_time=app_globals.app_results[node_name]['last_update'],
+                            current_time=current_time
+                        )
     
     if app_globals.app_results[node_name]['last_status'] == True:
         node_status = f"🌿 Status: Online (last seen: {node_last_seen})"
@@ -172,33 +169,32 @@ async def select_wallet(message: Message, state: FSMContext) -> None:
 
     if app_globals.app_results[node_name]['wallets'][wallet_address]['last_status'] != True:
         wallet_status = as_list(
-            as_line(
-                f"⁉ No actual data for wallet: ",
-                TextLink(
-                    get_short_address(address=wallet_address),
-                    url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_address}"
-                ),
-                end=""
-            ),
-            as_line(
-                "👁 Last successful data update: ",
-                wallet_last_seen
-            ),
-            as_line("⚠️ Check wallet address or node settings!"),
-            as_line("💻 Result: ", Code(app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'])),
-            f"⏳ Service checks updates: every {app_globals.app_config['service']['main_loop_period_sec']} seconds"
-        )
+                            as_line(
+                                f"⁉ No actual data for wallet: ",
+                                TextLink(
+                                    get_short_address(address=wallet_address),
+                                    url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_address}"
+                                ),
+                                end=""
+                            ),
+                            as_line(
+                                "👁 Last successful data update: ",
+                                wallet_last_seen
+                            ),
+                            as_line("⚠️ Check wallet address or node settings!"),
+                            as_line("💻 Result: ", Code(app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'])),
+                            f"⏳ Service checks updates: every {app_globals.app_config['service']['main_loop_period_sec']} seconds"
+                        )
 
         t = as_list(
-            as_line(app_globals.app_config['telegram']['service_nickname']),
-            as_line("🏠 Node: ", Code(node_name), end=""),
-            f"📍 {app_globals.app_results[node_name]['url']}",
-            f"{node_status}", "",
-            wallet_status
-        )
+                as_line(app_globals.app_config['telegram']['service_nickname']),
+                as_line("🏠 Node: ", Code(node_name), end=""),
+                f"📍 {app_globals.app_results[node_name]['url']}",
+                f"{node_status}", "",
+                wallet_status
+            )
 
     else:
-
         wallet_final_balance = app_globals.app_results[node_name]['wallets'][wallet_address]['final_balance']
         wallet_candidate_rolls = app_globals.app_results[node_name]['wallets'][wallet_address]['candidate_rolls']
         wallet_active_rolls = app_globals.app_results[node_name]['wallets'][wallet_address]['active_rolls']
@@ -206,6 +202,7 @@ async def select_wallet(message: Message, state: FSMContext) -> None:
 
         cycles_list = []
         wallet_cycles = app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'].get("cycle_infos", "")
+
         if len(wallet_cycles) == 0:
             cycles_list.append("🌀 Cycles info: No data")
         else:
@@ -219,53 +216,60 @@ async def select_wallet(message: Message, state: FSMContext) -> None:
 
         credit_list = []
         wallet_credits = app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'].get("deferred_credits", "")
+
         if len(wallet_credits) == 0:
             credit_list.append("💳 Deferred credits: No data")
+
         else:
             credit_list.append("💳 Deferred credits: ")
+
             for wallet_credit in wallet_credits:
                 credit_amount = round(
                     float(wallet_credit['amount']),
                     4
                 )
+
                 credit_period = int(wallet_credit['slot']['period'])
                 credit_unix = 1705312800 + (credit_period * 16)
                 credit_date = datetime.utcfromtimestamp(credit_unix).strftime("%b %d, %Y %I:%M %p UTC")
 
                 credit_list.append(
                     as_line(
-                      " ⋅ ",
-                      credit_date,
-                      ": ",
-                      Code(credit_amount),
-                      " MASSA",
-                      end=""
+                        " ⋅ ",
+                        credit_date,
+                        ": ",
+                        Code(credit_amount),
+                        " MASSA",
+                        end=""
                     )
                 )
 
         t = as_list(
-            as_line(app_globals.app_config['telegram']['service_nickname']),
-            as_line("🏠 Node: ", Code(node_name), end=""),
-            f"📍 {app_globals.app_results[node_name]['url']}",
-            f"{node_status}", "",
-            as_line(
-                "👛 Wallet: ",
-                TextLink(
-                    get_short_address(address=wallet_address),
-                    url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_address}"
+                as_line(app_globals.app_config['telegram']['service_nickname']),
+                as_line(
+                    "🏠 Node: ",
+                    Code(node_name),
+                    end=""
                 ),
-                end=""
-            ),
-            f"👁 Info updated: {wallet_last_seen}", "",
-            f"💰 Final balance: {wallet_final_balance} MASSA",
-            f"🧻 Candidate/Active rolls: {wallet_candidate_rolls}/{wallet_active_rolls}",
-            f"🥊 Missed blocks: {wallet_missed_blocks}", "",
-            "🔎 Detailed info:", "",
-            *cycles_list, "",
-            *credit_list, "",
-            f"⏳ Service checks updates: every {app_globals.app_config['service']['main_loop_period_sec']} seconds"
-        )
-
+                f"📍 {app_globals.app_results[node_name]['url']}",
+                f"{node_status}", "",
+                as_line(
+                    "👛 Wallet: ",
+                    TextLink(
+                        get_short_address(address=wallet_address),
+                        url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_address}"
+                    ),
+                    end=""
+                ),
+                f"👁 Info updated: {wallet_last_seen}", "",
+                f"💰 Final balance: {wallet_final_balance} MASSA",
+                f"🧻 Candidate/Active rolls: {wallet_candidate_rolls}/{wallet_active_rolls}",
+                f"🥊 Missed blocks: {wallet_missed_blocks}", "",
+                "🔎 Detailed info:", "",
+                *cycles_list, "",
+                *credit_list, "",
+                f"⏳ Service checks updates: every {app_globals.app_config['service']['main_loop_period_sec']} seconds"
+            )
 
     await message.answer(
         text=t.as_html(),

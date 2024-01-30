@@ -18,10 +18,10 @@ async def cmd_unknown(message: Message) -> None:
     if message.chat.id != app_globals.bot.chat_id: return
 
     t = as_list(
-        as_line(app_globals.app_config['telegram']['service_nickname']),
-        "⁉ Unknown command.", "",
-        "Try /cancel to quit ongoing scenario or /help to learn correct commands."
-    )
+            as_line(app_globals.app_config['telegram']['service_nickname']),
+            "⁉ Unknown command.", "",
+            "Try /cancel to quit ongoing scenario or /help to learn correct commands."
+        )
     await message.answer(
         text=t.as_html(),
         parse_mode=ParseMode.HTML,

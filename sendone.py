@@ -4,7 +4,8 @@ from aiogram.utils.formatting import as_list, as_line, Bold, Pre, Code
 from aiogram.enums import ParseMode
 
 
-async def main():
+async def main() -> None:
+
     t = as_list(
     )
 
@@ -14,6 +15,8 @@ async def main():
         parse_mode=ParseMode.HTML,
         request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
     )
+
+    return
 
 
 if __name__ == "__main__":

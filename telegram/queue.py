@@ -23,6 +23,7 @@ async def queue_telegram_message(message_text: str="") -> None:
     return
 
 
+
 @logger.catch
 async def operate_telegram_queue() -> None:
     logger.debug("-> Enter Def")
@@ -33,7 +34,7 @@ async def operate_telegram_queue() -> None:
         number_unsent_messages = len(app_globals.telegram_queue)
         logger.debug(f"Telegram: {number_unsent_messages} unsent message(s) in queue")
         
-        if not number_unsent_messages:
+        if number_unsent_messages == 0:
             continue
 
         try:

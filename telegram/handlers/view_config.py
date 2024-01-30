@@ -9,6 +9,7 @@ from aiogram.utils.formatting import as_list, as_line, TextLink, Code, as_number
 import app_globals
 from tools import get_short_address
 
+
 router = Router()
 
 
@@ -19,11 +20,11 @@ async def cmd_view_config(message: Message) -> None:
     if message.chat.id != app_globals.bot.chat_id: return
 
     config_list = []
+
     if len(app_globals.app_results) == 0:
         config_list.append("⭕ Configuration is empty")
-    else:
-        config_list = []
 
+    else:
         for node_name in app_globals.app_results:
             config_list.append(
                 as_line(
@@ -35,18 +36,12 @@ async def cmd_view_config(message: Message) -> None:
             config_list.append(f"📍 {app_globals.app_results[node_name]['url']}")
 
             if len(app_globals.app_results[node_name]['wallets']) == 0:
-                config_list.append(
-                    as_line("⭕ No wallets attached")
-                )
-                config_list.append("")
+                config_list.append("⭕ No wallets attached\n\n")
             else:
-                config_list.append(
-                    as_line(
-                        f"👛 {len(app_globals.app_results[node_name]['wallets'])} wallet(s) attached: "
-                    )
-                )
+                config_list.append(f"👛 {len(app_globals.app_results[node_name]['wallets'])} wallet(s) attached:\n")
 
                 wallet_list = []
+
                 for wallet_address in app_globals.app_results[node_name]['wallets']:
                     wallet_list.append(
                         as_line(
@@ -63,11 +58,11 @@ async def cmd_view_config(message: Message) -> None:
                 config_list.append("")
 
     t = as_list(
-        as_line(app_globals.app_config['telegram']['service_nickname']),
-        "📋 Current service configuration:", "",
-        *config_list,
-        "❓ Try /help to learn how to manage settings."
-    )
+            as_line(app_globals.app_config['telegram']['service_nickname']),
+            "📋 Current service configuration:", "",
+            *config_list,
+            "❓ Try /help to learn how to manage settings."
+        )
     await message.answer(
         text=t.as_html(),
         parse_mode=ParseMode.HTML,

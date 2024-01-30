@@ -13,12 +13,14 @@ from tools import pull_node_api
 async def check_node(node_name: str="") -> None:
     logger.debug(f"-> Enter Def")
 
-    payload = json.dumps({
-        "id": 0,
-        "jsonrpc": "2.0",
-        "method": "get_status",
-        "params": []
-    })
+    payload =   json.dumps(
+                    {
+                        "id": 0,
+                        "jsonrpc": "2.0",
+                        "method": "get_status",
+                        "params": []
+                    }
+                )
 
     try:
         node_result = await pull_node_api(api_url=app_globals.app_results[node_name]['url'], api_payload=payload)
@@ -30,12 +32,19 @@ async def check_node(node_name: str="") -> None:
 
         if app_globals.app_results[node_name]['last_status'] != False:
             t = as_list(
-                as_line("🏠 Node: ", Code(node_name), end=""),
-                f"📍 {app_globals.app_results[node_name]['url']}", "",
-                "☠ Seems dead or unavailable", "",
-                as_line("💻 Result: ", Code(node_result)),
-                "⚠️ Check node or firewall settings!"
-            )
+                    as_line(
+                        "🏠 Node: ",
+                        Code(node_name),
+                        end=""
+                    ),
+                    f"📍 {app_globals.app_results[node_name]['url']}", "",
+                    "☠ Seems dead or unavailable", "",
+                    as_line(
+                        "💻 Result: ",
+                        Code(node_result)
+                    ),
+                    "⚠️ Check node or firewall settings!"
+                )
             await queue_telegram_message(message_text=t.as_html())
 
         app_globals.app_results[node_name]['last_status'] = False
@@ -46,10 +55,17 @@ async def check_node(node_name: str="") -> None:
 
         if app_globals.app_results[node_name]['last_status'] != True:
             t = as_list(
-                as_line("🏠 Node: ", Code(node_name), end=""),
-                f"📍 {app_globals.app_results[node_name]['url']}", "",
-                as_line("🌿 Become alive with Chain ID: ", Code(node_chain_id))
-            )
+                    as_line(
+                        "🏠 Node: ",
+                        Code(node_name),
+                        end=""
+                    ),
+                    f"📍 {app_globals.app_results[node_name]['url']}", "",
+                    as_line(
+                        "🌿 Become alive with Chain ID: ",
+                        Code(node_chain_id)
+                    )
+                )
             await queue_telegram_message(message_text=t.as_html())
 
         app_globals.app_results[node_name]['last_status'] = True
@@ -58,7 +74,6 @@ async def check_node(node_name: str="") -> None:
 
     finally:
         logger.debug(f"API result for node '{node_name}' ({app_globals.app_results[node_name]['url']}):\n{json.dumps(obj=app_globals.app_results[node_name]['last_result'], indent=4)}")
-
     
     return
 
