@@ -36,7 +36,7 @@ async def heartbeat() -> None:
                 )
 
                 if app_globals.app_results[node_name]['last_status'] == True:
-                    heartbeat_list.append(f"🌿 Status: online ({last_seen})")
+                    heartbeat_list.append(f"🌿 Status: Online ({last_seen})")
 
                     num_wallets = len(app_globals.app_results[node_name]['wallets'])
                     if num_wallets == 0:
@@ -75,7 +75,7 @@ async def heartbeat() -> None:
                         )
 
                 else:
-                    heartbeat_list.append(f"☠️ Status: offline ({last_seen})")
+                    heartbeat_list.append(f"☠️ Status: Offline ({last_seen})")
                     heartbeat_list.append("⭕ No wallets info available")
 
 

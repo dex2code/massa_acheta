@@ -120,7 +120,7 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
                     as_line(f"🏠 Node: ", Code(node_name), end=""),
                     as_line(f"📍 {app_globals.app_results[node_name]['url']}"),
                     as_line(
-                        "🧻 Candidate rolls changed on wallet:",
+                        "🧻 Candidate rolls changed on wallet: ",
                         TextLink(
                             get_short_address(address=wallet_address),
                             url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_address}"
@@ -141,7 +141,7 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
                     as_line(f"🏠 Node: ", Code(node_name), end=""),
                     as_line(f"📍 {app_globals.app_results[node_name]['url']}"),
                     as_line(
-                        "🧻 Active rolls changed on wallet:",
+                        "🧻 Active rolls changed on wallet: ",
                         TextLink(
                             get_short_address(address=wallet_address),
                             url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_address}"

@@ -166,9 +166,9 @@ async def select_wallet(message: Message, state: FSMContext) -> None:
     )
     
     if app_globals.app_results[node_name]['last_status'] == True:
-        node_status = f"🌿 Status: online (last seen: {node_last_seen})"
+        node_status = f"🌿 Status: Online (last seen: {node_last_seen})"
     else:
-        node_status = f"☠️ Status: offline (last seen: {node_last_seen})"
+        node_status = f"☠️ Status: Offline (last seen: {node_last_seen})"
 
     if app_globals.app_results[node_name]['wallets'][wallet_address]['last_status'] != True:
         wallet_status = as_list(

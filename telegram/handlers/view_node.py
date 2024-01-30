@@ -97,7 +97,7 @@ async def show_node(message: Message, state: FSMContext) -> None:
     )
 
     if app_globals.app_results[node_name]['last_status'] != True:
-        node_status = f"☠️ Status: offline (last seen: {last_seen})"
+        node_status = f"☠️ Status: Offline (last seen: {last_seen})"
 
         t = as_list(
             as_line(app_globals.app_config['telegram']['service_nickname']),
@@ -113,7 +113,7 @@ async def show_node(message: Message, state: FSMContext) -> None:
             f"⏳ Service checks updates: every {app_globals.app_config['service']['main_loop_period_sec']} seconds"
         )
     else:
-        node_status = f"🌿 Status: online (last seen: {last_seen})"
+        node_status = f"🌿 Status: Online (last seen: {last_seen})"
 
         node_id = app_globals.app_results[node_name]['last_result'].get("node_id", "Not known")
         node_ip = app_globals.app_results[node_name]['last_result'].get("node_ip", "Not known")
