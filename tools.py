@@ -13,6 +13,7 @@ async def pull_node_api(
     api_url: str="",
     api_header: object={"content-type": "application/json"},
     api_payload: object={},
+    api_content_type: str=None,
     api_session_timeout: int=app_globals.app_config['service']['http_session_timeout_sec'],
     api_probe_timeout: int=app_globals.app_config['service']['http_probe_timeout_sec']) -> object:
     logger.debug(f"-> Enter Def")
@@ -22,14 +23,8 @@ async def pull_node_api(
 
     try:
         async with aiohttp.ClientSession(timeout=api_session_timeout) as session:
-
-            async with session.post(
-                url=api_url,
-                headers=api_header,
-                data=api_payload,
-                timeout=api_probe_timeout) as api_response:
-
-                api_response_obj = await api_response.json()
+            async with session.post(url=api_url, headers=api_header, data=api_payload, timeout=api_probe_timeout) as api_response:
+                api_response_obj = await api_response.json(content_type=api_content_type)
         
         api_response_result = api_response_obj['result']
 
@@ -139,7 +134,11 @@ def get_last_seen(last_time: float=0.0, current_time: float=0.0) -> str:
 @logger.catch
 def get_short_address(address: str="") -> str:
     logger.debug("-> Enter Def")
-    return f"{address[0:9]}...{address[-6:]}"
+
+    if len(address) > 15:
+        return f"{address[0:9]}...{address[-6:]}"
+    else:
+        return address
 
 
 

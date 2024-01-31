@@ -121,7 +121,7 @@ async def select_wallet(message: Message, state: FSMContext) -> None:
 
 @router.message(WalletViewer.waiting_wallet_address, F.text.in_(get_all_wallets()))
 @logger.catch
-async def select_wallet(message: Message, state: FSMContext) -> None:
+async def show_wallet(message: Message, state: FSMContext) -> None:
     logger.debug("-> Enter Def")
     if message.chat.id != app_globals.bot.chat_id: return
 
@@ -147,7 +147,6 @@ async def select_wallet(message: Message, state: FSMContext) -> None:
             parse_mode=ParseMode.HTML,
             request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
         )
-
         return
 
     current_time = t_now()
@@ -181,16 +180,23 @@ async def select_wallet(message: Message, state: FSMContext) -> None:
                                 "👁 Last successful data update: ",
                                 wallet_last_seen
                             ),
+                            as_line(
+                                "💻 Result: ",
+                                Code(app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'])
+                            ),
                             as_line("⚠️ Check wallet address or node settings!"),
-                            as_line("💻 Result: ", Code(app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'])),
                             f"⏳ Service checks updates: every {app_globals.app_config['service']['main_loop_period_sec']} seconds"
                         )
 
         t = as_list(
                 as_line(app_globals.app_config['telegram']['service_nickname']),
-                as_line("🏠 Node: ", Code(node_name), end=""),
+                as_line(
+                    "🏠 Node: ",
+                    Code(node_name),
+                    end=""
+                ),
                 f"📍 {app_globals.app_results[node_name]['url']}",
-                f"{node_status}", "",
+                node_status, "",
                 wallet_status
             )
 
@@ -199,9 +205,10 @@ async def select_wallet(message: Message, state: FSMContext) -> None:
         wallet_candidate_rolls = app_globals.app_results[node_name]['wallets'][wallet_address]['candidate_rolls']
         wallet_active_rolls = app_globals.app_results[node_name]['wallets'][wallet_address]['active_rolls']
         wallet_missed_blocks = app_globals.app_results[node_name]['wallets'][wallet_address]['missed_blocks']
+        wallet_thread = app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'].get("thread", 0)
 
         cycles_list = []
-        wallet_cycles = app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'].get("cycle_infos", "")
+        wallet_cycles = app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'].get("cycle_infos", [])
 
         if len(wallet_cycles) == 0:
             cycles_list.append("🌀 Cycles info: No data")
@@ -215,7 +222,7 @@ async def select_wallet(message: Message, state: FSMContext) -> None:
         
 
         credit_list = []
-        wallet_credits = app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'].get("deferred_credits", "")
+        wallet_credits = app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'].get("deferred_credits", [])
 
         if len(wallet_credits) == 0:
             credit_list.append("💳 Deferred credits: No data")
@@ -266,10 +273,12 @@ async def select_wallet(message: Message, state: FSMContext) -> None:
                 f"🧻 Candidate/Active rolls: {wallet_candidate_rolls}/{wallet_active_rolls}",
                 f"🥊 Missed blocks: {wallet_missed_blocks}", "",
                 "🔎 Detailed info:", "",
+                as_line(f"🧵 Thread: {wallet_thread}"),
                 *cycles_list, "",
                 *credit_list, "",
                 f"⏳ Service checks updates: every {app_globals.app_config['service']['main_loop_period_sec']} seconds"
             )
+
 
     await message.answer(
         text=t.as_html(),

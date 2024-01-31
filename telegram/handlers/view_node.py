@@ -122,6 +122,8 @@ async def show_node(message: Message, state: FSMContext) -> None:
         node_version = app_globals.app_results[node_name]['last_result'].get("version", "Not known")
         if node_version != app_globals.latest_massa_release:
             node_version += f" ❗ Update to {app_globals.latest_massa_release}"
+        else:
+            node_version += " (latest)"
 
         current_cycle = app_globals.app_results[node_name]['last_result'].get("current_cycle", "Not known")
         chain_id = app_globals.app_results[node_name]['last_result'].get("chain_id", "Not known")

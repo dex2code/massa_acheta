@@ -51,7 +51,7 @@ async def check_node(node_name: str="") -> None:
         app_globals.app_results[node_name]['last_result'] = node_result
 
     else:
-        logger.info(f"Node '{node_name}' ({app_globals.app_results[node_name]['url']}) seems online!")
+        logger.info(f"Node '{node_name}' ({app_globals.app_results[node_name]['url']}) seems online ({node_chain_id=})")
 
         if app_globals.app_results[node_name]['last_status'] != True:
             t = as_list(

@@ -15,6 +15,8 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
 
     if app_globals.app_results[node_name]['last_status'] != True:
         logger.warning(f"Will not watch wallet '{wallet_address}' on node '{node_name}' because of its offline")
+        app_globals.app_results[node_name]['wallets'][wallet_address]['last_status'] = False
+        app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'] = {"error": "Host node is offline"}
         return
 
     payload =   json.dumps(
@@ -31,25 +33,41 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
                                 api_url=app_globals.app_results[node_name]['url'],
                                 api_payload=payload
                             )
+
+        if type(wallet_response) != list or not len(wallet_response) or "address" not in wallet_response[0]:
+            raise KeyError(wallet_response)
+
         wallet_result = wallet_response[0]
+        wallet_result_address = wallet_result.get("address", "None")
 
-        wallet_final_balance =  round(
-                                    float(wallet_result['final_balance']),
-                                    4
-                                )
-        wallet_candidate_rolls = int(wallet_result['candidate_roll_count'])
+        if wallet_result_address != wallet_address:
+            raise TypeError(
+                {
+                    "error": f"Bad address received from API: '{wallet_result_address}'"
+                }
+            )
 
-        if type(wallet_result['cycle_infos'][-1]['active_rolls']) == int:
-            wallet_active_rolls = int(wallet_result['cycle_infos'][-1]['active_rolls'])
-        else:
-            wallet_active_rolls = 0
+        wallet_final_balance = 0
+        wallet_final_balance = wallet_result.get("final_balance", 0)
+        wallet_final_balance = float(wallet_final_balance)
+        wallet_final_balance = round(wallet_final_balance, 4)
+
+        wallet_candidate_rolls = 0
+        wallet_candidate_rolls = wallet_result.get("candidate_roll_count", 0)
+        wallet_candidate_rolls = int(wallet_candidate_rolls)
+
+        wallet_active_rolls = 0
+        if type(wallet_result['cycle_infos'][-1].get("active_rolls", 0)) == int:
+            wallet_active_rolls = wallet_result['cycle_infos'][-1].get("active_rolls", 0)
 
         wallet_missed_blocks = 0
-        for cycle_info in wallet_result['cycle_infos']:
-            if type(cycle_info['nok_count']) == int:
-                wallet_missed_blocks += int(cycle_info['nok_count'])
+        for cycle_info in wallet_result.get("cycle_infos", []):
+            if type(cycle_info.get("nok_count", 0)) == int:
+                wallet_missed_blocks += cycle_info.get("nok_count", 0)
 
-        wallet_last_cycle_missed_blocks = int(wallet_result['cycle_infos'][-1]['nok_count'])
+        wallet_last_cycle_missed_blocks = 0
+        if type(wallet_result['cycle_infos'][-1].get("nok_count", 0)) == int:
+            wallet_last_cycle_missed_blocks = wallet_result['cycle_infos'][-1].get("nok_count", 0)
 
     except Exception as E:
         logger.warning(f"Error watching wallet '{wallet_address}' on '{node_name}': ({str(E)})")

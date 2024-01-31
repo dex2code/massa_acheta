@@ -11,6 +11,7 @@ from telegram.queue import queue_telegram_message
 @logger.catch
 async def get_latest_release_json(
     api_url: str="",
+    api_content_type: str=None,
     api_session_timeout: int=app_globals.app_config['service']['http_session_timeout_sec'],
     api_probe_timeout: int=app_globals.app_config['service']['http_probe_timeout_sec']) -> object:
     logger.debug("-> Enter Def")
@@ -21,7 +22,7 @@ async def get_latest_release_json(
     try:
         async with aiohttp.ClientSession(timeout=api_session_timeout) as session:
             async with session.get(url=api_url, timeout=api_probe_timeout) as response:
-                response_result = await response.json(content_type=None)
+                response_result = await response.json(content_type=api_content_type)
         
     except Exception as E:
         logger.error(f"API request Exception: ({str(E)})")
@@ -73,7 +74,7 @@ async def acheta_release() -> None:
     logger.debug(f"-> Enter Def")
 
     try:
-        acheta_release_obj = await get_latest_release_json(api_url=app_globals.app_config['service']['acheta_release_url'])
+        acheta_release_obj =    await get_latest_release_json(api_url=app_globals.app_config['service']['acheta_release_url'])
         acheta_latest_release = acheta_release_obj['result']['release']
     
     except Exception as E:
