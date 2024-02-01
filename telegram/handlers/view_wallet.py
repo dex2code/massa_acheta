@@ -64,7 +64,7 @@ async def cmd_view_wallet(message: Message, state: FSMContext) -> None:
 
 @router.message(WalletViewer.waiting_node_name, F.text.in_(get_list_nodes()))
 @logger.catch
-async def select_wallet(message: Message, state: FSMContext) -> None:
+async def select_wallet_to_show(message: Message, state: FSMContext) -> None:
     logger.debug("-> Enter Def")
     if message.chat.id != app_globals.bot.chat_id: return
 

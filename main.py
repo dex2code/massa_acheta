@@ -16,6 +16,7 @@ from telegram.queue import queue_telegram_message, operate_telegram_queue
 
 from telegram.handlers import start
 from telegram.handlers import view_config, view_node, view_wallet, view_address
+from telegram.handlers import delete_node, delete_wallet
 from telegram.handlers import massa_release, acheta_release
 from telegram.handlers import ping, id, cancel, unknown
 
@@ -32,8 +33,8 @@ async def main() -> None:
         BotCommand(command="/view_address", description="View any wallet info"), # Done!
         BotCommand(command="/add_node", description="Add node to bot"),
         BotCommand(command="/add_wallet", description="Add wallet to bot"),
-        BotCommand(command="/delete_node", description="Delete node from bot"),
-        BotCommand(command="/delete_wallet", description="Delete wallet from bot"),
+        BotCommand(command="/delete_node", description="Delete node from bot"), # Done!
+        BotCommand(command="/delete_wallet", description="Delete wallet from bot"), # Done!
         BotCommand(command="/massa_release", description="Show latest MASSA release"), # Done!
         BotCommand(command="/acheta_release", description="Show latest Acheta release"), # Done!
         BotCommand(command="/ping", description="Pong!"), # Done!
@@ -83,6 +84,9 @@ async def main() -> None:
     app_globals.tg_dp.include_router(view_node.router)
     app_globals.tg_dp.include_router(view_wallet.router)
     app_globals.tg_dp.include_router(view_address.router)
+
+    app_globals.tg_dp.include_router(delete_node.router)
+    app_globals.tg_dp.include_router(delete_wallet.router)
 
     app_globals.tg_dp.include_router(massa_release.router)
     app_globals.tg_dp.include_router(acheta_release.router)

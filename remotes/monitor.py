@@ -16,14 +16,15 @@ async def monitor() -> None:
         node_coros = set()
         wallet_coros = set()
 
-        for node_name in app_globals.app_results:
-            node_coros.add(check_node(node_name=node_name))
+        async with app_globals.results_lock:
+            for node_name in app_globals.app_results:
+                node_coros.add(check_node(node_name=node_name))
 
-            for wallet_address in app_globals.app_results[node_name]['wallets']:
-                wallet_coros.add(check_wallet(node_name=node_name, wallet_address=wallet_address))
+                for wallet_address in app_globals.app_results[node_name]['wallets']:
+                    wallet_coros.add(check_wallet(node_name=node_name, wallet_address=wallet_address))
 
-        await asyncio.gather(*node_coros)
-        await asyncio.gather(*wallet_coros)
+            await asyncio.gather(*node_coros)
+            await asyncio.gather(*wallet_coros)
 
         logger.debug(f"Current app_results:\n{json.dumps(obj=app_globals.app_results, indent=4)}")
 

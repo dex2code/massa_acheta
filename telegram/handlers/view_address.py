@@ -130,7 +130,7 @@ async def show_address(message: Message, state: FSMContext) -> None:
         )
 
     else:
-        logger.info(f"Successfully received result for address '{wallet_address}'.")
+        logger.info(f"Successfully received result for address '{wallet_address}'")
 
         wallet_final_balance = 0
         wallet_final_balance = wallet_result.get("final_balance", 0)

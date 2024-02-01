@@ -1,6 +1,7 @@
 from loguru import logger
 
 import json
+import asyncio
 from pathlib import Path
 from sys import exit as sys_exit
 from aiogram import Dispatcher, Bot
@@ -67,6 +68,11 @@ local_acheta_release = "ACHETA.1.0.0"
 latest_acheta_release = ""
 
 
+
+'''
+Global mutex
+'''
+results_lock = asyncio.Lock()
 
 
 if __name__ == "__main__":
