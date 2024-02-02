@@ -2,20 +2,6 @@
 
 
 echo
-echo "::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
-echo "::'##::::'##::::'###:::::'######:::'######:::::'###:::::"
-echo ":::###::'###:::'## ##:::'##... ##:'##... ##:::'## ##::::"
-echo ":::####'####::'##:. ##:: ##:::..:: ##:::..:::'##:. ##:::"
-echo ":::## ### ##:'##:::. ##:. ######::. ######::'##:::. ##::"
-echo ":::##. #: ##: #########::..... ##::..... ##: #########::"
-echo ":::##:.:: ##: ##.... ##:'##::: ##:'##::: ##: ##.... ##::"
-echo ":::##:::: ##: ##:::: ##:. ######::. ######:: ##:::: ##::"
-echo "::..:::::..::..:::::..:::......::::......:::..:::::..:::"
-echo "::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
-echo
-echo "[ MASSA 🦗 Acheta telebot ] -- https://github.com/dex2code/massa_acheta/"
-echo
-
 echo "This script configures .env file to store your Bot API Token and Chat ID for runtime environment."
 echo "Warning! Your existing .env file will be moved to .oldenv file."
 echo -n "Press Enter to continue or Ctrl+C to quit... "
