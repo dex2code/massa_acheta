@@ -164,8 +164,9 @@ async def add_node(message: Message, state: FSMContext) -> None:
 
     await state.clear()
 
-    async with app_globals.results_lock:
-        await asyncio.gather(check_node(node_name=node_name))
+    if app_globals.app_results[node_name]['last_status'] != True:
+        async with app_globals.results_lock:
+            await asyncio.gather(check_node(node_name=node_name))
 
     return
 
