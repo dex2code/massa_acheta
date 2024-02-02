@@ -2,6 +2,7 @@
 
 
 DESTDIR="massa_acheta"
+clear
 
 # Check OS distro
 hostnamectl | grep -i "ubuntu" > /dev/null
