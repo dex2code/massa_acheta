@@ -31,8 +31,7 @@ async def cmd_add_wallet(message: Message, state: FSMContext) -> None:
         t = as_list(
                 app_globals.app_config['telegram']['service_nickname'], "",
                 "⭕ Node list is empty", "",
-                "❗ You must /add_node first", "",
-                "☝ Try /help to learn how to add a node to bot"
+                "☝ Try /add_node to add a node or /help to learn bot commands"
             )
         await message.answer(
             text=t.as_html(),
@@ -137,6 +136,8 @@ async def add_wallet(message: Message, state: FSMContext) -> None:
             parse_mode=ParseMode.HTML,
             request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
         )
+
+        await state.clear()
         return
 
     try:
