@@ -11,7 +11,7 @@ Before we jump to a detailed description of the service, please watch this video
 [![MASSA Acheta service](https://img.youtube.com/vi/gdvuhe2iRyY/0.jpg)](https://www.youtube.com/watch?v=gdvuhe2iRyY)
 
 
-# Just-One-Command to start:
+## Just-One-Command to start:
 
 Copy the following command and paste it into your shell prompt:
 ```
@@ -20,7 +20,7 @@ cd ~ && bash <(wget -qO- https://raw.githubusercontent.com/dex2code/massa_acheta
 
 This command will install, configure and start your bot automatically.
 
-‼ Please check if you have Telegram Bot API KEY and you know your Telegram ID before start installation!
+> !! **Please check if you have Telegram Bot API KEY and you know your Telegram ID before start installation** !!
 
 You can stop the process by Ctrl+C but before you start installation again please run:
 ```
