@@ -133,7 +133,7 @@ if __name__ == "__main__":
             app_globals.app_results[node_name]['wallets'][wallet_address]['last_update'] = 0
             app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'] = {"unknown": "Never updated before"}
 
-    logger.debug(f"Results file loaded successfully:\n {json.dumps(obj=app_globals.app_results, indent=4)}")
+    logger.debug(f"Results:\n{json.dumps(obj=app_globals.app_results, indent=4)}")
     logger.info(f"Watching nodes with {app_globals.app_config['service']['main_loop_period_sec']} seconds loop period and {app_globals.app_config['service']['http_probe_timeout_sec']} seconds probe timeout.")
     logger.info(f"*** Service successfully started!")
 

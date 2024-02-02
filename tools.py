@@ -1,6 +1,5 @@
 from loguru import logger
 
-from typing import Union
 import aiohttp
 import json
 from aiofiles import open as aiof_open

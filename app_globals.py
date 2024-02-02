@@ -19,14 +19,26 @@ Init results
 '''
 results_obj = Path(app_config['service']['results_path'])
 
-app_results = {}
-
 if not results_obj.exists():
-    logger.critical(f"No results file '{results_obj}' exists.")
-    sys_exit(1)
-else:
-    logger.info(f"Loading results from existing '{results_obj}' file...")
+    logger.warning(f"No results file '{results_obj}' exists. Trying to create...")
 
+    try:
+        with open(results_obj, "w") as new_results:
+            new_results.write("{}")
+            new_results.flush()
+    
+    except Exception as E:
+        logger.critical(f"Cannot create '{results_obj}' file. Exiting...")
+        sys_exit(1)
+
+    else:
+        logger.info(f"Successfully created '{results_obj}' file")
+
+else:
+    logger.info(f"Loading results from '{results_obj}' file...")
+
+
+app_results = {}
 
 with open(file=results_obj, mode="r") as input_results:
 

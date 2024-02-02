@@ -8,7 +8,7 @@ app_config['telegram']['sending_delay_sec'] = 3
 app_config['telegram']['sending_timeout_sec'] = 5
 
 
-app_config['service']['results_path'] = "dev_results.json"
+app_config['service']['results_path'] = "app_results.json"
 
 app_config['service']['main_loop_period_sec'] = 300
 
