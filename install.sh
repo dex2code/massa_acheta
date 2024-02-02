@@ -34,7 +34,7 @@ echo "  - python3-venv"
 echo "  - python3-pip"
 echo "  - git"
 echo
-echo "New Python virtual environment will be created in '$HOME/$DESTDIR' and new systemd unit 'massa_acheta.service' will be created."
+echo "New Python virtual environment will be deployed in '$HOME/$DESTDIR' and new systemd unit 'massa_acheta.service' will be created."
 echo -n "If you are ok with this please hit Enter, otherwise Ctrl+C to quit the installation... "
 read _
 echo
