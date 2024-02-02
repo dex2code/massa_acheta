@@ -16,6 +16,7 @@ from telegram.queue import queue_telegram_message, operate_telegram_queue
 
 from telegram.handlers import start
 from telegram.handlers import view_config, view_node, view_wallet, view_address
+from telegram.handlers import reset
 from telegram.handlers import add_node, add_wallet
 from telegram.handlers import delete_node, delete_wallet
 from telegram.handlers import massa_release, acheta_release
@@ -40,7 +41,8 @@ async def main() -> None:
         BotCommand(command="/acheta_release", description="Show latest Acheta release"), # Done!
         BotCommand(command="/ping", description="Pong!"), # Done!
         BotCommand(command="/id", description="Show User and Chat ID"), # Done!
-        BotCommand(command="/cancel", description="Cancel any scenario") # Done!
+        BotCommand(command="/cancel", description="Cancel any scenario"), # Done!
+        BotCommand(command="/reset", description="Reset service configuration") # Done!
     ]
 
     await app_globals.tg_bot.set_my_commands(bot_commands)
@@ -84,6 +86,7 @@ async def main() -> None:
     app_globals.tg_dp.include_router(cancel.router)
 
     app_globals.tg_dp.include_router(view_config.router)
+
     app_globals.tg_dp.include_router(view_node.router)
     app_globals.tg_dp.include_router(view_wallet.router)
     app_globals.tg_dp.include_router(view_address.router)
@@ -99,6 +102,8 @@ async def main() -> None:
 
     app_globals.tg_dp.include_router(ping.router)
     app_globals.tg_dp.include_router(id.router)
+
+    app_globals.tg_dp.include_router(reset.router)
 
     app_globals.tg_dp.include_router(unknown.router)
 
