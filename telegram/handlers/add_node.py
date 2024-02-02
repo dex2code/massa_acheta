@@ -1,5 +1,6 @@
 from loguru import logger
 
+import asyncio
 from aiogram import Router, F
 from aiogram.types import Message
 from aiogram.filters import Command, StateFilter
@@ -9,6 +10,7 @@ from aiogram.utils.formatting import as_list, as_line, TextLink, Code
 from aiogram.enums import ParseMode
 
 import app_globals
+from remotes.node import check_node
 from tools import get_short_address, save_app_results
 
 
@@ -161,6 +163,10 @@ async def add_node(message: Message, state: FSMContext) -> None:
     )
 
     await state.clear()
+
+    async with app_globals.results_lock:
+        await asyncio.gather(check_node(node_name=node_name))
+
     return
 
 

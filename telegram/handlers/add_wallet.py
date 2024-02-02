@@ -1,5 +1,6 @@
 from loguru import logger
 
+import asyncio
 from aiogram import Router, F
 from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram.filters import Command, StateFilter
@@ -9,6 +10,7 @@ from aiogram.utils.formatting import as_list, as_line, TextLink, Code
 from aiogram.enums import ParseMode
 
 import app_globals
+from remotes.wallet import check_wallet
 from telegram.keyboards.kb_nodes import kb_nodes
 from tools import get_short_address, save_app_results
 
@@ -207,4 +209,8 @@ async def add_wallet(message: Message, state: FSMContext) -> None:
     )
 
     await state.clear()
+
+    async with app_globals.results_lock:
+        await asyncio.gather(check_wallet(node_name=node_name, wallet_address=wallet_address))
+
     return
