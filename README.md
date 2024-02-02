@@ -3,8 +3,12 @@
 
 Acheta is a genus of crickets. It most notably contains the house cricket (Acheta domesticus).
 
-"MASSA Acheta" is a service that will notify you about events occurring on your MASSA node and your wallet.\
+**"MASSA Acheta"** is a service that will notify you about events occurring on your MASSA node and your wallet.\
 Just like a little cricket!
+
+>
+>First of all let's define that this is not a public Telegram Bot, but opensource software that you can install on your own server to get a personal Bot that will be accessible only to you.
+>
 
 Before we jump to a detailed description of the service, please watch this video:
 
