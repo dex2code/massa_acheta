@@ -21,9 +21,10 @@ cd ~ && bash <(wget -qO- https://raw.githubusercontent.com/dex2code/massa_acheta
 This command will install, configure and start your Bot automatically.
 
 
-> !! Please check if you have a **Telegram Bot API KEY** and you do know your own **Telegram ID** before start installation !!
+> !! Please check if you have a **Telegram Bot API KEY** and you do know your own **Telegram ID** before start installation
 >
-> How to create a new Telegam Bot and its API KEY: https://www.youtube.com/watch?v=UQrcOj63S2o\
+> How to create a new Telegam Bot and its API KEY: https://www.youtube.com/watch?v=UQrcOj63S2o
+>
 > How to get your own Telegram ID value: https://www.youtube.com/watch?v=e_d3KqI6zkI
 
 
