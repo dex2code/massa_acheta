@@ -3,6 +3,7 @@
 
 DESTDIR="massa_acheta"
 
+
 # Check OS distro
 hostnamectl | grep -i "ubuntu" > /dev/null
 if [[ $? -ne 0 ]]
@@ -11,6 +12,8 @@ then
     echo "You can try to install service manually using this scenario: https://github.com/dex2code/massa_acheta/blob/main/README.md"
     exit 1
 fi
+
+
 
 cd ~
 clear
@@ -38,6 +41,9 @@ echo "New Python virtual environment will be deployed in '$HOME/$DESTDIR' and ne
 echo -n "If you are ok with this please hit Enter, otherwise Ctrl+C to quit the installation... "
 read _
 echo
+
+
+
 echo -n " → Ready to update your repository and install all packages. Press Enter to continue... "
 read _
 echo
@@ -64,6 +70,9 @@ else
     exit 1
 fi
 
+
+
+
 echo -n " → Ready to clone repo to download service software. Press Enter to continue... "
 read _
 echo
@@ -79,17 +88,20 @@ else
     exit 1
 fi
 
+
+
+
 echo -n " →  Ready to create and configure Python virtual environment. Press Enter to continue... "
 read _
 echo
 
+echo "Creating Python venv in $HOME/$DESTDIR..."
 cd $DESTDIR && python3 -m venv .
 if [[ $? -eq 0 ]]
 then
     echo "✅ Virtual environment created successfully! Configureng venv..."
     echo
 else
-    echo
     echo "‼ Some error occured. Please check your settings."
     exit 1
 fi
@@ -104,6 +116,8 @@ else
     echo "‼ Some error occured. Please check your settings."
     exit 1
 fi
+
+
 
 echo -n " →  Ready to create systemd unit. Press Enter to continue... "
 read _
