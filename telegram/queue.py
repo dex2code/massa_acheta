@@ -39,17 +39,17 @@ async def operate_telegram_queue() -> None:
 
         try:
             await app_globals.tg_bot.send_message(
-                chat_id=app_globals.bot.chat_id,
+                chat_id=app_globals.bot.ACHETA_CHAT,
                 text=app_globals.telegram_queue[0],
                 parse_mode=ParseMode.HTML,
                 request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
             )
 
         except Exception as E:
-            logger.error(f"Could not send telegram message to chat_id '{app_globals.bot.chat_id}': ({str(E)})")
+            logger.error(f"Could not send telegram message to chat_id '{app_globals.bot.ACHETA_CHAT}': ({str(E)})")
         
         else:
-            logger.info(f"Successfully sent message to chat_id '{app_globals.bot.chat_id}' ({number_unsent_messages - 1} unsent message(s) in queue)")
+            logger.info(f"Successfully sent message to chat_id '{app_globals.bot.ACHETA_CHAT}' ({number_unsent_messages - 1} unsent message(s) in queue)")
             app_globals.telegram_queue.popleft()
 
 

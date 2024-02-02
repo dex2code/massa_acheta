@@ -48,15 +48,15 @@ Init Telegram stuff
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding='utf-8')
 
-    key: SecretStr
-    chat_id: int
+    ACHETA_KEY: SecretStr
+    ACHETA_CHAT: int
 
 bot = Settings()
 
 
 telegram_queue = deque()
 tg_dp = Dispatcher(storage=MemoryStorage())
-tg_bot = Bot(token=bot.key.get_secret_value(), disable_web_page_preview=True, parse_mode=ParseMode.HTML)
+tg_bot = Bot(token=bot.ACHETA_KEY.get_secret_value(), disable_web_page_preview=True, parse_mode=ParseMode.HTML)
 
 
 

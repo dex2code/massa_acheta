@@ -16,7 +16,7 @@ router = Router()
 @logger.catch
 async def cmd_acheta_release(message: Message) -> None:
     logger.debug("-> Enter Def")
-    if message.chat.id != app_globals.bot.chat_id: return
+    if message.chat.id != app_globals.bot.ACHETA_CHAT: return
 
     update_needed = as_line("👌 No updates needed")
     if app_globals.latest_acheta_release != app_globals.local_acheta_release:

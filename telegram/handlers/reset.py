@@ -23,7 +23,7 @@ router = Router()
 @logger.catch
 async def cmd_reset(message: Message, state: FSMContext) -> None:
     logger.debug("->Enter Def")
-    if message.chat.id != app_globals.bot.chat_id: return
+    if message.chat.id != app_globals.bot.ACHETA_CHAT: return
 
     t = as_list(
             as_line(app_globals.app_config['telegram']['service_nickname']),
@@ -50,7 +50,7 @@ async def cmd_reset(message: Message, state: FSMContext) -> None:
 @logger.catch
 async def do_reset(message: Message, state: FSMContext) -> None:
     logger.debug("-> Enter Def")
-    if message.chat.id != app_globals.bot.chat_id: return
+    if message.chat.id != app_globals.bot.ACHETA_CHAT: return
 
     if message.text.upper() != "I WANT TO RESET THE SERVICE":
         t = as_list(

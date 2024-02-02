@@ -28,7 +28,7 @@ router = Router()
 @logger.catch
 async def cmd_view_wallet(message: Message, state: FSMContext) -> None:
     logger.debug("->Enter Def")
-    if message.chat.id != app_globals.bot.chat_id: return
+    if message.chat.id != app_globals.bot.ACHETA_CHAT: return
     
     if len(app_globals.app_results) == 0:
         t = as_list(
@@ -66,7 +66,7 @@ async def cmd_view_wallet(message: Message, state: FSMContext) -> None:
 @logger.catch
 async def select_wallet_to_show(message: Message, state: FSMContext) -> None:
     logger.debug("-> Enter Def")
-    if message.chat.id != app_globals.bot.chat_id: return
+    if message.chat.id != app_globals.bot.ACHETA_CHAT: return
 
     node_name = message.text
     await state.set_data(data={"node_name": node_name})
@@ -126,7 +126,7 @@ async def select_wallet_to_show(message: Message, state: FSMContext) -> None:
 @logger.catch
 async def show_wallet(message: Message, state: FSMContext) -> None:
     logger.debug("-> Enter Def")
-    if message.chat.id != app_globals.bot.chat_id: return
+    if message.chat.id != app_globals.bot.ACHETA_CHAT: return
 
     user_state = await state.get_data()
     node_name = user_state['node_name']

@@ -17,7 +17,7 @@ router = Router()
 @logger.catch
 async def cmd_view_config(message: Message) -> None:
     logger.debug("-> Enter Def")
-    if message.chat.id != app_globals.bot.chat_id: return
+    if message.chat.id != app_globals.bot.ACHETA_CHAT: return
 
     config_list = []
 
