@@ -13,7 +13,7 @@ from aiogram.enums import ParseMode
 import app_globals
 from telegram.keyboards.kb_nodes import kb_nodes
 from telegram.keyboards.kb_wallets import kb_wallets
-from tools import get_list_nodes, get_all_wallets, get_short_address, get_last_seen
+from tools import get_short_address, get_last_seen
 
 
 class WalletViewer(StatesGroup):
@@ -33,8 +33,8 @@ async def cmd_view_wallet(message: Message, state: FSMContext) -> None:
     if len(app_globals.app_results) == 0:
         t = as_list(
                 app_globals.app_config['telegram']['service_nickname'], "",
-                "⭕ Node list is empty.", "",
-                "❓ Try /help to learn how to add a node to bot."
+                "⭕ Node list is empty", "",
+                "☝ Try /help to learn how to add a node to bot"
             )
         await message.answer(
             text=t.as_html(),
@@ -48,7 +48,7 @@ async def cmd_view_wallet(message: Message, state: FSMContext) -> None:
 
     t = as_list(
             as_line(app_globals.app_config['telegram']['service_nickname']),
-            "❓ Tap the node to select or /cancel to quit the scenario.",
+            "❓ Tap the node to select or /cancel to quit the scenario",
         )
     await message.answer(
         text=t.as_html(),
@@ -62,7 +62,7 @@ async def cmd_view_wallet(message: Message, state: FSMContext) -> None:
 
 
 
-@router.message(WalletViewer.waiting_node_name, F.text.in_(get_list_nodes()))
+@router.message(WalletViewer.waiting_node_name, F.text)
 @logger.catch
 async def select_wallet_to_show(message: Message, state: FSMContext) -> None:
     logger.debug("-> Enter Def")
@@ -74,8 +74,11 @@ async def select_wallet_to_show(message: Message, state: FSMContext) -> None:
     if node_name not in app_globals.app_results:
         t = as_list(
                 as_line(app_globals.app_config['telegram']['service_nickname']),
-                "‼ Error. Unknown node.", "",
-                "❓ Try /help to learn how to add a node to bot."
+                as_line(
+                    "‼ Error: Unknown node ",
+                    Code(node_name)
+                ),
+                "☝ Try /view_wallet to view another wallet or /help to learn bot commands"
             )
         await message.answer(
             text=t.as_html(),
@@ -90,8 +93,8 @@ async def select_wallet_to_show(message: Message, state: FSMContext) -> None:
     if len(app_globals.app_results[node_name]['wallets']) == 0:
         t = as_list(
                 as_line(app_globals.app_config['telegram']['service_nickname']),
-                "⭕ No wallets attached to selected node!", "",
-                "❓ Try /help to learn how to add a wallet to bot."
+                f"⭕ No wallets attached to node {node_name}", "",
+                "☝ Try /add_wallet to add wallet to the node or /help to learn bot commands"
             )
         await message.answer(
             text=t.as_html(),
@@ -105,7 +108,7 @@ async def select_wallet_to_show(message: Message, state: FSMContext) -> None:
 
     t = as_list(
             as_line(app_globals.app_config['telegram']['service_nickname']),
-            "❓ Tap the wallet to select or /cancel to quit the scenario.",
+            "❓ Tap the wallet to select or /cancel to quit the scenario:",
         )
     await message.answer(
         text=t.as_html(),
@@ -119,7 +122,7 @@ async def select_wallet_to_show(message: Message, state: FSMContext) -> None:
 
 
 
-@router.message(WalletViewer.waiting_wallet_address, F.text.in_(get_all_wallets()))
+@router.message(WalletViewer.waiting_wallet_address, F.text.startswith("AU"))
 @logger.catch
 async def show_wallet(message: Message, state: FSMContext) -> None:
     logger.debug("-> Enter Def")
@@ -133,20 +136,23 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
         t = as_list(
                 as_line(app_globals.app_config['telegram']['service_nickname']),
                 as_line(
-                    "‼ Error. Wallet ",
+                    "‼ Error: Wallet ",
                     TextLink(
                         get_short_address(address=wallet_address),
                         url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_address}"
                     ),
-                    f" is not attached to node {node_name}. Try another one."
+                    " is not attached to node ",
+                    Code(node_name)
                 ),
-                "❓ Try /help to learn how to add a wallet to bot."
+                "☝ Try /view_wallet to view another wallet or /help to learn bot commands"
             )
         await message.answer(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
             request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
         )
+
+        await state.clear()
         return
 
     current_time = t_now()
@@ -185,7 +191,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
                                 Code(app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'])
                             ),
                             as_line("⚠️ Check wallet address or node settings!"),
-                            f"⏳ Service checks updates: every {app_globals.app_config['service']['main_loop_period_sec']} seconds"
+                            f"☝ Service checks updates: every {app_globals.app_config['service']['main_loop_period_sec']} seconds"
                         )
 
         t = as_list(
@@ -213,12 +219,12 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
         if len(wallet_cycles) == 0:
             cycles_list.append("🌀 Cycles info: No data")
         else:
-            cycles_list.append("🌀 Cycles info (produced/missed blocks):")
+            cycles_list.append("🌀 Cycles info ( Produced / Missed):")
             for wallet_cycle in wallet_cycles:
                 cycle_num = wallet_cycle.get("cycle", 0)
                 ok_count = wallet_cycle.get("ok_count", 0)
                 nok_count = wallet_cycle.get("nok_count", 0)
-                cycles_list.append(f" ⋅ Cycle {cycle_num}: {ok_count}/{nok_count}")
+                cycles_list.append(f" ⋅ Cycle {cycle_num}: ( {ok_count} / {nok_count} )")
         
 
         credit_list = []
@@ -238,7 +244,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
 
                 credit_period = int(wallet_credit['slot']['period'])
                 credit_unix = 1705312800 + (credit_period * 16)
-                credit_date = datetime.utcfromtimestamp(credit_unix).strftime("%b %d, %Y %I:%M %p UTC")
+                credit_date = datetime.utcfromtimestamp(credit_unix).strftime("%b %d, %Y")
 
                 credit_list.append(
                     as_line(
@@ -276,7 +282,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
                 as_line(f"🧵 Thread: {wallet_thread}"),
                 *cycles_list, "",
                 *credit_list, "",
-                f"⏳ Service checks updates: every {app_globals.app_config['service']['main_loop_period_sec']} seconds"
+                f"☝ Service checks updates: every {app_globals.app_config['service']['main_loop_period_sec']} seconds"
             )
 
 

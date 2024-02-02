@@ -111,7 +111,8 @@ def get_all_wallets() -> list:
     for node_name in app_globals.app_results:
         for wallet_address in app_globals.app_results[node_name]['wallets']:
             result_list.append(wallet_address)
-    
+
+    logger.info(f"{result_list=}")
     return result_list
 
 

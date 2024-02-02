@@ -11,7 +11,7 @@ from aiogram.enums import ParseMode
 
 import app_globals
 from telegram.keyboards.kb_nodes import kb_nodes
-from tools import get_list_nodes, get_last_seen, get_short_address
+from tools import get_last_seen, get_short_address
 
 
 class NodeViewer(StatesGroup):
@@ -30,8 +30,8 @@ async def cmd_view_node(message: Message, state: FSMContext) -> None:
     if len(app_globals.app_results) == 0:
         t = as_list(
                 app_globals.app_config['telegram']['service_nickname'], "",
-                "⭕ Node list is empty.", "",
-                "❓ Try /help to learn how to add a node to bot."
+                "⭕ Node list is empty", "",
+                "☝ Try /help to learn how to add a node to bot"
             )
         await message.answer(
             text=t.as_html(),
@@ -44,7 +44,7 @@ async def cmd_view_node(message: Message, state: FSMContext) -> None:
 
     t = as_list(
             as_line(app_globals.app_config['telegram']['service_nickname']),
-            "❓ Tap the node to view or /cancel to quit the scenario.",
+            "☝ Tap the node to view or /cancel to quit the scenario",
         )
     await message.answer(
         text=t.as_html(),
@@ -58,7 +58,7 @@ async def cmd_view_node(message: Message, state: FSMContext) -> None:
 
 
 
-@router.message(NodeViewer.waiting_node_name, F.text.in_(get_list_nodes()))
+@router.message(NodeViewer.waiting_node_name, F.text)
 @logger.catch
 async def show_node(message: Message, state: FSMContext) -> None:
     logger.debug("-> Enter Def")
@@ -69,8 +69,11 @@ async def show_node(message: Message, state: FSMContext) -> None:
     if node_name not in app_globals.app_results:
         t = as_list(
                 as_line(app_globals.app_config['telegram']['service_nickname']),
-                "‼ Error. Unknown node.", "",
-                "❓ Try /help to learn how to add a node to bot."
+                as_line(
+                    "‼ Error: Unknown node ",
+                    Code(node_name)
+                ),
+                "☝ Try /view_node to view another node or /help to learn how to add a node to bot"
             )
         await message.answer(
             text=t.as_html(),
@@ -111,7 +114,7 @@ async def show_node(message: Message, state: FSMContext) -> None:
                     "💻 Result: ",
                     Code(app_globals.app_results[node_name]['last_result'])
                 ),
-                f"⏳ Service checks updates: every {app_globals.app_config['service']['main_loop_period_sec']} seconds"
+                f"☝ Service checks updates: every {app_globals.app_config['service']['main_loop_period_sec']} seconds"
             )
     else:
         node_status = f"🌿 Status: Online (last seen: {last_seen})"
@@ -159,7 +162,7 @@ async def show_node(message: Message, state: FSMContext) -> None:
                     "🔗 Chain ID: ",
                     Code(chain_id)
                 ),
-                f"⏳ Service checks updates: every {app_globals.app_config['service']['main_loop_period_sec']} seconds"
+                f"☝ Service checks updates: every {app_globals.app_config['service']['main_loop_period_sec']} seconds"
             )
 
     await message.answer(

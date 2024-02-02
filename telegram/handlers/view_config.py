@@ -22,7 +22,7 @@ async def cmd_view_config(message: Message) -> None:
     config_list = []
 
     if len(app_globals.app_results) == 0:
-        config_list.append("⭕ Configuration is empty")
+        config_list.append("⭕ Configuration is empty\n")
 
     else:
         for node_name in app_globals.app_results:
@@ -60,8 +60,8 @@ async def cmd_view_config(message: Message) -> None:
     t = as_list(
             as_line(app_globals.app_config['telegram']['service_nickname']),
             "📋 Current service configuration:", "",
-            *config_list,
-            "❓ Try /help to learn how to manage settings."
+            *config_list, 
+            "❓ Try /help to learn how to manage settings"
         )
     await message.answer(
         text=t.as_html(),

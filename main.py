@@ -16,7 +16,7 @@ from telegram.queue import queue_telegram_message, operate_telegram_queue
 
 from telegram.handlers import start
 from telegram.handlers import view_config, view_node, view_wallet, view_address
-from telegram.handlers import add_node
+from telegram.handlers import add_node, add_wallet
 from telegram.handlers import delete_node, delete_wallet
 from telegram.handlers import massa_release, acheta_release
 from telegram.handlers import ping, id, cancel, unknown
@@ -48,7 +48,7 @@ async def main() -> None:
     nodes_list = []
 
     if len(app_globals.app_results) == 0:
-        nodes_list.append("⭕ Node list is empty")
+        nodes_list.append("\n⭕ Node list is empty")
     else:
         for node_name in app_globals.app_results:
             nodes_list.append(
@@ -66,7 +66,7 @@ async def main() -> None:
     t = as_list(
         "🔆 Service successfully started to watch the following nodes:",
         *nodes_list, "",
-        "❓ Try /help to learn how to manage settings", "",
+        "☝ Try /help to learn bot commands", "",
         f"⏳ Main loop period: {app_globals.app_config['service']['main_loop_period_sec']} seconds",
         f"⚡ Probe timeout: {app_globals.app_config['service']['http_probe_timeout_sec']} seconds"
     )
@@ -81,12 +81,15 @@ async def main() -> None:
 
     app_globals.tg_dp.include_router(start.router)
 
+    app_globals.tg_dp.include_router(cancel.router)
+
     app_globals.tg_dp.include_router(view_config.router)
     app_globals.tg_dp.include_router(view_node.router)
     app_globals.tg_dp.include_router(view_wallet.router)
     app_globals.tg_dp.include_router(view_address.router)
 
     app_globals.tg_dp.include_router(add_node.router)
+    app_globals.tg_dp.include_router(add_wallet.router)
 
     app_globals.tg_dp.include_router(delete_node.router)
     app_globals.tg_dp.include_router(delete_wallet.router)
@@ -96,7 +99,6 @@ async def main() -> None:
 
     app_globals.tg_dp.include_router(ping.router)
     app_globals.tg_dp.include_router(id.router)
-    app_globals.tg_dp.include_router(cancel.router)
 
     app_globals.tg_dp.include_router(unknown.router)
 

@@ -11,7 +11,7 @@ from aiogram.enums import ParseMode
 import app_globals
 from telegram.keyboards.kb_nodes import kb_nodes
 from telegram.keyboards.kb_wallets import kb_wallets
-from tools import get_list_nodes, get_all_wallets, get_short_address, save_app_results
+from tools import get_short_address, save_app_results
 
 
 class WalletRemover(StatesGroup):
@@ -31,8 +31,8 @@ async def cmd_delete_wallet(message: Message, state: FSMContext) -> None:
     if len(app_globals.app_results) == 0:
         t = as_list(
                 app_globals.app_config['telegram']['service_nickname'], "",
-                "⭕ Node list is empty.", "",
-                "❓ Try /help to learn how to add a node to bot."
+                "⭕ Node list is empty", "",
+                "☝ Try /help to learn how to add a node to bot"
             )
         await message.answer(
             text=t.as_html(),
@@ -46,7 +46,7 @@ async def cmd_delete_wallet(message: Message, state: FSMContext) -> None:
 
     t = as_list(
             as_line(app_globals.app_config['telegram']['service_nickname']),
-            "❓ Tap the node to select or /cancel to quit the scenario.",
+            "❓ Tap the node to select or /cancel to quit the scenario:",
         )
     await message.answer(
         text=t.as_html(),
@@ -60,7 +60,7 @@ async def cmd_delete_wallet(message: Message, state: FSMContext) -> None:
 
 
 
-@router.message(WalletRemover.waiting_node_name, F.text.in_(get_list_nodes()))
+@router.message(WalletRemover.waiting_node_name, F.text)
 @logger.catch
 async def select_wallet_to_delete(message: Message, state: FSMContext) -> None:
     logger.debug("-> Enter Def")
@@ -72,8 +72,11 @@ async def select_wallet_to_delete(message: Message, state: FSMContext) -> None:
     if node_name not in app_globals.app_results:
         t = as_list(
                 as_line(app_globals.app_config['telegram']['service_nickname']),
-                "‼ Error. Unknown node.", "",
-                "❓ Try /help to learn how to add a node to bot."
+                as_line(
+                    "‼ Error: Unknown node ",
+                    Code(node_name)
+                ),
+                "☝ Try /delete_wallet to delete another wallet or /help to learn bot commands"
             )
         await message.answer(
             text=t.as_html(),
@@ -88,8 +91,11 @@ async def select_wallet_to_delete(message: Message, state: FSMContext) -> None:
     if len(app_globals.app_results[node_name]['wallets']) == 0:
         t = as_list(
                 as_line(app_globals.app_config['telegram']['service_nickname']),
-                "⭕ No wallets attached to selected node!", "",
-                "❓ Try /help to learn how to add a wallet to bot."
+                as_line(
+                    "⭕ No wallets attached to node ",
+                    Code(node_name)
+                ),
+                "☝ Try /add_wallet to add a wallet or /help to learn bot commands"
             )
         await message.answer(
             text=t.as_html(),
@@ -103,7 +109,7 @@ async def select_wallet_to_delete(message: Message, state: FSMContext) -> None:
 
     t = as_list(
             as_line(app_globals.app_config['telegram']['service_nickname']),
-            "❓ Tap the wallet to select or /cancel to quit the scenario.",
+            "❓ Tap the wallet to select or /cancel to quit the scenario:",
         )
     await message.answer(
         text=t.as_html(),
@@ -117,7 +123,7 @@ async def select_wallet_to_delete(message: Message, state: FSMContext) -> None:
 
 
 
-@router.message(WalletRemover.waiting_wallet_address, F.text.in_(get_all_wallets()))
+@router.message(WalletRemover.waiting_wallet_address, F.text.startswith("AU"))
 @logger.catch
 async def delete_wallet(message: Message, state: FSMContext) -> None:
     logger.debug("-> Enter Def")
@@ -131,14 +137,14 @@ async def delete_wallet(message: Message, state: FSMContext) -> None:
         t = as_list(
                 as_line(app_globals.app_config['telegram']['service_nickname']),
                 as_line(
-                    "‼ Error. Wallet ",
+                    "‼ Error: Wallet ",
                     TextLink(
                         get_short_address(address=wallet_address),
                         url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_address}"
                     ),
-                    f" is not attached to node {node_name}. Try another one."
+                    f" is not attached to node {node_name}"
                 ),
-                "❓ Try /help to learn how to add a wallet to bot."
+                "☝ Try /delete_wallet to delete another wallet or /help to learn bot commands"
             )
         await message.answer(
             text=t.as_html(),
@@ -160,7 +166,7 @@ async def delete_wallet(message: Message, state: FSMContext) -> None:
         t = as_list(
                 as_line(app_globals.app_config['telegram']['service_nickname']),
                 as_line(
-                    "‼ Error removing wallet ",
+                    "‼ Error: Could not delete wallet ",
                     TextLink(
                         get_short_address(wallet_address),
                         url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_address}"
@@ -169,7 +175,11 @@ async def delete_wallet(message: Message, state: FSMContext) -> None:
                     Code(get_short_address(node_name)),
                 ),
                 as_line(
-                    "⚠ Try again later or watch logs to check the reason. ",
+                    "💻 Result: ",
+                    Code(str(E))
+                ),
+                as_line(
+                    "⚠ Try again later or watch logs to check the reason - ",
                     TextLink(
                         "More info here",
                         url="https://github.com/dex2code/massa_acheta/blob/main/README.md"
@@ -191,7 +201,7 @@ async def delete_wallet(message: Message, state: FSMContext) -> None:
                     " from node ",
                     Code(get_short_address(node_name)),
                 ),
-                "👁 You can check new settings using /view_config command"
+                "☝ You can check new settings using /view_config command"
             )
 
 

@@ -29,7 +29,11 @@ async def cmd_view_address(message: Message, state: FSMContext) -> None:
     
     t = as_list(
             as_line(app_globals.app_config['telegram']['service_nickname']),
-            "❓ Please enter MASSA wallet address with leading AU... prefix:",
+            as_line(
+                "❓ Please enter MASSA wallet address with leading ",
+                Code("AU..."),
+                " prefix:"
+            )
         )
     await message.answer(
         text=t.as_html(),
@@ -42,7 +46,7 @@ async def cmd_view_address(message: Message, state: FSMContext) -> None:
 
 
 
-@router.message(AddressViewer.waiting_address, F.text.startswith('AU'))
+@router.message(AddressViewer.waiting_address, F.text.startswith("AU"))
 @logger.catch
 async def show_address(message: Message, state: FSMContext) -> None:
     logger.debug("-> Enter Def")
@@ -53,14 +57,13 @@ async def show_address(message: Message, state: FSMContext) -> None:
     t = as_list(
             as_line(app_globals.app_config['telegram']['service_nickname']),
             as_line(
-                "🕑 Trying to collect info for wallet: ",
+                "⏳ Trying to collect info for wallet: ",
                 TextLink(
                     get_short_address(wallet_address),
                     url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_address}"
                 ),
-                end=""
             ),
-            "This may take some time, info will be displayed here as soon as we receive the answer from Mainnet RPC..."
+            "This may take some time, Info will be displayed as soon as we receive the answer from Mainnet RPC"
         )
 
     await message.answer(
@@ -158,12 +161,12 @@ async def show_address(message: Message, state: FSMContext) -> None:
         if len(wallet_cycles) == 0:
             cycles_list.append("🌀 Cycles info: No data")
         else:
-            cycles_list.append("🌀 Cycles info (produced/missed blocks):")
+            cycles_list.append("🌀 Cycles info (Produced / Missed):")
             for wallet_cycle in wallet_cycles:
                 cycle_num = wallet_cycle.get("cycle", 0)
                 ok_count = wallet_cycle.get("ok_count", 0)
                 nok_count = wallet_cycle.get("nok_count", 0)
-                cycles_list.append(f" ⋅ Cycle {cycle_num}: {ok_count}/{nok_count}")
+                cycles_list.append(f" ⋅ Cycle {cycle_num}: ( {ok_count} / {nok_count} )")
         
 
         credit_list = []
@@ -183,7 +186,7 @@ async def show_address(message: Message, state: FSMContext) -> None:
 
                 credit_period = int(wallet_credit['slot']['period'])
                 credit_unix = 1705312800 + (credit_period * 16)
-                credit_date = datetime.utcfromtimestamp(credit_unix).strftime("%b %d, %Y %I:%M %p UTC")
+                credit_date = datetime.utcfromtimestamp(credit_unix).strftime("%b %d, %Y")
 
                 credit_list.append(
                     as_line(

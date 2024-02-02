@@ -1,7 +1,7 @@
 from loguru import logger
 
 from aiogram import Router, F
-from aiogram.types import Message, ReplyKeyboardRemove
+from aiogram.types import Message
 from aiogram.filters import Command, StateFilter
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
@@ -9,8 +9,7 @@ from aiogram.utils.formatting import as_list, as_line, TextLink, Code
 from aiogram.enums import ParseMode
 
 import app_globals
-from telegram.keyboards.kb_nodes import kb_nodes
-from tools import get_list_nodes, get_short_address, save_app_results
+from tools import get_short_address, save_app_results
 
 
 class NodeAdder(StatesGroup):
@@ -29,7 +28,7 @@ async def cmd_add_node(message: Message, state: FSMContext) -> None:
     
     t = as_list(
             as_line(app_globals.app_config['telegram']['service_nickname']),
-            "❓ Please enter a short name for the new node (nickname):",
+            "❓ Please enter a short name for the new node (nickname) or /cancel to quit the scenario:",
         )
     await message.answer(
         text=t.as_html(),
@@ -54,29 +53,32 @@ async def input_nodename_to_add(message: Message, state: FSMContext) -> None:
     if node_name in app_globals.app_results:
         t = as_list(
                 as_line(app_globals.app_config['telegram']['service_nickname']),
-                as_line("‼ Error. Node nickname ",
+                as_line("‼ Error: Node with nickname ",
                         Code(node_name),
-                        " already exists!"
+                        " already exists"
                 ),
-                as_line("❓ Try /help to learn how to add a node to bot")
+                as_line("☝ Try /add_node to add another node or /help to learn bot commands")
             )
         await message.answer(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
             request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
         )
+
         await state.clear()
         return
+
 
     t = as_list(
             as_line(app_globals.app_config['telegram']['service_nickname']),
             as_line(
-                "❓ Please enter URL API for the new node ",
+                "❓ Please enter API URL for the new node ",
                 Code(node_name),
-                ":"
+                " with leading ",
+                Code("http(s)://..."),
+                " prefix or /cancel to quit the scenario:"
             ),
-            "💭 Typically URL API looks like 'http://ip.ad.dre.ss:33035/api/v2'",
-            "⚠ Please also check if you opened a firewall on the remote host!"
+            "💭 Typically API URL looks like: http://ip.ad.dre.ss:33035/api/v2"
         )
     await message.answer(
         text=t.as_html(),
@@ -89,9 +91,9 @@ async def input_nodename_to_add(message: Message, state: FSMContext) -> None:
 
 
 
-@router.message(NodeAdder.waiting_node_url, F.text)
+@router.message(NodeAdder.waiting_node_url, F.text.startswith("http"))
 @logger.catch
-async def input_nodeurl_to_add(message: Message, state: FSMContext) -> None:
+async def add_node(message: Message, state: FSMContext) -> None:
     logger.debug("-> Enter Def")
     if message.chat.id != app_globals.bot.chat_id: return
 
@@ -115,12 +117,16 @@ async def input_nodeurl_to_add(message: Message, state: FSMContext) -> None:
         t = as_list(
                 as_line(app_globals.app_config['telegram']['service_nickname']),
                 as_line(
-                    "‼ Error adding node ",
+                    "‼ Error: Could not add node ",
                     Code(get_short_address(node_name)),
                     f" with API URL {node_url}"
                 ),
                 as_line(
-                    "⚠ Try again later or watch logs to check the reason. ",
+                    "💻 Result: ",
+                    Code(str(E))
+                ),
+                as_line(
+                    "⚠ Try again later or watch logs to check the reason - ",
                     TextLink(
                         "More info here",
                         url="https://github.com/dex2code/massa_acheta/blob/main/README.md"
@@ -133,12 +139,18 @@ async def input_nodeurl_to_add(message: Message, state: FSMContext) -> None:
         t = as_list(
                 as_line(app_globals.app_config['telegram']['service_nickname']),
                 as_line(
-                    "✅ Successfully added node ",
+                    "✅ Successfully added node: ",
                     Code(get_short_address(node_name)),
-                    f" with API URL {node_url}"
+                    f" with API URL: {node_url}"
                 ),
                 "👁 You can check new settings using /view_config command", "",
-                "⚠ Please note that info for this node will be updated a bit later!"
+                "☝ Please note that bot will update info for this node a bit later", "",
+                "⚠ Please also check if you opened a firewall on the remote host:",
+                as_line(
+                    "Use ",
+                    Code("sudo ufw allow 33035/tcp"),
+                    " command on Ubuntu hosts"
+                )
             )
 
 
