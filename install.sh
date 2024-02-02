@@ -8,6 +8,7 @@ DESTDIR="massa_acheta"
 hostnamectl | grep -i "ubuntu" > /dev/null
 if [[ $? -ne 0 ]]
 then
+    echo
     echo "Error: this installation uses Ubuntu-compatible commands and cannot be used in other Linux distros."
     echo "You can try to install service manually using this scenario: https://github.com/dex2code/massa_acheta/blob/main/README.md"
     exit 1
@@ -95,13 +96,14 @@ echo -n " →  Ready to create and configure Python virtual environment. Press E
 read _
 echo
 
-echo -n "Creating Python venv in $HOME/$DESTDIR..."
+echo -n "Creating Python venv in $HOME/$DESTDIR... "
 cd $DESTDIR && python3 -m venv .
 if [[ $? -eq 0 ]]
 then
     echo "Done!"
     echo
 else
+    echo
     echo "‼ Some error occured. Please check your settings."
     exit 1
 fi
