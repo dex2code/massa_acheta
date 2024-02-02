@@ -52,5 +52,6 @@ else
         exit 1
 fi
 
-echo "*** Service daemon configured successfully!"
 echo
+
+exit 0
