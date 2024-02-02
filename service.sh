@@ -53,3 +53,4 @@ else
 fi
 
 echo "*** Service daemon configured successfully!"
+echo
