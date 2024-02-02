@@ -1,14 +1,16 @@
 #!/usr/bin/env bash
 
 
-sudo systemctl stop massa_acheta.service
-sudo systemctl disable massa_acheta.service
+cd
 
-rm -rf ~/massa_acheta
+sudo systemctl stop massa_acheta.service &> /dev/null
+sudo systemctl disable massa_acheta.service &> /dev/null
 
-sudo rm /etc/systemd/system/massa_acheta.service
-sudo systemctl daemon-reload
+rm -rf ~/massa_acheta &> /dev/null
+
+sudo rm /etc/systemd/system/massa_acheta.service &> /dev/null
+sudo systemctl daemon-reload &> /dev/null
 
 echo
-echo "Acheta service uninstalled!"
+echo "MASSA Acheta service uninstalled!"
 echo
