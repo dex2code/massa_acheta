@@ -95,21 +95,22 @@ echo -n " →  Ready to create and configure Python virtual environment. Press E
 read _
 echo
 
-echo "Creating Python venv in $HOME/$DESTDIR..."
+echo -n "Creating Python venv in $HOME/$DESTDIR..."
 cd $DESTDIR && python3 -m venv .
 if [[ $? -eq 0 ]]
 then
-    echo "✅ Virtual environment created successfully! Configureng venv..."
+    echo "Done!"
     echo
 else
     echo "‼ Some error occured. Please check your settings."
     exit 1
 fi
 
+echo "Configuring venv..."
 source ./bin/activate && ./bin/pip3 install pip --upgrade && ./bin/pip3 install -r ./requirements.txt
 if [[ $? -eq 0 ]]
 then
-    echo "✅ Virtual environment configured successfully!"
+    echo "✅ Python virtual environment created and configured successfully!"
     echo
 else
     echo
