@@ -101,7 +101,6 @@ cd $DESTDIR && python3 -m venv .
 if [[ $? -eq 0 ]]
 then
     echo "Done!"
-    echo
 else
     echo
     echo "‼ Some error occured. Please check your settings."
