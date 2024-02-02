@@ -138,9 +138,8 @@ fi
 
 echo -n " →  Ready to start service. Press Enter to continue..."
 read _
-echo
 
-./launch.sh
+sudo systemctl start massa_acheta.service
 if [[ $? -eq 0 ]]
 then
     echo "✅ Service started successfully!"
@@ -151,6 +150,21 @@ else
     exit 1
 fi
 
+echo -n " →  Ready to enable service. Press Enter to continue..."
+read _
+
+sudo systemctl enable massa_acheta.service
+if [[ $? -eq 0 ]]
+then
+    echo "✅ Service enabled successfully!"
+    echo
+else
+    echo
+    echo "‼ Some error occured. Please check your settings."
+    exit 1
+fi
+
+echo
 echo -n "✅ Installation done! Press Enter to continue... "
 read _
 

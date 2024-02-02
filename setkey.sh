@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 
-echo
 echo -n "Enter your Telegram bot API Token and press Enter (Ctrl+C to quit): "
 read NEW_KEY
 
@@ -26,4 +25,3 @@ echo "Printing your new .env file:"
 echo "###"
 cat ./.env
 echo "###"
-echo
