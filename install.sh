@@ -108,7 +108,6 @@ else
     exit 1
 fi
 
-echo "Configuring venv..."
 source ./bin/activate && ./bin/pip3 install pip --upgrade && ./bin/pip3 install -r ./requirements.txt
 if [[ $? -eq 0 ]]
 then
