@@ -2,7 +2,6 @@
 
 
 DESTDIR="massa_acheta"
-clear
 
 # Check OS distro
 hostnamectl | grep -i "ubuntu" > /dev/null
@@ -11,10 +10,10 @@ then
     echo "Error: this installation uses Ubuntu-compatible commands and cannot be used in other Linux distros."
     echo "You can try to install service manually using this scenario: https://github.com/dex2code/massa_acheta/blob/main/README.md"
     exit 1
-else
-    cd ~
 fi
 
+cd ~
+clear
 echo
 echo "::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
 echo "::'##::::'##::::'###:::::'######:::'######:::::'###:::::"
