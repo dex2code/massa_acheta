@@ -154,24 +154,18 @@ fi
 
 
 
-echo -n " →  Ready to start service. Press Enter to continue... "
+echo -n " →  Ready to start and enable the service. Press Enter to continue... "
 read _
-echo
 
 sudo systemctl start massa_acheta.service
 if [[ $? -eq 0 ]]
 then
     echo "✅ Service started successfully!"
-    echo
 else
     echo
     echo "‼ Some error occured. Please check your settings."
     exit 1
 fi
-
-echo -n " →  Ready to enable service. Press Enter to continue... "
-read _
-echo
 
 sudo systemctl enable massa_acheta.service
 if [[ $? -eq 0 ]]
