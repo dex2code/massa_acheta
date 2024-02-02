@@ -137,6 +137,7 @@ else
 fi
 
 
+
 echo -n " →  Ready to configure your Telegram bot. Press Enter to continue... "
 read _
 echo
@@ -152,8 +153,11 @@ else
     exit 1
 fi
 
-echo -n " →  Ready to start service. Press Enter to continue..."
+
+
+echo -n " →  Ready to start service. Press Enter to continue... "
 read _
+echo
 
 sudo systemctl start massa_acheta.service
 if [[ $? -eq 0 ]]
@@ -166,8 +170,9 @@ else
     exit 1
 fi
 
-echo -n " →  Ready to enable service. Press Enter to continue..."
+echo -n " →  Ready to enable service. Press Enter to continue... "
 read _
+echo
 
 sudo systemctl enable massa_acheta.service
 if [[ $? -eq 0 ]]
@@ -180,13 +185,11 @@ else
     exit 1
 fi
 
-echo
 echo -n "✅ Installation done! Press Enter to continue... "
 read _
 
 
 clear
-sudo systemctl status massa_acheta.service
 echo
 echo "Please note if you watch remote MASSA node you MUST open firewall on your node host."
 echo "You can do it with command 'sudo ufw allow 33035/tcp'. If your firewall is closed for 33035/tcp port - your node will be unavailable for monitoring service."
