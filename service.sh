@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-echo "Generating service file... "
+echo -n "Generating service file... "
 
 echo "
 [Unit]
@@ -29,7 +29,7 @@ else
 fi
 
 
-echo "Copying service file to /etc/systemd/system/massa_acheta.service... "
+echo -n "Copying service file to /etc/systemd/system/massa_acheta.service... "
 sudo cp ./massa_acheta.service /etc/systemd/system/massa_acheta.service
 
 if [[ $? -eq 0 ]]
@@ -41,7 +41,7 @@ else
 fi
 
 
-echo "Reloading systemd daemon configuration... "
+echo -n "Reloading systemd daemon configuration... "
 sudo systemctl daemon-reload
 
 if [[ $? -eq 0 ]]
@@ -52,6 +52,4 @@ else
         exit 1
 fi
 
-
-echo
-echo "Success!"
+echo "*** Service daemon configured successfully!"
