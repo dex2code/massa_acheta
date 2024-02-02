@@ -48,10 +48,8 @@ echo "ACHETA_CHAT=$NEW_CHAT" >> ./.env
 echo "Done!"
 
 echo -n "Exporting new environment variables... "
-set ACHETA_KEY=$NEW_KEY
-export ACHETA_KEY
-set ACHETA_CHAT=$NEW_CHAT
-export ACHETA_CHAT
+export ACHETA_KEY=$NEW_KEY
+export ACHETA_CHAT=$NEW_CHAT
 echo "Done!"
 
 echo
