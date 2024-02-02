@@ -18,8 +18,9 @@ Copy the following command and paste it into your shell prompt:
 cd ~ && bash <(wget -qO- https://raw.githubusercontent.com/dex2code/massa_acheta/main/install.sh)
 ```
 
-This command will install, configure and start your bot automatically.\
-Please check if you have Telegram Bot API KEY and you know your Telegram ID before start installation!
+This command will install, configure and start your bot automatically.
+
+‼ Please check if you have Telegram Bot API KEY and you know your Telegram ID before start installation!
 
 You can stop the process by Ctrl+C but before you start installation again please run:
 ```
