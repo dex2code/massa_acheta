@@ -18,6 +18,7 @@ echo "Done!"
 echo -n "Creating new .env file ... "
 echo "ACHETA_KEY=$NEW_KEY" > ./.env
 echo "ACHETA_CHAT=$NEW_CHAT" >> ./.env
+chmod 640 ./.env
 echo "Done!"
 
 echo
