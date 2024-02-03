@@ -4,6 +4,19 @@
 DESTDIR="massa_acheta"
 
 
+function rollback {
+    sudo systemctl stop massa_acheta.service &> /dev/null
+    sudo systemctl disable massa_acheta.service &> /dev/null
+
+    cd ~
+    rm -rf ~/massa_acheta &> /dev/null
+
+    sudo rm /etc/systemd/system/massa_acheta.service &> /dev/null
+    sudo systemctl daemon-reload &> /dev/null
+}
+
+
+
 # Check OS distro
 hostnamectl | grep -i "ubuntu" > /dev/null
 if [[ $? -ne 0 ]]
@@ -33,7 +46,7 @@ echo
 echo "[ MASSA 🦗 Acheta Telebot ] -- https://github.com/dex2code/massa_acheta/"
 echo
 echo "This script will configure your system and install all neccessary software:"
-echo "  - python3-full"
+echo "  - python3"
 echo "  - python3-venv"
 echo "  - python3-pip"
 echo "  - git"
@@ -60,7 +73,7 @@ else
     exit 1
 fi
 
-sudo apt-get -y install git python3-full python3-venv python3-pip
+sudo apt-get -y install git python3 python3-venv python3-pip
 if [[ $? -eq 0 ]]
 then
     echo "✅ All dependecies installed!"
@@ -86,6 +99,7 @@ then
 else
     echo
     echo "‼ Some error occured. Please check your settings."
+    rollback
     exit 1
 fi
 
@@ -104,6 +118,7 @@ then
 else
     echo
     echo "‼ Some error occured. Please check your settings."
+    rollback
     exit 1
 fi
 
@@ -115,6 +130,7 @@ then
 else
     echo
     echo "‼ Some error occured. Please check your settings."
+    rollback
     exit 1
 fi
 
@@ -132,6 +148,7 @@ then
 else
     echo
     echo "‼ Some error occured. Please check your settings."
+    rollback
     exit 1
 fi
 
@@ -149,6 +166,7 @@ then
 else
     echo
     echo "‼ Some error occured. Please check your settings."
+    rollback
     exit 1
 fi
 
@@ -164,6 +182,7 @@ then
 else
     echo
     echo "‼ Some error occured. Please check your settings."
+    rollback
     exit 1
 fi
 
@@ -175,6 +194,7 @@ then
 else
     echo
     echo "‼ Some error occured. Please check your settings."
+    rollback
     exit 1
 fi
 
