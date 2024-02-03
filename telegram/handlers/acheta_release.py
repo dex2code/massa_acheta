@@ -18,20 +18,20 @@ async def cmd_acheta_release(message: Message) -> None:
     logger.debug("-> Enter Def")
     if message.chat.id != app_globals.bot.ACHETA_CHAT: return
 
-    update_needed = as_line("👌 No updates needed")
-    if app_globals.latest_acheta_release != app_globals.local_acheta_release:
+    if app_globals.latest_acheta_release == app_globals.local_acheta_release:
+        update_needed = as_line("👌 No updates needed")
+    else:
         update_needed = as_line(
-                            "❗ Please update your bot! ",
+                            "❗ Please update your bot - ",
                             TextLink(
                                 "More info here",
-                                url="https://github.com/dex2code/massa_acheta/blob/main/README.md"
+                                url="https://github.com/dex2code/massa_acheta/"
                             )
                         )
 
     t = as_list(
-            as_line(app_globals.app_config['telegram']['service_nickname']),
             as_line(
-                "🦗 Latest released ACHETA version: ",
+                "🦗 A new version of ACHETA has been released: ",
                 Code(app_globals.latest_acheta_release)
             ),
             as_line(
@@ -39,7 +39,7 @@ async def cmd_acheta_release(message: Message) -> None:
                 Code(app_globals.local_acheta_release)
             ),
             update_needed,
-            as_line(f"⏳ Service checks releases: every {int(app_globals.app_config['service']['main_loop_period_sec'] / 2)} seconds")
+            as_line(f"⏳ Service checks releases: every {app_globals.app_config['service']['main_loop_period_sec']} seconds")
         )
     await message.answer(
         text=t.as_html(),

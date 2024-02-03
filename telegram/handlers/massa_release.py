@@ -16,12 +16,10 @@ router = Router()
 @logger.catch
 async def cmd_cancel(message: Message) -> None:
     logger.debug("-> Enter Def")
-    if message.chat.id != app_globals.bot.ACHETA_CHAT: return
 
     t = as_list(
-            as_line(app_globals.app_config['telegram']['service_nickname']),
             as_line("💾 Latest released MASSA version: ", Code(app_globals.latest_massa_release)),
-            as_line(f"⏳ Service checks releases: every {int(app_globals.app_config['service']['main_loop_period_sec'] / 2)} seconds")
+            as_line(f"⏳ Service checks releases: every {app_globals.app_config['service']['main_loop_period_sec']} seconds")
         )
     await message.answer(
         text=t.as_html(),

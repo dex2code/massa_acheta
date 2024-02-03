@@ -23,7 +23,7 @@ if [[ $? -ne 0 ]]
 then
     echo
     echo "Error: this installation uses Ubuntu-compatible commands and cannot be used in other Linux distros."
-    echo "You can try to install service manually using this scenario: https://github.com/dex2code/massa_acheta/blob/main/README.md"
+    echo "You can try to install service manually using this scenario: https://github.com/dex2code/massa_acheta/"
     exit 1
 fi
 
@@ -44,6 +44,7 @@ echo "::..:::::..::..:::::..:::......::::......:::..:::::..:::"
 echo "::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
 echo
 echo "[ MASSA 🦗 Acheta Telebot ] -- https://github.com/dex2code/massa_acheta/"
+echo "Release: ACHETA.1.0.1"
 echo
 echo "This script will configure your system and install all neccessary software:"
 echo "  - python3"

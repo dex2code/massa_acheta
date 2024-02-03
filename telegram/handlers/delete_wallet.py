@@ -30,9 +30,8 @@ async def cmd_delete_wallet(message: Message, state: FSMContext) -> None:
     
     if len(app_globals.app_results) == 0:
         t = as_list(
-                app_globals.app_config['telegram']['service_nickname'], "",
                 "⭕ Node list is empty", "",
-                "☝ Try /help to learn how to add a node to bot"
+                "👉 Try /help to learn how to add a node to bot"
             )
         await message.answer(
             text=t.as_html(),
@@ -45,7 +44,6 @@ async def cmd_delete_wallet(message: Message, state: FSMContext) -> None:
 
 
     t = as_list(
-            as_line(app_globals.app_config['telegram']['service_nickname']),
             "❓ Tap the node to select or /cancel to quit the scenario:",
         )
     await message.answer(
@@ -71,12 +69,11 @@ async def select_wallet_to_delete(message: Message, state: FSMContext) -> None:
 
     if node_name not in app_globals.app_results:
         t = as_list(
-                as_line(app_globals.app_config['telegram']['service_nickname']),
                 as_line(
                     "‼ Error: Unknown node ",
                     Code(node_name)
                 ),
-                "☝ Try /delete_wallet to delete another wallet or /help to learn bot commands"
+                "👉 Try /delete_wallet to delete another wallet or /help to learn bot commands"
             )
         await message.answer(
             text=t.as_html(),
@@ -90,12 +87,11 @@ async def select_wallet_to_delete(message: Message, state: FSMContext) -> None:
 
     if len(app_globals.app_results[node_name]['wallets']) == 0:
         t = as_list(
-                as_line(app_globals.app_config['telegram']['service_nickname']),
                 as_line(
                     "⭕ No wallets attached to node ",
                     Code(node_name)
                 ),
-                "☝ Try /add_wallet to add a wallet or /help to learn bot commands"
+                "👉 Try /add_wallet to add a wallet or /help to learn bot commands"
             )
         await message.answer(
             text=t.as_html(),
@@ -108,7 +104,6 @@ async def select_wallet_to_delete(message: Message, state: FSMContext) -> None:
         return
 
     t = as_list(
-            as_line(app_globals.app_config['telegram']['service_nickname']),
             "❓ Tap the wallet to select or /cancel to quit the scenario:",
         )
     await message.answer(
@@ -135,7 +130,6 @@ async def delete_wallet(message: Message, state: FSMContext) -> None:
 
     if wallet_address not in app_globals.app_results[node_name]['wallets']:
         t = as_list(
-                as_line(app_globals.app_config['telegram']['service_nickname']),
                 as_line(
                     "‼ Error: Wallet ",
                     TextLink(
@@ -144,7 +138,7 @@ async def delete_wallet(message: Message, state: FSMContext) -> None:
                     ),
                     f" is not attached to node {node_name}"
                 ),
-                "☝ Try /delete_wallet to delete another wallet or /help to learn bot commands"
+                "👉 Try /delete_wallet to delete another wallet or /help to learn bot commands"
             )
         await message.answer(
             text=t.as_html(),
@@ -164,7 +158,6 @@ async def delete_wallet(message: Message, state: FSMContext) -> None:
         logger.error(f"Cannot remove wallet '{wallet_address}' from node '{node_name}': ({str(E)})")
 
         t = as_list(
-                as_line(app_globals.app_config['telegram']['service_nickname']),
                 as_line(
                     "‼ Error: Could not delete wallet ",
                     TextLink(
@@ -182,7 +175,7 @@ async def delete_wallet(message: Message, state: FSMContext) -> None:
                     "⚠ Try again later or watch logs to check the reason - ",
                     TextLink(
                         "More info here",
-                        url="https://github.com/dex2code/massa_acheta/blob/main/README.md"
+                        url="https://github.com/dex2code/massa_acheta/"
                     )
                 )
             )
@@ -191,7 +184,6 @@ async def delete_wallet(message: Message, state: FSMContext) -> None:
         logger.info(f"Successfully removed wallet '{wallet_address}' from node '{node_name}'")
 
         t = as_list(
-                as_line(app_globals.app_config['telegram']['service_nickname']),
                 as_line(
                     "✅ Successfully removed wallet ",
                     TextLink(
@@ -201,7 +193,7 @@ async def delete_wallet(message: Message, state: FSMContext) -> None:
                     " from node ",
                     Code(get_short_address(node_name)),
                 ),
-                "☝ You can check new settings using /view_config command"
+                "👉 You can check new settings using /view_config command"
             )
 
 

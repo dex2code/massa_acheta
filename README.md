@@ -3,19 +3,19 @@
 
 Acheta is a genus of crickets. It most notably contains the house cricket (Acheta domesticus).
 
-**"MASSA Acheta"** is a service that will notify you about events occurring on your MASSA node and your wallet.\
+"MASSA Acheta" is a service that will notify you about events occurring on your MASSA node and your wallet.\
 Just like a little cricket!
 
 >
 >First of all let's define that this is not a public Telegram Bot, but opensource software that you can install on your own server to get a personal Bot that will be accessible only to you.
 >
 
-Before we jump to a detailed description of the service, please watch this video:
+Before we jump to a detailed description of the service, please watch the video:
 
-[![MASSA Acheta service](https://img.youtube.com/vi/gdvuhe2iRyY/0.jpg)](https://www.youtube.com/watch?v=gdvuhe2iRyY)
+[![MASSA Acheta service video](https://img.youtube.com/vi/gdvuhe2iRyY/0.jpg)](https://www.youtube.com/watch?v=gdvuhe2iRyY)
 
 
-## Just-One-Command to start:
+## Just one command to start:
 
 Copy the following command and paste it into your shell prompt:
 ```
@@ -33,6 +33,26 @@ This command will install, configure and start your Bot automatically.
 
 
 You can stop the process anywhere by pressing Ctrl+C, but before starting the installation again, run the following command to clear all changes made:
+```
+cd ~ && bash <(wget -qO- https://raw.githubusercontent.com/dex2code/massa_acheta/main/uninstall.sh)
+```
+
+
+## Update Acheta:
+
+Acheta automatically checks for its updates, and if you receive the message “A new version of ACHETA has been released” - please update your installation.
+
+You can do it with one command:
+```
+cd ~ && bash <(wget -qO- https://raw.githubusercontent.com/dex2code/massa_acheta/main/update.sh)
+```
+
+This command stops Acheta, deploys all updates ans starts Acheta again.
+
+
+## Uninstall Acheta
+
+You can clean your system with the following command:
 ```
 cd ~ && bash <(wget -qO- https://raw.githubusercontent.com/dex2code/massa_acheta/main/uninstall.sh)
 ```

@@ -9,7 +9,7 @@ from telegram.queue import queue_telegram_message
 
 
 @logger.catch
-async def get_latest_release_json(
+async def get_latest_release_github(
     api_url: str="",
     api_content_type: str=None,
     api_session_timeout: int=app_globals.app_config['service']['http_session_timeout_sec'],
@@ -23,6 +23,7 @@ async def get_latest_release_json(
         async with aiohttp.ClientSession(timeout=api_session_timeout) as session:
             async with session.get(url=api_url, timeout=api_probe_timeout) as response:
                 response_result = await response.json(content_type=api_content_type)
+        response_result = {"result": response_result['name']}
         
     except Exception as E:
         logger.error(f"API request Exception: ({str(E)})")
@@ -43,8 +44,8 @@ async def massa_release() -> None:
     logger.debug(f"-> Enter Def")
 
     try:
-        massa_release_obj = await get_latest_release_json(api_url=app_globals.app_config['service']['massa_release_url'])
-        massa_latest_release = massa_release_obj['name']
+        massa_release_obj = await get_latest_release_github(api_url=app_globals.app_config['service']['massa_release_url'])
+        massa_latest_release = massa_release_obj['result']
 
     except Exception as E:
         logger.warning(f"Cannot get latest MASSA release version: ({str(E)}). Result: {massa_release_obj}")
@@ -74,8 +75,8 @@ async def acheta_release() -> None:
     logger.debug(f"-> Enter Def")
 
     try:
-        acheta_release_obj =    await get_latest_release_json(api_url=app_globals.app_config['service']['acheta_release_url'])
-        acheta_latest_release = acheta_release_obj['result']['release']
+        acheta_release_obj = await get_latest_release_github(api_url=app_globals.app_config['service']['acheta_release_url'])
+        acheta_latest_release = acheta_release_obj['result']
     
     except Exception as E:
         logger.warning(f"Cannot get latest ACHETA release version: ({str(E)}). Result: {acheta_release_obj}")
@@ -97,10 +98,10 @@ async def acheta_release() -> None:
                         Code(app_globals.local_acheta_release)
                     ),
                     as_line(
-                        "⚠ Update your bot version! ",
+                        "⚠ Update your bot version - ",
                         TextLink(
                             "More info here",
-                            url="https://github.com/dex2code/massa_acheta/blob/main/README.md"
+                            url="https://github.com/dex2code/massa_acheta/"
                         )
                     )
                 )
@@ -120,7 +121,7 @@ async def releases() -> None:
         await massa_release()
         await acheta_release()
 
-        await asyncio.sleep(delay=(app_globals.app_config['service']['main_loop_period_sec'] / 2))
+        await asyncio.sleep(delay=app_globals.app_config['service']['main_loop_period_sec'])
 
 
 

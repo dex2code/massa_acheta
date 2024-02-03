@@ -58,10 +58,9 @@ async def cmd_view_config(message: Message) -> None:
                 config_list.append("")
 
     t = as_list(
-            as_line(app_globals.app_config['telegram']['service_nickname']),
             "📋 Current service configuration:", "",
             *config_list, 
-            "☝ Try /help to learn how to manage settings"
+            "👉 Try /help to learn how to manage settings"
         )
     await message.answer(
         text=t.as_html(),

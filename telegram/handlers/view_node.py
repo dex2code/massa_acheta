@@ -29,9 +29,8 @@ async def cmd_view_node(message: Message, state: FSMContext) -> None:
     
     if len(app_globals.app_results) == 0:
         t = as_list(
-                app_globals.app_config['telegram']['service_nickname'], "",
                 "⭕ Node list is empty", "",
-                "☝ Try /help to learn how to add a node to bot"
+                "👉 Try /help to learn how to add a node to bot"
             )
         await message.answer(
             text=t.as_html(),
@@ -43,8 +42,7 @@ async def cmd_view_node(message: Message, state: FSMContext) -> None:
         return
 
     t = as_list(
-            as_line(app_globals.app_config['telegram']['service_nickname']),
-            "☝ Tap the node to view or /cancel to quit the scenario",
+            "👉 Tap the node to view or /cancel to quit the scenario",
         )
     await message.answer(
         text=t.as_html(),
@@ -68,12 +66,11 @@ async def show_node(message: Message, state: FSMContext) -> None:
 
     if node_name not in app_globals.app_results:
         t = as_list(
-                as_line(app_globals.app_config['telegram']['service_nickname']),
                 as_line(
                     "‼ Error: Unknown node ",
                     Code(node_name)
                 ),
-                "☝ Try /view_node to view another node or /help to learn how to add a node to bot"
+                "👉 Try /view_node to view another node or /help to learn how to add a node to bot"
             )
         await message.answer(
             text=t.as_html(),
@@ -101,7 +98,6 @@ async def show_node(message: Message, state: FSMContext) -> None:
         node_status = f"☠️ Status: Offline (last seen: {last_seen})"
 
         t = as_list(
-                as_line(app_globals.app_config['telegram']['service_nickname']),
                 as_line(
                     "🏠 Node: ",
                     Code(node_name),
@@ -137,7 +133,6 @@ async def show_node(message: Message, state: FSMContext) -> None:
         banned_peer_count = app_globals.app_results[node_name]['last_result']['network_stats'].get("banned_peer_count", 0)
 
         t = as_list(
-                as_line(app_globals.app_config['telegram']['service_nickname']),
                 as_line(
                     "🏠 Node: ",
                     Code(node_name),

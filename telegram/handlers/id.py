@@ -18,7 +18,6 @@ async def cmd_cancel(message: Message) -> None:
     logger.debug("-> Enter Def")
 
     t = as_list(
-            as_line(app_globals.app_config['telegram']['service_nickname']),
             as_line(
                 "👤 User ID: ",
                 Code(message.from_user.id)

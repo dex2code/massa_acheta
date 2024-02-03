@@ -29,7 +29,6 @@ async def cmd_add_node(message: Message, state: FSMContext) -> None:
     if message.chat.id != app_globals.bot.ACHETA_CHAT: return
     
     t = as_list(
-            as_line(app_globals.app_config['telegram']['service_nickname']),
             "❓ Please enter a short name for the new node (nickname) or /cancel to quit the scenario:",
         )
     await message.answer(
@@ -54,12 +53,11 @@ async def input_nodename_to_add(message: Message, state: FSMContext) -> None:
 
     if node_name in app_globals.app_results:
         t = as_list(
-                as_line(app_globals.app_config['telegram']['service_nickname']),
                 as_line("‼ Error: Node with nickname ",
                         Code(node_name),
                         " already exists"
                 ),
-                as_line("☝ Try /add_node to add another node or /help to learn bot commands")
+                as_line("👉 Try /add_node to add another node or /help to learn bot commands")
             )
         await message.answer(
             text=t.as_html(),
@@ -72,7 +70,6 @@ async def input_nodename_to_add(message: Message, state: FSMContext) -> None:
 
 
     t = as_list(
-            as_line(app_globals.app_config['telegram']['service_nickname']),
             as_line(
                 "❓ Please enter API URL for the new node ",
                 Code(node_name),
@@ -117,7 +114,6 @@ async def add_node(message: Message, state: FSMContext) -> None:
     except Exception as E:
         logger.error(f"Cannot add node '{node_name}' with URL '{node_url}': ({str(E)})")
         t = as_list(
-                as_line(app_globals.app_config['telegram']['service_nickname']),
                 as_line(
                     "‼ Error: Could not add node ",
                     Code(get_short_address(node_name)),
@@ -131,7 +127,7 @@ async def add_node(message: Message, state: FSMContext) -> None:
                     "⚠ Try again later or watch logs to check the reason - ",
                     TextLink(
                         "More info here",
-                        url="https://github.com/dex2code/massa_acheta/blob/main/README.md"
+                        url="https://github.com/dex2code/massa_acheta/"
                     )
                 )
             )
@@ -139,7 +135,6 @@ async def add_node(message: Message, state: FSMContext) -> None:
     else:
         logger.info(f"Successfully added node '{node_name}' with URL '{node_url}'")
         t = as_list(
-                as_line(app_globals.app_config['telegram']['service_nickname']),
                 as_line(
                     "✅ Successfully added node: ",
                     Code(get_short_address(node_name)),
@@ -147,7 +142,7 @@ async def add_node(message: Message, state: FSMContext) -> None:
                 ),
                 "👁 You can check new settings using /view_config command", "",
                 "☝ Please note that bot will update info for this node a bit later", "",
-                "⚠ Please also check if you opened a firewall on the remote host:",
+                "⚠ Please also check if you opened a firewall on the MASSA host:",
                 as_line(
                     "Use ",
                     Code("sudo ufw allow 33035/tcp"),
@@ -169,5 +164,3 @@ async def add_node(message: Message, state: FSMContext) -> None:
             await asyncio.gather(check_node(node_name=node_name))
 
     return
-
-

@@ -18,7 +18,6 @@ async def cmd_ping(message: Message) -> None:
     logger.debug("-> Enter Def")
 
     t = as_list(
-            as_line(app_globals.app_config['telegram']['service_nickname']),
             as_line("🏓 Pong!")
         )
     await message.answer(

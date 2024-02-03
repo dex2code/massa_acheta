@@ -32,9 +32,8 @@ async def cmd_view_wallet(message: Message, state: FSMContext) -> None:
     
     if len(app_globals.app_results) == 0:
         t = as_list(
-                app_globals.app_config['telegram']['service_nickname'], "",
                 "⭕ Node list is empty", "",
-                "☝ Try /help to learn how to add a node to bot"
+                "👉 Try /help to learn how to add a node to bot"
             )
         await message.answer(
             text=t.as_html(),
@@ -47,7 +46,6 @@ async def cmd_view_wallet(message: Message, state: FSMContext) -> None:
 
 
     t = as_list(
-            as_line(app_globals.app_config['telegram']['service_nickname']),
             "❓ Tap the node to select or /cancel to quit the scenario",
         )
     await message.answer(
@@ -73,12 +71,11 @@ async def select_wallet_to_show(message: Message, state: FSMContext) -> None:
 
     if node_name not in app_globals.app_results:
         t = as_list(
-                as_line(app_globals.app_config['telegram']['service_nickname']),
                 as_line(
                     "‼ Error: Unknown node ",
                     Code(node_name)
                 ),
-                "☝ Try /view_wallet to view another wallet or /help to learn bot commands"
+                "👉 Try /view_wallet to view another wallet or /help to learn bot commands"
             )
         await message.answer(
             text=t.as_html(),
@@ -92,9 +89,8 @@ async def select_wallet_to_show(message: Message, state: FSMContext) -> None:
 
     if len(app_globals.app_results[node_name]['wallets']) == 0:
         t = as_list(
-                as_line(app_globals.app_config['telegram']['service_nickname']),
                 f"⭕ No wallets attached to node {node_name}", "",
-                "☝ Try /add_wallet to add wallet to the node or /help to learn bot commands"
+                "👉 Try /add_wallet to add wallet to the node or /help to learn bot commands"
             )
         await message.answer(
             text=t.as_html(),
@@ -107,7 +103,6 @@ async def select_wallet_to_show(message: Message, state: FSMContext) -> None:
         return
 
     t = as_list(
-            as_line(app_globals.app_config['telegram']['service_nickname']),
             "❓ Tap the wallet to select or /cancel to quit the scenario:",
         )
     await message.answer(
@@ -134,7 +129,6 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
 
     if wallet_address not in app_globals.app_results[node_name]['wallets']:
         t = as_list(
-                as_line(app_globals.app_config['telegram']['service_nickname']),
                 as_line(
                     "‼ Error: Wallet ",
                     TextLink(
@@ -144,7 +138,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
                     " is not attached to node ",
                     Code(node_name)
                 ),
-                "☝ Try /view_wallet to view another wallet or /help to learn bot commands"
+                "👉 Try /view_wallet to view another wallet or /help to learn bot commands"
             )
         await message.answer(
             text=t.as_html(),
@@ -195,7 +189,6 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
                         )
 
         t = as_list(
-                as_line(app_globals.app_config['telegram']['service_nickname']),
                 as_line(
                     "🏠 Node: ",
                     Code(node_name),
@@ -258,7 +251,6 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
                 )
 
         t = as_list(
-                as_line(app_globals.app_config['telegram']['service_nickname']),
                 as_line(
                     "🏠 Node: ",
                     Code(node_name),

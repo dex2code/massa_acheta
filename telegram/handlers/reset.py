@@ -26,7 +26,6 @@ async def cmd_reset(message: Message, state: FSMContext) -> None:
     if message.chat.id != app_globals.bot.ACHETA_CHAT: return
 
     t = as_list(
-            as_line(app_globals.app_config['telegram']['service_nickname']),
             "⁉ Please confirm that you actually want to reset the service configuration", "",
             "☝ All your configured nodes and wallets will be erased from bot configuration", "",
             as_line(
@@ -54,9 +53,8 @@ async def do_reset(message: Message, state: FSMContext) -> None:
 
     if message.text.upper() != "I WANT TO RESET THE SERVICE":
         t = as_list(
-                as_line(app_globals.app_config['telegram']['service_nickname']),
                 "🙆 Reset request rejected", "",
-                "☝ Try /help to learn bot commands"
+                "👉 Try /help to learn bot commands"
             )
         await message.answer(
             text=t.as_html(),
@@ -74,7 +72,6 @@ async def do_reset(message: Message, state: FSMContext) -> None:
 
     except Exception as E:
         t = as_list(
-                as_line(app_globals.app_config['telegram']['service_nickname']),
                 as_line("‼ Error: Could not reset configuration"),
                 as_line(
                     "💻 Result: ",
@@ -84,16 +81,15 @@ async def do_reset(message: Message, state: FSMContext) -> None:
                     "⚠ Try again later or watch logs to check the reason - ",
                     TextLink(
                         "More info here",
-                        url="https://github.com/dex2code/massa_acheta/blob/main/README.md"
+                        url="https://github.com/dex2code/massa_acheta/"
                     )
                 )
             )
 
     else:
         t = as_list(
-                as_line(app_globals.app_config['telegram']['service_nickname']),
                 as_line("✅ Reset done "),
-                "☝ You can check new settings using /view_config command"
+                "👉 You can check new settings using /view_config command"
             )
 
 

@@ -2,7 +2,6 @@ from loguru import logger
 
 import asyncio
 from aiogram.enums import ParseMode
-from aiogram import html
 
 import app_globals
 
@@ -12,7 +11,7 @@ async def queue_telegram_message(message_text: str="") -> None:
     logger.debug(f"-> Enter Def")
 
     try:
-        app_globals.telegram_queue.append(f"{html.quote(app_globals.app_config['telegram']['service_nickname'])}\n\n{message_text}")
+        app_globals.telegram_queue.append(message_text)
     
     except Exception as E:
         logger.error(f"Cannot add telegram message to queue : ({str(E)})")

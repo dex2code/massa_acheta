@@ -31,9 +31,8 @@ async def cmd_add_wallet(message: Message, state: FSMContext) -> None:
     
     if len(app_globals.app_results) == 0:
         t = as_list(
-                app_globals.app_config['telegram']['service_nickname'], "",
                 "⭕ Node list is empty", "",
-                "☝ Try /add_node to add a node or /help to learn bot commands"
+                "👉 Try /add_node to add a node or /help to learn bot commands"
             )
         await message.answer(
             text=t.as_html(),
@@ -46,7 +45,6 @@ async def cmd_add_wallet(message: Message, state: FSMContext) -> None:
 
 
     t = as_list(
-            as_line(app_globals.app_config['telegram']['service_nickname']),
             "❓ Tap the node to select or /cancel to quit the scenario:",
         )
     await message.answer(
@@ -72,12 +70,11 @@ async def input_wallet_to_add(message: Message, state: FSMContext) -> None:
 
     if node_name not in app_globals.app_results:
         t = as_list(
-                as_line(app_globals.app_config['telegram']['service_nickname']),
                 as_line(
                     "‼ Error: Unknown node ",
                     Code(node_name)
                 ),
-                "☝ Try /add_wallet to add another wallet or /help to learn bot commands"
+                "👉 Try /add_wallet to add another wallet or /help to learn bot commands"
             )
         await message.answer(
             text=t.as_html(),
@@ -90,7 +87,6 @@ async def input_wallet_to_add(message: Message, state: FSMContext) -> None:
         return
 
     t = as_list(
-            as_line(app_globals.app_config['telegram']['service_nickname']),
             as_line(
                 "❓ Please enter MASSA wallet address with leading ",
                 Code("AU..."),
@@ -121,7 +117,6 @@ async def add_wallet(message: Message, state: FSMContext) -> None:
 
     if wallet_address in app_globals.app_results[node_name]['wallets']:
         t = as_list(
-                as_line(app_globals.app_config['telegram']['service_nickname']),
                 as_line(
                     "‼ Error: Wallet ",
                     TextLink(
@@ -131,7 +126,7 @@ async def add_wallet(message: Message, state: FSMContext) -> None:
                     f" already attached to node ",
                     Code(node_name)
                 ),
-                "☝ Try /add_wallet to add another wallet or /help to learn bot commands"
+                "👉 Try /add_wallet to add another wallet or /help to learn bot commands"
             )
         await message.answer(
             text=t.as_html(),
@@ -157,7 +152,6 @@ async def add_wallet(message: Message, state: FSMContext) -> None:
     except Exception as E:
         logger.error(f"Cannot add wallet '{wallet_address}' to node '{node_name}': ({str(E)})")
         t = as_list(
-                as_line(app_globals.app_config['telegram']['service_nickname']),
                 as_line(
                     "‼ Error: Could not add wallet ",
                     TextLink(
@@ -175,7 +169,7 @@ async def add_wallet(message: Message, state: FSMContext) -> None:
                     "⚠ Try again later or watch logs to check the reason - ",
                     TextLink(
                         "More info here",
-                        url="https://github.com/dex2code/massa_acheta/blob/main/README.md"
+                        url="https://github.com/dex2code/massa_acheta/"
                     )
                 )
             )
@@ -183,7 +177,6 @@ async def add_wallet(message: Message, state: FSMContext) -> None:
     else:
         logger.info(f"Successfully added wallet '{wallet_address}' to node '{node_name}'")
         t = as_list(
-                as_line(app_globals.app_config['telegram']['service_nickname']),
                 as_line(
                     "✅ Successfully added wallet: ",
                     TextLink(

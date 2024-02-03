@@ -29,9 +29,8 @@ async def cmd_delete_node(message: Message, state: FSMContext) -> None:
     
     if len(app_globals.app_results) == 0:
         t = as_list(
-                app_globals.app_config['telegram']['service_nickname'], "",
                 "⭕ Node list is empty", "",
-                "☝ Try /help to learn how to add a node to bot"
+                "👉 Try /help to learn how to add a node to bot"
             )
         await message.answer(
             text=t.as_html(),
@@ -44,7 +43,6 @@ async def cmd_delete_node(message: Message, state: FSMContext) -> None:
 
 
     t = as_list(
-            as_line(app_globals.app_config['telegram']['service_nickname']),
             "❓ Tap the node to select or /cancel to quit the scenario:",
         )
     await message.answer(
@@ -69,12 +67,11 @@ async def delete_node(message: Message, state: FSMContext) -> None:
 
     if node_name not in app_globals.app_results:
         t = as_list(
-                as_line(app_globals.app_config['telegram']['service_nickname']),
                 as_line(
                     "‼ Error: Unknown node ",
                     Code(node_name)
                 ),
-                as_line("☝ Try /delete_node to delete another node or /help to learn bot commands")
+                as_line("👉 Try /delete_node to delete another node or /help to learn bot commands")
             )
         await message.answer(
             text=t.as_html(),
@@ -94,7 +91,6 @@ async def delete_node(message: Message, state: FSMContext) -> None:
     except Exception as E:
         logger.error(f"Cannot remove node '{node_name}': ({str(E)})")
         t = as_list(
-                as_line(app_globals.app_config['telegram']['service_nickname']),
                 as_line(
                     "‼ Error: Could not delete node ",
                     Code(get_short_address(node_name))
@@ -107,7 +103,7 @@ async def delete_node(message: Message, state: FSMContext) -> None:
                     "⚠ Try again later or watch logs to check the reason - ",
                     TextLink(
                         "More info here",
-                        url="https://github.com/dex2code/massa_acheta/blob/main/README.md"
+                        url="https://github.com/dex2code/massa_acheta/"
                     )
                 )
             )
@@ -115,12 +111,11 @@ async def delete_node(message: Message, state: FSMContext) -> None:
     else:
         logger.info(f"Successfully removed node '{node_name}'")
         t = as_list(
-                as_line(app_globals.app_config['telegram']['service_nickname']),
                 as_line(
                     "✅ Successfully removed node ",
                     Code(get_short_address(node_name))
                 ),
-                "☝ You can check new settings using /view_config command"
+                "👉 You can check new settings using /view_config command"
             )
 
 
@@ -133,5 +128,3 @@ async def delete_node(message: Message, state: FSMContext) -> None:
 
     await state.clear()
     return
-
-

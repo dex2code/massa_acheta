@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
 
-cd
-
 sudo systemctl stop massa_acheta.service &> /dev/null
 sudo systemctl disable massa_acheta.service &> /dev/null
 
