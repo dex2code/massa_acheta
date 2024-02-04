@@ -33,7 +33,7 @@ This command will install, configure and start your Bot automatically.
 > How to get your own Telegram ID value: https://www.youtube.com/watch?v=e_d3KqI6zkI
 
 
-You can stop the process anywhere by pressing Ctrl+C, but before starting the installation again, run the following command to clear all changes made:
+You can stop the installation process anywhere by pressing Ctrl+C, but before starting the installation again, run the following command to clear all changes made:
 ```
 cd ~ && bash <(wget -qO- https://raw.githubusercontent.com/dex2code/massa_acheta/main/uninstall.sh)
 ```
@@ -116,7 +116,7 @@ If the attempt is successful, Acheta will start to watch your wallet and will se
 
 You also can display actual wallet info using command:
 >
-> /view wallet
+> /view_wallet
 > 
 
 
