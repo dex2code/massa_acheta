@@ -141,22 +141,13 @@ async def show_node(message: Message, state: FSMContext) -> None:
                 f"📍 {app_globals.app_results[node_name]['url']}",
                 f"{wallets_attached}", "",
                 f"{node_status}", "",
-                as_line(
-                    "🆔: ",
-                    Code(get_short_address(node_id))
-                ),
+                f"🆔: {get_short_address(node_id)}", "",
                 f"↕ Routable IP: {node_ip}", "",
                 f"💾 Release: {node_version}", "",
-                as_line(
-                    "🌀 Cycle: ",
-                    Code(current_cycle)
-                ),
-                f"↔ In/Out connections: {in_connection_count}/{out_connection_count}", "",
-                f"🙋 Known/Banned peers: {known_peer_count}/{banned_peer_count}", "",
-                as_line(
-                    "🔗 Chain ID: ",
-                    Code(chain_id)
-                ),
+                f"🌀 Cycle: {current_cycle}", "",
+                f"↔ In / Out connections: {in_connection_count} / {out_connection_count}", "",
+                f"🙋 Known / Banned peers: {known_peer_count} / {banned_peer_count}", "",
+                f"🔗 Chain ID: {chain_id}", "",
                 f"☝ Service checks updates: every {app_globals.app_config['service']['main_loop_period_sec']} seconds"
             )
 
