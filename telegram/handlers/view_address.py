@@ -119,6 +119,10 @@ async def show_address(message: Message, state: FSMContext) -> None:
                     "💻 Result: ",
                     Code(str(E))
                 ),
+                as_line(
+                    "🩺 Exception: ",
+                    Code(str(E))
+                ),
                 as_line("⚠️ Check wallet address or try later!")
             )
         await message.answer(
