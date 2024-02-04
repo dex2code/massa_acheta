@@ -43,6 +43,10 @@ async def check_node(node_name: str="") -> None:
                         "💻 Result: ",
                         Code(node_result)
                     ),
+                    as_line(
+                        "🩺 Exception: ",
+                        Code(str(E))
+                    ),
                     "⚠️ Check node or firewall settings!"
                 )
             await queue_telegram_message(message_text=t.as_html())

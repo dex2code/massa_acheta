@@ -91,6 +91,10 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
                         "💻 Result: ",
                         Code(wallet_response)
                     ),
+                    as_line(
+                        "🩺 Exception: ",
+                        Code(str(E))
+                    ),
                     "⚠ Check wallet address or node settings!"
                 )
             await queue_telegram_message(message_text=t.as_html())
