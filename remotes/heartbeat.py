@@ -85,5 +85,3 @@ async def heartbeat() -> None:
                 f"⏳ Heartbeat schedule: every {app_globals.app_config['service']['heartbeat_period_hours']} hours"
             )
         await queue_telegram_message(message_text=t.as_html())
-
-        return

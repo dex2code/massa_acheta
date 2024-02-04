@@ -68,6 +68,8 @@ async def massa_release() -> None:
         
         app_globals.latest_massa_release = massa_latest_release
 
+    return
+
 
 
 @logger.catch
