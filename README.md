@@ -99,11 +99,12 @@ In order to watch your wallet and staking activity, you need to add it to the se
 Acheta will ask you to select which node this wallet belongs to and will ask you to enter its address.
 
 After succesfuly adding a wallet, Acheta will try to obtain information about it from the node and display the status of this attempt.\
-If the attempt is successful, Acheta will start to watch your wallet and will send notifications about the following events:\
-- Decrease wallet balance\
-- Missed blocks\
-- Increase candidate rolls\
-- Increase active rolls\
+If the attempt is successful, Acheta will start to watch your wallet and will send notifications about the following events:
+- Decrease wallet balance
+- Missed blocks
+- Increase candidate rolls
+- Increase active rolls
+
 You also can display actual wallet info using command:
 >
 > /view wallet
