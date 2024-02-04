@@ -29,14 +29,26 @@ async def pull_node_api(
 
     except Exception as E:
         logger.error(f"Exception in API request for URL '{api_url}': ({str(E)})")
-        api_response_result = {"error": f"Exception: ({str(E)})"}
+        api_response_result =   {
+                                    "error":
+                                        {
+                                            "result": api_response_obj,
+                                            "exception": str(E)
+                                        }
+                                }
 
     else:
         if api_response.status == 200:
             logger.info(f"Successfully pulled result from API '{api_url}'")
         else:
             logger.error(f"API URL '{api_url}' response status error: (HTTP {api_response.status})")
-            api_response_result = {"error": f"HTTP Error: ({api_response.status})"}
+            api_response_result =   {
+                                        "error":
+                                            {
+                                                "result": api_response_obj,
+                                                "exception": f"HTTP {api_response.status}"
+                                            }
+                                    }
 
     finally:
         return api_response_result
