@@ -59,7 +59,7 @@ async def massa_release() -> None:
         elif app_globals.latest_massa_release != massa_latest_release:
             t = as_list(
                     as_line(
-                        "💾 New MASSA version released: ",
+                        "💾 A new MASSA version released: ",
                         Code(massa_latest_release)
                         ),
                     as_line("⚠ Check your nodes and update it if needed!")
@@ -92,7 +92,7 @@ async def acheta_release() -> None:
         if app_globals.latest_acheta_release != acheta_latest_release:
             t = as_list(
                     as_line(
-                        "🦗 New ACHETA version released: ",
+                        "🦗 A new ACHETA version released: ",
                         Code(acheta_latest_release)
                     ),
                     as_line(
