@@ -32,7 +32,7 @@ async def pull_node_api(
         api_response_result =   {
                                     "error":
                                         {
-                                            "result": api_response_obj,
+                                            "response": api_response_obj,
                                             "exception": str(E)
                                         }
                                 }
@@ -45,7 +45,7 @@ async def pull_node_api(
             api_response_result =   {
                                         "error":
                                             {
-                                                "result": api_response_obj,
+                                                "response": api_response_obj,
                                                 "exception": f"HTTP {api_response.status}"
                                             }
                                     }

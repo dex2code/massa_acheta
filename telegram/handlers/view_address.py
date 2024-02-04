@@ -117,7 +117,7 @@ async def show_address(message: Message, state: FSMContext) -> None:
                 ),
                 as_line(
                     "💻 Result: ",
-                    Code(str(E))
+                    Code(wallet_response)
                 ),
                 as_line(
                     "🩺 Exception: ",
