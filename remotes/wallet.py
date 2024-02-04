@@ -116,7 +116,7 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
                             url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_address}"
                         )
                     ),
-                    f"💰 Final balance: {wallet_final_balance} MAS",
+                    f"💰 Final balance: {wallet_final_balance:,} MAS",
                     f"🧻 Candidate / Active rolls: {wallet_candidate_rolls} / {wallet_active_rolls}",
                     f"🥊 Missed blocks: {wallet_missed_blocks}"
                 )
