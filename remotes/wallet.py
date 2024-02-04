@@ -116,13 +116,8 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
                             url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_address}"
                         )
                     ),
-                    as_line(
-                        "💰 Final balance: ",
-                        Code(wallet_final_balance),
-                        " MAS",
-                        end=""
-                    ),
-                    f"🧻 Candidate/Active rolls: {wallet_candidate_rolls}/{wallet_active_rolls}",
+                    f"💰 Final balance: {wallet_final_balance} MAS",
+                    f"🧻 Candidate / Active rolls: {wallet_candidate_rolls} / {wallet_active_rolls}",
                     f"🥊 Missed blocks: {wallet_missed_blocks}"
                 )
             await queue_telegram_message(message_text=t.as_html())
@@ -145,13 +140,7 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
                                 url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_address}"
                             )
                         ),
-                        as_line(
-                            "👁 New final balance: ",
-                            Code(app_globals.app_results[node_name]['wallets'][wallet_address]['final_balance']),
-                            " → ",
-                            Code(wallet_final_balance),
-                            " MAS"
-                        )
+                        f"👁 New final balance: {app_globals.app_results[node_name]['wallets'][wallet_address]['final_balance']} → {wallet_final_balance} MAS",
                     )
                 await queue_telegram_message(message_text=t.as_html())
 
@@ -171,12 +160,7 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
                                 url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_address}"
                             )
                         ),
-                        as_line(
-                            "👁 New candidate rolls number: ",
-                            Code(app_globals.app_results[node_name]['wallets'][wallet_address]['candidate_rolls']),
-                            " → ",
-                            Code(wallet_candidate_rolls)
-                        )
+                        f"👁 New candidate rolls number: {app_globals.app_results[node_name]['wallets'][wallet_address]['candidate_rolls']} → {wallet_candidate_rolls}"
                     )
                 await queue_telegram_message(message_text=t.as_html())
 
@@ -196,12 +180,7 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
                                 url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_address}"
                             )
                         ),
-                        as_line(
-                            "👁 New active rolls number: ",
-                            Code(app_globals.app_results[node_name]['wallets'][wallet_address]['active_rolls']),
-                            " → ",
-                            Code(wallet_active_rolls)
-                        )
+                        f"👁 New active rolls number: {app_globals.app_results[node_name]['wallets'][wallet_address]['active_rolls']} → {wallet_active_rolls}"
                     )
                 await queue_telegram_message(message_text=t.as_html())
 
@@ -221,10 +200,7 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
                                 url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_address}"
                             )
                         ),
-                        as_line(
-                            "👁 Blocks missed in last cycle: ",
-                            Code(wallet_last_cycle_missed_blocks)
-                        )
+                        f"👁 Blocks missed in last cycle: {wallet_last_cycle_missed_blocks}"
                     )
                 await queue_telegram_message(message_text=t.as_html())
 
