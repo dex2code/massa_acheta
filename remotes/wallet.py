@@ -140,7 +140,7 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
                                 url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_address}"
                             )
                         ),
-                        f"👁 New final balance: {app_globals.app_results[node_name]['wallets'][wallet_address]['final_balance']} → {wallet_final_balance} MAS",
+                        f"👁 New final balance: {app_globals.app_results[node_name]['wallets'][wallet_address]['final_balance']:,} → {wallet_final_balance:,} MAS",
                     )
                 await queue_telegram_message(message_text=t.as_html())
 
