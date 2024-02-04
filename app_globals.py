@@ -77,7 +77,7 @@ Releases stuff
 '''
 latest_massa_release = ""
 
-local_acheta_release = "ACHETA.1.0.1"
+local_acheta_release = "ACHETA.1.0.2"
 latest_acheta_release = ""
 
 
