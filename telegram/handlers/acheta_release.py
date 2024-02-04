@@ -31,7 +31,7 @@ async def cmd_acheta_release(message: Message) -> None:
 
     t = as_list(
             as_line(
-                "🦗 A new version of ACHETA has been released: ",
+                "🦗 Latest released ACHETA version: ",
                 Code(app_globals.latest_acheta_release)
             ),
             as_line(
