@@ -88,8 +88,13 @@ In order to watch your node, you need to add it to the service configuration. To
 > /add_node
 >
 Acheta will ask you for a node nickname (any unique value) and API URL to connect the node using MASSA public API.\
-Use `http://127.0.0.1:33035/api/v2` if you installed Acheta on the same host with MASSA node, otherwise replace `127.0.0.1` with your real MASSA node IP address.\
+Use `http://127.0.0.1:33035/api/v2` if you installed Acheta on the same host with MASSA node, otherwise replace `127.0.0.1` with your real MASSA node IP address.
+
 !!! Please make sure if you opened TCP port 33035 on your MASSA node to allow the connection from Acheta! Use `sudo ufw allow 33035/tcp` on Ubuntu hosts.
+
+`33035/TCP` is the public API port so it's safe to open it.\
+You can read more about MASSA Public API here: https://docs.massa.net/docs/build/api/jsonrpc
+
 
 Once you have successfully added a node, Acheta will try to connect to it and display its current status.\
 If the node is available, Acheta will start monitoring the node and will notify you if the node's status changes (`Alive -> Dead` or `Dead -> Alive`).\
