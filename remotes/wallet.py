@@ -119,7 +119,7 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
                     as_line(
                         "💰 Final balance: ",
                         Code(wallet_final_balance),
-                        " MASSA",
+                        " MAS",
                         end=""
                     ),
                     f"🧻 Candidate/Active rolls: {wallet_candidate_rolls}/{wallet_active_rolls}",
@@ -150,7 +150,7 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
                             Code(app_globals.app_results[node_name]['wallets'][wallet_address]['final_balance']),
                             " → ",
                             Code(wallet_final_balance),
-                            " MASSA"
+                            " MAS"
                         )
                     )
                 await queue_telegram_message(message_text=t.as_html())
