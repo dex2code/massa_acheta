@@ -148,7 +148,7 @@ def get_short_address(address: str="") -> str:
     logger.debug("-> Enter Def")
 
     if len(address) > 15:
-        return f"{address[0:9]}...{address[-6:]}"
+        return f"{address[0:8]}...{address[-6:]}"
     else:
         return address
 
