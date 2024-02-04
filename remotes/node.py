@@ -61,10 +61,7 @@ async def check_node(node_name: str="") -> None:
                         end=""
                     ),
                     f"📍 {app_globals.app_results[node_name]['url']}", "",
-                    as_line(
-                        "🌿 Become alive with Chain ID: ",
-                        Code(node_chain_id)
-                    )
+                    f"🌿 Become alive with Chain ID: {node_chain_id}"
                 )
             await queue_telegram_message(message_text=t.as_html())
 
