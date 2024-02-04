@@ -63,28 +63,28 @@ cd ~ && bash <(wget -qO- https://raw.githubusercontent.com/dex2code/massa_acheta
 
 ## What can Acheta do:
 
-First of all it can observe MASSA explorer and display wallets info:
-> Command:
+First of all it can observe MASSA explorer and display wallets info with command:
+>
 > /view_address
 >
 
 
 Acheta also checks for the latest published version of the MASSA and automatically notifies you if a new version is available.\
-You can see the latest version with:
+You also can see the latest version with:
 >
 > /massa_release
 >
 
 
-In order for the Acheta to watch your node, you need to add it to the service configuration. To do this use the command:
+In order to watch your node, you need to add it to the service configuration. To do this use the command:
 >
 > /add_node
 >
-Acheta will ask you for a node nickname (any value) and API URL to connect the node using MASSA public API.\
+Acheta will ask you for a node nickname (any unique value) and API URL to connect the node using MASSA public API.\
 Use `http://127.0.0.1:33035/api/v2` if you installed Acheta on the same host with MASSA node, otherwise replace `127.0.0.1` with your real MASSA node IP address.\
-!!! Please make sure if you opened TCP port 33035 on your MASSA node! Use `sudo ufw allow 33035/tcp` on Ubuntu hosts.
+!!! Please make sure if you opened TCP port 33035 on your MASSA node to allow the connection from Acheta! Use `sudo ufw allow 33035/tcp` on Ubuntu hosts.
 
-Once you have added a node, Acheta will try to connect to it and display its current status.\
+Once you have successfully added a node, Acheta will try to connect to it and display its current status.\
 If the node is available, Acheta will start monitoring the node and will notify you if the node's status changes (`Alive -> Dead` or `Dead -> Alive`).\
 Every time the status changes, you will receive warning messages about it.
 You also can display actual node info using command:
@@ -92,15 +92,14 @@ You also can display actual node info using command:
 > /view_node
 >
 
-In order for the Acheta to watch your wallet and staking activity, you need to add it to the service configuration. To do this use the command:
+In order to watch your wallet and staking activity, you need to add it to the service configuration. To do this use the command:
 >
 > /add_wallet
 >
-Acheta will prompt you to select which node this wallet belongs to and will ask you to enter its address.
-You can display current 
+Acheta will ask you to select which node this wallet belongs to and will ask you to enter its address.
 
-After adding a wallet, Acheta will try to obtain information about it from the node and display the status of this attempt.\
-If the attempt was successful, Acheta begins to monitor your wallet and will send notifications about the following events:\
+After succesfuly adding a wallet, Acheta will try to obtain information about it from the node and display the status of this attempt.\
+If the attempt is successful, Acheta will start to watch your wallet and will send notifications about the following events:\
 - Decrease wallet balance\
 - Missed blocks\
 - Increase candidate rolls\
@@ -109,3 +108,22 @@ You also can display actual wallet info using command:
 >
 > /view wallet
 > 
+
+To view your current configuration (added nodes and wallets) use command:
+>
+> /view_config
+>
+
+To remove added nodes or wallets use:
+>
+> /delete_node
+>
+> /delete_wallet
+>
+
+To reset the whole service configuration use:
+>
+> /reset
+>
+
+
