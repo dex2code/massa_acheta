@@ -80,7 +80,7 @@ async def heartbeat() -> None:
                 heartbeat_list.append("")
 
         t = as_list(
-                "⏲ Heartbeat message:", "",
+                "💓 Heartbeat message:", "",
                 *heartbeat_list,
                 f"⏳ Heartbeat schedule: every {app_globals.app_config['service']['heartbeat_period_hours']} hours"
             )
