@@ -63,6 +63,8 @@ cd ~ && bash <(wget -qO- https://raw.githubusercontent.com/dex2code/massa_acheta
 
 ## What can Acheta do:
 
+### View MASSA blockchain
+
 First of all it can observe MASSA explorer and display wallets info with command:
 >
 > /view_address
