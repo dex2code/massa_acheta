@@ -110,6 +110,8 @@ You also can display actual wallet info using command:
 > /view wallet
 > 
 
+> You can add any number of nodes and wallets you want to your Acheta configuration!
+
 To view your current configuration (added nodes and wallets) use command:
 >
 > /view_config
