@@ -1,5 +1,6 @@
 # MASSA 🦗 Acheta
 
+
 Acheta is a genus of crickets. It most notably contains the house cricket (Acheta domesticus).
 
 "MASSA Acheta" is a service that will notify you about events occurring on your MASSA node and your wallet.\
@@ -63,7 +64,6 @@ cd ~ && bash <(wget -qO- https://raw.githubusercontent.com/dex2code/massa_acheta
 
 ## What can Acheta do:
 
-
 ### 👉 View MASSA blockchain
 First of all it can observe MASSA explorer and display wallets info with command:
 >
@@ -120,6 +120,11 @@ You also can display actual wallet info using command:
 > 
 
 
+### 👉 Remind you about its status
+Acheta sends heartbeat messages to your messenger every 4 hours.\
+These messages contains short useful information about your nodes and wallets, including its status and balance.
+
+
 ### 👉 Edit configuration
 To view your current configuration (added nodes and wallets) use command:
 >
@@ -137,3 +142,8 @@ To reset the whole service configuration use:
 >
 > /reset
 >
+
+
+
+## Notes
+Although you can install Acheta on the same host where your MASSA node is installed, I recommend using a different remote host for Acheta because in case the MASSA node fails, Acheta will be able to notify you about it.

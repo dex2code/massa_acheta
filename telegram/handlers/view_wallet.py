@@ -245,7 +245,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
                         credit_date,
                         ": ",
                         Code(credit_amount),
-                        " MASSA",
+                        " MAS",
                         end=""
                     )
                 )
@@ -267,7 +267,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
                     end=""
                 ),
                 f"👁 Info updated: {wallet_last_seen}", "",
-                f"💰 Final balance: {wallet_final_balance} MASSA",
+                f"💰 Final balance: {wallet_final_balance} MAS",
                 f"🧻 Candidate/Active rolls: {wallet_candidate_rolls}/{wallet_active_rolls}",
                 f"🥊 Missed blocks: {wallet_missed_blocks}", "",
                 "🔎 Detailed info:", "",

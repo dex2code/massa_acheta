@@ -189,7 +189,7 @@ async def show_address(message: Message, state: FSMContext) -> None:
                         credit_date,
                         ": ",
                         Code(credit_amount),
-                        " MASSA",
+                        " MAS",
                         end=""
                     )
                 )
@@ -202,7 +202,7 @@ async def show_address(message: Message, state: FSMContext) -> None:
                         url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_address}"
                     )
                 ),
-                f"💰 Final balance: {wallet_final_balance} MASSA",
+                f"💰 Final balance: {wallet_final_balance} MAS",
                 f"🧻 Candidate/Active rolls: {wallet_candidate_rolls}/{wallet_active_rolls}",
                 f"🥊 Missed blocks: {wallet_missed_blocks}", "",
                 "🔎 Detailed info:", "",
