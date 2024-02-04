@@ -64,14 +64,14 @@ cd ~ && bash <(wget -qO- https://raw.githubusercontent.com/dex2code/massa_acheta
 ## What can Acheta do:
 
 
-### [ View MASSA blockchain ]
+### 👉 View MASSA blockchain
 First of all it can observe MASSA explorer and display wallets info with command:
 >
 > /view_address
 >
 
 
-### [ Watch new MASSA releases ]
+### 👉 Watch new MASSA releases
 Acheta also checks for the latest published version of the MASSA and automatically notifies you if a new version is available.\
 You also can see the latest version with:
 >
@@ -79,7 +79,7 @@ You also can see the latest version with:
 >
 
 
-### [ Watch your node ]
+### 👉 Watch your node
 !!! You can add any number of nodes and wallets you want to your Acheta configuration.
 
 
@@ -100,7 +100,7 @@ You also can display actual node info using command:
 >
 
 
-### [ Watch your staking ]
+### 👉 Watch your staking
 In order to watch your wallet and staking activity, you need to add it to the service configuration. To do this use the command:
 >
 > /add_wallet
@@ -120,7 +120,7 @@ You also can display actual wallet info using command:
 > 
 
 
-### [ Edit configuration ]
+### 👉 Edit configuration
 To view your current configuration (added nodes and wallets) use command:
 >
 > /view_config
