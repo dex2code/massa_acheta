@@ -16,9 +16,8 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
     if app_globals.app_results[node_name]['last_status'] != True:
         logger.warning(f"Will not watch wallet '{wallet_address}' on node '{node_name}' because of its offline")
 
-        async with app_globals.results_lock:
-            app_globals.app_results[node_name]['wallets'][wallet_address]['last_status'] = False
-            app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'] = {"error": "Host node is offline"}
+        app_globals.app_results[node_name]['wallets'][wallet_address]['last_status'] = False
+        app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'] = {"error": "Host node is offline"}
 
         return
 
@@ -98,9 +97,8 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
                 )
             await queue_telegram_message(message_text=t.as_html())
 
-        async with app_globals.results_lock:
-            app_globals.app_results[node_name]['wallets'][wallet_address]['last_status'] = False
-            app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'] = wallet_response
+        app_globals.app_results[node_name]['wallets'][wallet_address]['last_status'] = False
+        app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'] = wallet_response
 
     else:
         logger.info(f"Got wallet '{wallet_address}' on node '{node_name}' info successfully!")
@@ -208,16 +206,15 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
                     )
                 await queue_telegram_message(message_text=t.as_html())
 
-        async with app_globals.results_lock:
-            app_globals.app_results[node_name]['wallets'][wallet_address]['last_status'] = True
-            app_globals.app_results[node_name]['wallets'][wallet_address]['last_update'] = t_now()
+        app_globals.app_results[node_name]['wallets'][wallet_address]['last_status'] = True
+        app_globals.app_results[node_name]['wallets'][wallet_address]['last_update'] = t_now()
 
-            app_globals.app_results[node_name]['wallets'][wallet_address]['final_balance'] = wallet_final_balance
-            app_globals.app_results[node_name]['wallets'][wallet_address]['candidate_rolls'] = wallet_candidate_rolls
-            app_globals.app_results[node_name]['wallets'][wallet_address]['active_rolls'] = wallet_active_rolls
-            app_globals.app_results[node_name]['wallets'][wallet_address]['missed_blocks'] = wallet_missed_blocks
+        app_globals.app_results[node_name]['wallets'][wallet_address]['final_balance'] = wallet_final_balance
+        app_globals.app_results[node_name]['wallets'][wallet_address]['candidate_rolls'] = wallet_candidate_rolls
+        app_globals.app_results[node_name]['wallets'][wallet_address]['active_rolls'] = wallet_active_rolls
+        app_globals.app_results[node_name]['wallets'][wallet_address]['missed_blocks'] = wallet_missed_blocks
 
-            app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'] = wallet_result
+        app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'] = wallet_result
 
     finally:
         logger.debug(f"API result for wallet '{wallet_address}' on node '{node_name}':\n{json.dumps(obj=app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'], indent=4)}")

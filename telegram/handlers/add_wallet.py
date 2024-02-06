@@ -204,7 +204,6 @@ async def add_wallet(message: Message, state: FSMContext) -> None:
     await state.clear()
 
     if app_globals.app_results[node_name]['wallets'][wallet_address]['last_status'] != True:
-        async with app_globals.results_lock:
-            await asyncio.gather(check_wallet(node_name=node_name, wallet_address=wallet_address))
+        await asyncio.gather(check_wallet(node_name=node_name, wallet_address=wallet_address))
 
     return
