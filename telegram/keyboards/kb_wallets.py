@@ -20,7 +20,7 @@ def kb_wallets(node_name: str="") -> ReplyKeyboardMarkup:
 
         wallet_keyboard.adjust(1)
     
-    except Exception as E:
+    except BaseException as E:
         logger.error(f"Cannot build node_keyboard: ({str(E)})")
         return ReplyKeyboardBuilder().as_markup()
 

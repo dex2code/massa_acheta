@@ -149,7 +149,7 @@ async def add_wallet(message: Message, state: FSMContext) -> None:
             app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'] = {"unknown": "Never updated before"}
             await save_app_results()
 
-    except Exception as E:
+    except BaseException as E:
         logger.error(f"Cannot add wallet '{wallet_address}' to node '{node_name}': ({str(E)})")
         t = as_list(
                 as_line(

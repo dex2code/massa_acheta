@@ -154,7 +154,7 @@ async def delete_wallet(message: Message, state: FSMContext) -> None:
             del app_globals.app_results[node_name]['wallets'][wallet_address]
             await save_app_results()
 
-    except Exception as E:
+    except BaseException as E:
         logger.error(f"Cannot remove wallet '{wallet_address}' from node '{node_name}': ({str(E)})")
 
         t = as_list(

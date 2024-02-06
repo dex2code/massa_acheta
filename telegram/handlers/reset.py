@@ -70,7 +70,7 @@ async def do_reset(message: Message, state: FSMContext) -> None:
             app_globals.app_results = {}
             await save_app_results()
 
-    except Exception as E:
+    except BaseException as E:
         t = as_list(
                 as_line("‼ Error: Could not reset configuration"),
                 as_line(

@@ -11,7 +11,7 @@ from telegram.queue import queue_telegram_message
 @logger.catch
 async def get_latest_release_github(
     api_url: str="",
-    api_content_type: str=None,
+    api_content_type: str="application/json",
     api_session_timeout: int=app_globals.app_config['service']['http_session_timeout_sec'],
     api_probe_timeout: int=app_globals.app_config['service']['http_probe_timeout_sec']) -> object:
     logger.debug("-> Enter Def")
@@ -22,20 +22,27 @@ async def get_latest_release_github(
     try:
         async with aiohttp.ClientSession(timeout=api_session_timeout) as session:
             async with session.get(url=api_url, timeout=api_probe_timeout) as response:
+
+                if response.status != 200:
+                    raise Exception(f"Github API HTTP Error '{str(response.status)}'")
+
+                if response.content_type != api_content_type:
+                    raise Exception(f"Github API wrong content type '{str(response.content_type)}'")
+
                 response_result = await response.json(content_type=api_content_type)
-        response_result = {"result": response_result['name']}
+
+        response_release = response_result.get("name", "None")
+        if response_release == "None":
+            raise Exception("No correct release in Github API answer")
+
+        response_result = {"result": response_release}
         
-    except Exception as E:
-        logger.error(f"API request Exception: ({str(E)})")
+    except BaseException as E:
+        logger.error(f"Github API request Exception: ({str(E)})")
         response_result = {"error": f"Exception: ({str(E)})"}
 
-    else:
-        if response.status != 200:
-            logger.error(f"API request HTTP error: (HTTP {response.status})")
-            response_result = {"error": f"HTTP ({response.status})"}
-    
-    finally:
-        return response_result
+
+    return response_result
 
 
 
@@ -47,7 +54,7 @@ async def massa_release() -> None:
         massa_release_obj = await get_latest_release_github(api_url=app_globals.app_config['service']['massa_release_url'])
         massa_latest_release = massa_release_obj['result']
 
-    except Exception as E:
+    except BaseException as E:
         logger.warning(f"Cannot get latest MASSA release version: ({str(E)}). Result: {massa_release_obj}")
 
     else:
@@ -80,7 +87,7 @@ async def acheta_release() -> None:
         acheta_release_obj = await get_latest_release_github(api_url=app_globals.app_config['service']['acheta_release_url'])
         acheta_latest_release = acheta_release_obj['result']
     
-    except Exception as E:
+    except BaseException as E:
         logger.warning(f"Cannot get latest ACHETA release version: ({str(E)}). Result: {acheta_release_obj}")
     
     else:

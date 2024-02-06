@@ -12,43 +12,37 @@ async def pull_node_api(
     api_url: str="",
     api_header: object={"content-type": "application/json"},
     api_payload: object={},
-    api_content_type: str=None,
+    api_content_type: str="application/json",
     api_session_timeout: int=app_globals.app_config['service']['http_session_timeout_sec'],
     api_probe_timeout: int=app_globals.app_config['service']['http_probe_timeout_sec']) -> object:
     logger.debug(f"-> Enter Def")
 
     api_session_timeout = aiohttp.ClientTimeout(total=api_session_timeout)
     api_probe_timeout = aiohttp.ClientTimeout(total=api_probe_timeout)
+    api_response_obj = {"error": "Cannot operate MASSA API answer"}
 
     try:
         async with aiohttp.ClientSession(timeout=api_session_timeout) as session:
             async with session.post(url=api_url, headers=api_header, data=api_payload, timeout=api_probe_timeout) as api_response:
-                api_response_obj = await api_response.json(content_type=api_content_type)
-        
-        api_response_result = api_response_obj['result']
 
-    except Exception as E:
+                if api_response.status != 200:
+                    raise Exception(f"MASSA API HTTP Error '{str(api_response.status)}'")
+
+                if api_response.content_type != api_content_type:
+                    raise Exception(f"MASSA API wrong content type '{str(api_response.content_type)}'")
+
+                api_response_obj = await api_response.json(content_type=api_content_type)
+
+        api_response_result = api_response_obj.get("result", "")
+        if api_response_result == "":
+            raise Exception(f"MASSA API no result in API answer '{str(api_response_obj)}'")
+
+    except BaseException as E:
         logger.error(f"Exception in API request for URL '{api_url}': ({str(E)})")
-        api_response_result =   {
-                                    "error":
-                                        {
-                                            "response": api_response_obj,
-                                            "exception": str(E)
-                                        }
-                                }
+        api_response_result = { "error": str(E) }
 
     else:
-        if api_response.status == 200:
-            logger.info(f"Successfully pulled result from API '{api_url}'")
-        else:
-            logger.error(f"API URL '{api_url}' response status error: (HTTP {api_response.status})")
-            api_response_result =   {
-                                        "error":
-                                            {
-                                                "response": api_response_obj,
-                                                "exception": f"HTTP {api_response.status}"
-                                            }
-                                    }
+        logger.info(f"Successfully pulled result from API '{api_url}'")
 
     finally:
         return api_response_result
@@ -74,7 +68,7 @@ async def save_app_results() -> bool:
             await output_results.write(json.dumps(obj=composed_results, indent=4))
             await output_results.flush()
                     
-    except Exception as E:
+    except BaseException as E:
         logger.critical(f"Cannot save app_results into '{app_globals.results_obj}' file: ({str(E)})")
         return False
         

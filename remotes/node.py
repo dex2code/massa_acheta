@@ -24,10 +24,14 @@ async def check_node(node_name: str="") -> None:
 
     try:
         node_result = await pull_node_api(api_url=app_globals.app_results[node_name]['url'], api_payload=payload)
-        node_chain_id = node_result['chain_id']
+
+        node_chain_id = node_result.get("chain_id", "")
+        if node_chain_id == "":
+            raise Exception(f"No chain_id in MASSA API answer: {str(node_result)}")
+
         node_chain_id = int(node_chain_id)
 
-    except Exception as E:
+    except BaseException as E:
         logger.warning(f"Node '{node_name}' ({app_globals.app_results[node_name]['url']}) seems dead! ({str(E)})")
 
         if app_globals.app_results[node_name]['last_status'] != False:
@@ -44,7 +48,7 @@ async def check_node(node_name: str="") -> None:
                         Code(node_result)
                     ),
                     as_line(
-                        "🩺 Exception: ",
+                        "💥 Exception: ",
                         Code(str(E))
                     ),
                     "⚠️ Check node or firewall settings!"

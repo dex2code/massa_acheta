@@ -17,7 +17,7 @@ def kb_nodes() -> ReplyKeyboardMarkup:
 
         node_keyboard.adjust(2)
 
-    except Exception as E:
+    except BaseException as E:
         logger.error(f"Cannot build node_keyboard: ({str(E)})")
         return ReplyKeyboardBuilder().as_markup()
 

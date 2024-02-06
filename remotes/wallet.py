@@ -34,18 +34,14 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
                                 api_payload=payload
                             )
 
-        if type(wallet_response) != list or not len(wallet_response) or "address" not in wallet_response[0]:
-            raise KeyError(wallet_response)
+        if type(wallet_response) != list or not len(wallet_response):
+            raise Exception(f"Cannot operate MASSA API result type '{type(wallet_response)}'")
 
         wallet_result = wallet_response[0]
         wallet_result_address = wallet_result.get("address", "None")
 
         if wallet_result_address != wallet_address:
-            raise TypeError(
-                {
-                    "error": f"Bad address received from API: '{wallet_result_address}'"
-                }
-            )
+            raise Exception(f"Bad address received from API: '{wallet_result_address}'")
 
         wallet_final_balance = 0
         wallet_final_balance = wallet_result.get("final_balance", 0)
@@ -69,7 +65,7 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
         if type(wallet_result['cycle_infos'][-1].get("nok_count", 0)) == int:
             wallet_last_cycle_missed_blocks = wallet_result['cycle_infos'][-1].get("nok_count", 0)
 
-    except Exception as E:
+    except BaseException as E:
         logger.warning(f"Error watching wallet '{wallet_address}' on '{node_name}': ({str(E)})")
 
         if app_globals.app_results[node_name]['wallets'][wallet_address]['last_status'] != False:
@@ -92,7 +88,7 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
                         Code(wallet_response)
                     ),
                     as_line(
-                        "🩺 Exception: ",
+                        "💥 Exception: ",
                         Code(str(E))
                     ),
                     "⚠ Check wallet address or node settings!"

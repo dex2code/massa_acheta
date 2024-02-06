@@ -88,7 +88,7 @@ async def delete_node(message: Message, state: FSMContext) -> None:
             del app_globals.app_results[node_name]
             await save_app_results()
 
-    except Exception as E:
+    except BaseException as E:
         logger.error(f"Cannot remove node '{node_name}': ({str(E)})")
         t = as_list(
                 as_line(

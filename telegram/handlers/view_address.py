@@ -85,19 +85,16 @@ async def show_address(message: Message, state: FSMContext) -> None:
                                 api_payload=payload
                             )
         
-        if type(wallet_response) != list or not len(wallet_response) or "address" not in wallet_response[0]:
-            raise KeyError(wallet_response)
+        if type(wallet_response) != list or not len(wallet_response):
+            raise Exception("Cannot operate MASSA API result")
 
         wallet_result = wallet_response[0]
         wallet_result_address = wallet_result.get("address", "None")
+
         if wallet_result_address != wallet_address:
-            raise ValueError(
-                {
-                    "error": f"Wrong address received from Mainnet RPC: '{wallet_result_address}'"
-                }
-            )
+            raise Exception(f"Bad address received from API: '{wallet_result_address}'")
     
-    except Exception as E:
+    except BaseException as E:
         logger.warning(f"Cannot operate received address result: ({str(E)})")
 
         t = as_list(
@@ -120,7 +117,7 @@ async def show_address(message: Message, state: FSMContext) -> None:
                     Code(wallet_response)
                 ),
                 as_line(
-                    "🩺 Exception: ",
+                    "💥 Exception: ",
                     Code(str(E))
                 ),
                 as_line("⚠️ Check wallet address or try later!")

@@ -27,7 +27,7 @@ if not results_obj.exists():
             new_results.write("{}")
             new_results.flush()
     
-    except Exception as E:
+    except BaseException as E:
         logger.critical(f"Cannot create '{results_obj}' file. Exiting...")
         sys_exit(1)
 
@@ -45,7 +45,7 @@ with open(file=results_obj, mode="r") as input_results:
     try:
         app_results = json.load(fp=input_results)
 
-    except Exception as E:
+    except BaseException as E:
         logger.critical(f"Cannot load results from '{results_obj}': ({str(E)})")
         sys_exit(1)
 
@@ -77,7 +77,7 @@ Releases stuff
 '''
 latest_massa_release = ""
 
-local_acheta_release = "ACHETA.1.0.2"
+local_acheta_release = "ACHETA.1.0.3"
 latest_acheta_release = ""
 
 

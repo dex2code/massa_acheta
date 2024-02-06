@@ -13,7 +13,7 @@ async def queue_telegram_message(message_text: str="") -> None:
     try:
         app_globals.telegram_queue.append(message_text)
     
-    except Exception as E:
+    except BaseException as E:
         logger.error(f"Cannot add telegram message to queue : ({str(E)})")
 
     else:
@@ -44,7 +44,7 @@ async def operate_telegram_queue() -> None:
                 request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
             )
 
-        except Exception as E:
+        except BaseException as E:
             logger.error(f"Could not send telegram message to chat_id '{app_globals.bot.ACHETA_CHAT}': ({str(E)})")
         
         else:
