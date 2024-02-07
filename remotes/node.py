@@ -27,7 +27,7 @@ async def check_node(node_name: str="") -> None:
 
         node_chain_id = node_result.get("chain_id", "")
         if node_chain_id == "":
-            raise Exception(f"No chain_id in MASSA API answer: {str(node_result)}")
+            raise Exception(f"No chain_id in MASSA API answer")
 
         node_chain_id = int(node_chain_id)
 

@@ -9,7 +9,6 @@ from aiogram.types import BotCommand
 import app_globals
 
 from remotes.heartbeat import heartbeat as remote_heartbeat
-from remotes.releases import releases as remote_releases
 from remotes.monitor import monitor as remote_monitor
 
 from telegram.queue import queue_telegram_message, operate_telegram_queue
@@ -78,7 +77,6 @@ async def main() -> None:
     aio_loop.create_task(operate_telegram_queue())
     aio_loop.create_task(remote_monitor())
     aio_loop.create_task(remote_heartbeat())
-    aio_loop.create_task(remote_releases())
 
 
     app_globals.tg_dp.include_router(start.router)

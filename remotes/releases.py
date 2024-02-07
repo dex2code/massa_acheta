@@ -121,16 +121,13 @@ async def acheta_release() -> None:
     return
 
 
+
 @logger.catch
-async def releases() -> None:
+async def check_releases() -> None:
     logger.debug(f"-> Enter Def")
 
-    while True:
-
-        await massa_release()
-        await acheta_release()
-
-        await asyncio.sleep(delay=app_globals.app_config['service']['main_loop_period_sec'])
+    await massa_release()
+    await acheta_release()
 
 
 

@@ -37,7 +37,7 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
                             )
 
         if type(wallet_response) != list or not len(wallet_response):
-            raise Exception(f"Cannot operate MASSA API result type '{type(wallet_response)}'")
+            raise Exception(f"Cannot operate MASSA API result data")
 
         wallet_result = wallet_response[0]
         wallet_result_address = wallet_result.get("address", "None")
