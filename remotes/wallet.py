@@ -112,7 +112,7 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
                     )
                 ),
                 f"💰 Final balance: {wallet_final_balance:,} MAS",
-                f"🗞 Candidate / Active rolls: {wallet_candidate_rolls} / {wallet_active_rolls}",
+                f"🗞 Candidate / Active rolls: {wallet_candidate_rolls:,} / {wallet_active_rolls:,}",
                 f"🥊 Missed blocks: {wallet_missed_blocks}"
             )
             await queue_telegram_message(message_text=t.as_html())
@@ -147,7 +147,7 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
                             url=f"{app_globals.app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                         )
                     ),
-                    f"👁 New candidate rolls number: {app_globals.app_results[node_name]['wallets'][wallet_address]['candidate_rolls']} → {wallet_candidate_rolls}"
+                    f"👁 New candidate rolls number: {app_globals.app_results[node_name]['wallets'][wallet_address]['candidate_rolls']:,} → {wallet_candidate_rolls:,}"
                 )
                 await queue_telegram_message(message_text=t.as_html())
 
@@ -163,7 +163,7 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
                             url=f"{app_globals.app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                         )
                     ),
-                    f"👁 New active rolls number: {app_globals.app_results[node_name]['wallets'][wallet_address]['active_rolls']} → {wallet_active_rolls}"
+                    f"👁 New active rolls number: {app_globals.app_results[node_name]['wallets'][wallet_address]['active_rolls']:,} → {wallet_active_rolls:,}"
                 )
                 await queue_telegram_message(message_text=t.as_html())
 
