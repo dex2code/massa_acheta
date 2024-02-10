@@ -9,7 +9,7 @@ from aiogram.utils.formatting import as_list, as_line, TextLink, Code
 from aiogram.enums import ParseMode
 
 import app_globals
-from tools import save_app_results
+from tools import save_app_results, check_privacy
 
 
 class ResetState(StatesGroup):
@@ -23,7 +23,7 @@ router = Router()
 @logger.catch
 async def cmd_reset(message: Message, state: FSMContext) -> None:
     logger.debug("->Enter Def")
-    if message.chat.id != app_globals.bot.ACHETA_CHAT: return
+    if not await check_privacy(message=message): return
 
     t = as_list(
         "⁉ Please confirm that you actually want to reset the service configuration", "",
@@ -49,7 +49,7 @@ async def cmd_reset(message: Message, state: FSMContext) -> None:
 @logger.catch
 async def do_reset(message: Message, state: FSMContext) -> None:
     logger.debug("-> Enter Def")
-    if message.chat.id != app_globals.bot.ACHETA_CHAT: return
+    if not await check_privacy(message=message): return
 
     if message.text.upper() != "I WANT TO RESET THE SERVICE":
         t = as_list(

@@ -228,33 +228,37 @@ async def massa() -> None:
     while True:
         success_flag = True
 
-        if await massa_get_info():
+        if success_flag and await massa_get_info():
             logger.info(f"Successfully pulled /info from MASSA mainnet RPC")
+            await asyncio.sleep(delay=1)
         else:
             success_flag = False
             logger.warning(f"Error pulling /info from MASSA mainnet RPC")
-        await asyncio.sleep(delay=1)
 
-        if await massa_get_status():
+        if success_flag and await massa_get_status():
             logger.info(f"Successfully pulled get_status from MASSA mainnet RPC")
+            await asyncio.sleep(delay=1)
         else:
             success_flag = False
             logger.warning(f"Error pulling get_status from MASSA mainnet RPC")
-        await asyncio.sleep(delay=1)
 
-        if await massa_get_stakers():
+        if success_flag and await massa_get_stakers():
             logger.info(f"Successfully pulled get_stakers from MASSA mainnet RPC")
+            await asyncio.sleep(delay=1)
         else:
             success_flag = False
             logger.warning(f"Error pulling get_stakers from MASSA mainnet RPC")
-        await asyncio.sleep(delay=1)
 
         if not success_flag:
             if await massexplo_get_data():
+                success_flag = True
                 logger.info(f"Successfully pulled /info from massexplo.io")
             else:
                 logger.warning(f"Error pulling /info from massexplo.io")
 
+        if success_flag:
+            logger.info(f"Successfully collected MASSA mainnet network info")
+        else:
+            logger.warning(f"Could not collect MASSA mainnet network info")
         logger.debug(f"Current MASSA network values:\n{json.dumps(obj=app_globals.massa_network_values, indent=4)}")
-
         await asyncio.sleep(delay=app_globals.app_config['service']['massa_network_update_period_hours'] * 60 * 60)

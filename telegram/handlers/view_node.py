@@ -11,7 +11,7 @@ from aiogram.enums import ParseMode
 
 import app_globals
 from telegram.keyboards.kb_nodes import kb_nodes
-from tools import get_last_seen, get_short_address
+from tools import get_last_seen, get_short_address, check_privacy
 
 
 class NodeViewer(StatesGroup):
@@ -25,7 +25,7 @@ router = Router()
 @logger.catch
 async def cmd_view_node(message: Message, state: FSMContext) -> None:
     logger.debug("->Enter Def")
-    if message.chat.id != app_globals.bot.ACHETA_CHAT: return
+    if not await check_privacy(message=message): return
     
     if len(app_globals.app_results) == 0:
         t = as_list(
@@ -60,7 +60,7 @@ async def cmd_view_node(message: Message, state: FSMContext) -> None:
 @logger.catch
 async def show_node(message: Message, state: FSMContext) -> None:
     logger.debug("-> Enter Def")
-    if message.chat.id != app_globals.bot.ACHETA_CHAT: return
+    if not await check_privacy(message=message): return
 
     node_name = message.text
 

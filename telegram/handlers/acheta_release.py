@@ -8,6 +8,7 @@ from aiogram.utils.formatting import as_list, as_line, TextLink
 
 import app_globals
 
+from tools import check_privacy
 
 router = Router()
 
@@ -16,7 +17,7 @@ router = Router()
 @logger.catch
 async def cmd_acheta_release(message: Message) -> None:
     logger.debug("-> Enter Def")
-    if message.chat.id != app_globals.bot.ACHETA_CHAT: return
+    if not await check_privacy(message=message): return
 
     if app_globals.latest_acheta_release == app_globals.local_acheta_release:
         update_needed = as_line("👌 No updates needed")

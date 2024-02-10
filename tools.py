@@ -3,6 +3,9 @@ from loguru import logger
 import aiohttp
 import json
 from aiofiles import open as aiof_open
+from aiogram.types import Message
+from aiogram.utils.formatting import as_list, as_line, TextLink
+from aiogram.enums import ParseMode
 
 import app_globals
 
@@ -170,6 +173,36 @@ def get_short_address(address: str="") -> str:
         return f"{address[0:8]}...{address[-6:]}"
     else:
         return address
+
+
+
+@logger.catch
+async def check_privacy(message: Message) -> bool:
+    logger.debug("-> Enter Def")
+
+    if message.chat.id == app_globals.bot.ACHETA_CHAT:
+        return True
+    
+    else:
+        t = as_list(
+            "🔑 This is a private telegram bot with limited public availability", "",
+            "MASSA 🦗 Acheta is not a public service but opensource software that you can install on your own server",
+            as_line(
+                "👉 ",
+                TextLink(
+                    "More info here",
+                    url="https://github.com/dex2code/massa_acheta"
+                )
+            ),
+            "☝ Try /help to get a list of public commands"
+        )
+        await message.answer(
+            text=t.as_html(),
+            parse_mode=ParseMode.HTML,
+            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+        )
+
+        return False
 
 
 

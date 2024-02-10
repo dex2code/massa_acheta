@@ -11,7 +11,7 @@ from aiogram.enums import ParseMode
 import app_globals
 from telegram.keyboards.kb_nodes import kb_nodes
 from telegram.keyboards.kb_wallets import kb_wallets
-from tools import get_short_address, save_app_results
+from tools import get_short_address, save_app_results, check_privacy
 
 
 class WalletRemover(StatesGroup):
@@ -26,7 +26,7 @@ router = Router()
 @logger.catch
 async def cmd_delete_wallet(message: Message, state: FSMContext) -> None:
     logger.debug("->Enter Def")
-    if message.chat.id != app_globals.bot.ACHETA_CHAT: return
+    if not await check_privacy(message=message): return
     
     if len(app_globals.app_results) == 0:
         t = as_list(
@@ -62,7 +62,7 @@ async def cmd_delete_wallet(message: Message, state: FSMContext) -> None:
 @logger.catch
 async def select_wallet_to_delete(message: Message, state: FSMContext) -> None:
     logger.debug("-> Enter Def")
-    if message.chat.id != app_globals.bot.ACHETA_CHAT: return
+    if not await check_privacy(message=message): return
 
     node_name = message.text
     await state.set_data(data={"node_name": node_name})
@@ -116,7 +116,7 @@ async def select_wallet_to_delete(message: Message, state: FSMContext) -> None:
 @logger.catch
 async def delete_wallet(message: Message, state: FSMContext) -> None:
     logger.debug("-> Enter Def")
-    if message.chat.id != app_globals.bot.ACHETA_CHAT: return
+    if not await check_privacy(message=message): return
 
     user_state = await state.get_data()
     node_name = user_state['node_name']

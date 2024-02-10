@@ -7,7 +7,7 @@ from aiogram.enums import ParseMode
 from aiogram.utils.formatting import as_list, as_line, TextLink, as_numbered_list
 
 import app_globals
-from tools import get_short_address
+from tools import get_short_address, check_privacy
 
 
 router = Router()
@@ -17,7 +17,7 @@ router = Router()
 @logger.catch
 async def cmd_view_config(message: Message) -> None:
     logger.debug("-> Enter Def")
-    if message.chat.id != app_globals.bot.ACHETA_CHAT: return
+    if not await check_privacy(message=message): return
 
     config_list = []
 

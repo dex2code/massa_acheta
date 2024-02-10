@@ -31,11 +31,20 @@ async def main() -> None:
 
     bot_commands = [
         BotCommand(command="/help", description="Show help info"),
+        BotCommand(command="/view_config", description="View service config"),
+        BotCommand(command="/view_node", description="View node status"),
+        BotCommand(command="/view_wallet", description="View wallet info"),
         BotCommand(command="/view_address", description="View any wallet info"),
+        BotCommand(command="/add_node", description="Add node to bot"),
+        BotCommand(command="/add_wallet", description="Add wallet to bot"),
+        BotCommand(command="/delete_node", description="Delete node from bot"),
+        BotCommand(command="/delete_wallet", description="Delete wallet from bot"),
         BotCommand(command="/massa_info", description="Show MASSA network info"),
+        BotCommand(command="/acheta_release", description="Actual Acheta release"),
         BotCommand(command="/ping", description="Pong!"),
         BotCommand(command="/id", description="Show your TG ID"),
-        BotCommand(command="/cancel", description="Cancel ongoing scenario")
+        BotCommand(command="/cancel", description="Cancel ongoing scenario"),
+        BotCommand(command="/reset", description="Reset bot configuration")
     ]
     await app_globals.tg_bot.set_my_commands(bot_commands)
 

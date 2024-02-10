@@ -73,7 +73,7 @@ async def cmd_start(message: Message) -> None:
             "⦙",
             "⦙… /cancel : Cancel ongoing scenario",
             "⦙",
-            "⦙… /reset : Reset bot configuration", "",
+            "⦙… /reset : Reset configuration", "",
             as_line(
                 "👉 ",
                 TextLink(

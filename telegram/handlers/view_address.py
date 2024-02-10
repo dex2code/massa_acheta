@@ -55,7 +55,7 @@ async def show_address(message: Message, state: FSMContext) -> None:
                 url=f"{app_globals.app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
             ),
         ),
-        "This may take some time, Info will be displayed as soon as we receive the answer from Mainnet RPC"
+        "This may take some time, so info will be displayed as soon as we receive the answer from MASSA Mainnet RPC"
     )
 
     await message.answer(
