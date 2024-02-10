@@ -29,8 +29,8 @@ async def cmd_add_node(message: Message, state: FSMContext) -> None:
     if message.chat.id != app_globals.bot.ACHETA_CHAT: return
     
     t = as_list(
-            "❓ Please enter a short name for the new node (nickname) or /cancel to quit the scenario:",
-        )
+        "❓ Please enter a short name for the new node (nickname) or /cancel to quit the scenario:",
+    )
     await message.answer(
         text=t.as_html(),
         parse_mode=ParseMode.HTML,
@@ -53,12 +53,9 @@ async def input_nodename_to_add(message: Message, state: FSMContext) -> None:
 
     if node_name in app_globals.app_results:
         t = as_list(
-                as_line("‼ Error: Node with nickname ",
-                        Code(node_name),
-                        " already exists"
-                ),
-                as_line("👉 Try /add_node to add another node or /help to learn bot commands")
-            )
+            f"‼ Error: Node with nickname \"{node_name}\" already exists", "",
+            "👉 Try /add_node to add another node or /help to learn bot commands"
+        )
         await message.answer(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
@@ -70,15 +67,9 @@ async def input_nodename_to_add(message: Message, state: FSMContext) -> None:
 
 
     t = as_list(
-            as_line(
-                "❓ Please enter API URL for the new node ",
-                Code(node_name),
-                " with leading ",
-                Code("http(s)://..."),
-                " prefix or /cancel to quit the scenario:"
-            ),
-            "💭 Typically API URL looks like: http://ip.ad.dre.ss:33035/api/v2"
-        )
+        f"❓ Please enter API URL for the new node \"{node_name}\" with leading \"http(s)://...\" prefix or /cancel to quit the scenario: ", "",
+        "💭 Typically API URL looks like: http://ip.ad.dre.ss:33035/api/v2"
+    )
     await message.answer(
         text=t.as_html(),
         parse_mode=ParseMode.HTML,
@@ -114,41 +105,41 @@ async def add_node(message: Message, state: FSMContext) -> None:
     except BaseException as E:
         logger.error(f"Cannot add node '{node_name}' with URL '{node_url}': ({str(E)})")
         t = as_list(
-                as_line(
-                    "‼ Error: Could not add node ",
-                    Code(get_short_address(node_name)),
-                    f" with API URL {node_url}"
-                ),
-                as_line(
-                    "💻 Result: ",
-                    Code(str(E))
-                ),
-                as_line(
-                    "⚠ Try again later or watch logs to check the reason - ",
-                    TextLink(
-                        "More info here",
-                        url="https://github.com/dex2code/massa_acheta/"
-                    )
+            as_line(
+                "‼ Error: Could not add node ",
+                Code(get_short_address(node_name)),
+                f" with API URL {node_url}"
+            ),
+            as_line(
+                "💻 Result: ",
+                Code(str(E))
+            ),
+            as_line(
+                "⚠ Try again later or watch logs to check the reason - ",
+                TextLink(
+                    "More info here",
+                    url="https://github.com/dex2code/massa_acheta/"
                 )
             )
+        )
 
     else:
         logger.info(f"Successfully added node '{node_name}' with URL '{node_url}'")
         t = as_list(
-                as_line(
-                    "✅ Successfully added node: ",
-                    Code(get_short_address(node_name)),
-                    f" with API URL: {node_url}"
-                ),
-                "👁 You can check new settings using /view_config command", "",
-                "☝ Please note that bot will update info for this node a bit later", "",
-                "⚠ Please also check if you opened a firewall on the MASSA host:",
-                as_line(
-                    "Use ",
-                    Code("sudo ufw allow 33035/tcp"),
-                    " command on Ubuntu hosts"
-                )
+            as_line(
+                "✅ Successfully added node: ",
+                Code(get_short_address(node_name)),
+                f" with API URL: {node_url}"
+            ),
+            "👁 You can check new settings using /view_config command", "",
+            "☝ Please note that bot will update info for this node a bit later", "",
+            "⚠ Please also check if you opened a firewall on the MASSA host:",
+            as_line(
+                "Use ",
+                Code("sudo ufw allow 33035/tcp"),
+                " command on Ubuntu hosts"
             )
+        )
 
 
     await message.answer(
@@ -160,6 +151,7 @@ async def add_node(message: Message, state: FSMContext) -> None:
     await state.clear()
 
     if app_globals.app_results[node_name]['last_status'] != True:
-        await asyncio.gather(check_node(node_name=node_name))
+        async with app_globals.results_lock:
+            await asyncio.gather(check_node(node_name=node_name))
 
     return

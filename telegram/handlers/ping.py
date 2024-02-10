@@ -18,8 +18,8 @@ async def cmd_ping(message: Message) -> None:
     logger.debug("-> Enter Def")
 
     t = as_list(
-            as_line("🏓 Pong!")
-        )
+        as_line("🏓 Pong!")
+    )
     await message.answer(
         text=t.as_html(),
         parse_mode=ParseMode.HTML,

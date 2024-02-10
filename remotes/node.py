@@ -6,53 +6,51 @@ from aiogram.utils.formatting import as_list, as_line, Code
 
 import app_globals
 from telegram.queue import queue_telegram_message
-from tools import pull_node_api
+from tools import pull_http_api
 
 
 @logger.catch
 async def check_node(node_name: str="") -> None:
     logger.debug(f"-> Enter Def")
 
-    payload =   json.dumps(
-                    {
-                        "id": 0,
-                        "jsonrpc": "2.0",
-                        "method": "get_status",
-                        "params": []
-                    }
-                )
+    payload = json.dumps(
+        {
+            "id": 0,
+            "jsonrpc": "2.0",
+            "method": "get_status",
+            "params": []
+        }
+    )
 
+    node_answer = {"error": "No response from remote HTTP API"}
     try:
-        node_result = await pull_node_api(api_url=app_globals.app_results[node_name]['url'], api_payload=payload)
+        node_answer = await pull_http_api(api_url=app_globals.app_results[node_name]['url'],
+                                          api_method="POST",
+                                          api_payload=payload,
+                                          api_root_element="result")
 
-        node_chain_id = node_result.get("chain_id", "")
-        if node_chain_id == "":
-            raise Exception(f"No chain_id in MASSA API answer")
+        node_result = node_answer.get("result", None)
+        if not node_result:
+            raise Exception(f"Wrong answer from MASSA node API ({str(node_answer)})")
 
-        node_chain_id = int(node_chain_id)
+        node_chain_id = node_result.get("chain_id", None)
+        if not node_chain_id:
+            raise Exception(f"No chain_id in MASSA node API answer")
 
     except BaseException as E:
         logger.warning(f"Node '{node_name}' ({app_globals.app_results[node_name]['url']}) seems dead! ({str(E)})")
 
         if app_globals.app_results[node_name]['last_status'] != False:
             t = as_list(
-                    as_line(
-                        "🏠 Node: ",
-                        Code(node_name),
-                        end=""
-                    ),
-                    f"📍 {app_globals.app_results[node_name]['url']}", "",
-                    "☠ Seems dead or unavailable", "",
-                    as_line(
-                        "💻 Result: ",
-                        Code(node_result)
-                    ),
-                    as_line(
-                        "💥 Exception: ",
-                        Code(str(E))
-                    ),
-                    "⚠️ Check node or firewall settings!"
-                )
+                f"🏠 Node: \"{node_name}\"",
+                f"📍 {app_globals.app_results[node_name]['url']}", "",
+                "☠ Seems dead or unavailable", "",
+                as_line(
+                    "💥 Exception: ",
+                    Code(str(E))
+                ),
+                "⚠️ Check node or firewall settings!"
+            )
             await queue_telegram_message(message_text=t.as_html())
 
         app_globals.app_results[node_name]['last_status'] = False
@@ -63,14 +61,10 @@ async def check_node(node_name: str="") -> None:
 
         if app_globals.app_results[node_name]['last_status'] != True:
             t = as_list(
-                    as_line(
-                        "🏠 Node: ",
-                        Code(node_name),
-                        end=""
-                    ),
-                    f"📍 {app_globals.app_results[node_name]['url']}", "",
-                    f"🌿 Become alive with Chain ID: {node_chain_id}"
-                )
+                f"🏠 Node: \"{node_name}\"",
+                f"📍 {app_globals.app_results[node_name]['url']}", "",
+                f"🌿 Become alive with chain ID: {node_chain_id}"
+            )
             await queue_telegram_message(message_text=t.as_html())
 
         app_globals.app_results[node_name]['last_status'] = True

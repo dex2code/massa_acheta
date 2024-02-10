@@ -4,7 +4,7 @@ from aiogram import Router
 from aiogram.filters import Command
 from aiogram.types import Message
 from aiogram.enums import ParseMode
-from aiogram.utils.formatting import as_list, as_line, TextLink, Code, as_numbered_list
+from aiogram.utils.formatting import as_list, as_line, TextLink, as_numbered_list
 
 import app_globals
 from tools import get_short_address
@@ -26,13 +26,7 @@ async def cmd_view_config(message: Message) -> None:
 
     else:
         for node_name in app_globals.app_results:
-            config_list.append(
-                as_line(
-                    f"🏠 Node: ",
-                    Code(node_name),
-                    end=""
-                )
-            )
+            config_list.append(f"🏠 Node: \"{node_name}\"")
             config_list.append(f"📍 {app_globals.app_results[node_name]['url']}")
 
             if len(app_globals.app_results[node_name]['wallets']) == 0:
@@ -47,7 +41,7 @@ async def cmd_view_config(message: Message) -> None:
                         as_line(
                             TextLink(
                                 get_short_address(address=wallet_address),
-                                url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_address}"
+                                url=f"{app_globals.app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                             )
                         )
                     )
@@ -58,10 +52,10 @@ async def cmd_view_config(message: Message) -> None:
                 config_list.append("")
 
     t = as_list(
-            "📋 Current service configuration:", "",
-            *config_list, 
-            "👉 Try /help to learn how to manage settings"
-        )
+        "📋 Current service configuration:", "",
+        *config_list, 
+        "👉 Try /help to learn how to manage settings"
+    )
     await message.answer(
         text=t.as_html(),
         parse_mode=ParseMode.HTML,

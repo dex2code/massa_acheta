@@ -2,7 +2,7 @@ from loguru import logger
 
 import asyncio
 from time import time as t_now
-from aiogram.utils.formatting import as_list, as_line, Code, TextLink, as_numbered_list
+from aiogram.utils.formatting import as_list, as_line, TextLink, as_numbered_list
 
 import app_globals
 from telegram.queue import queue_telegram_message
@@ -27,13 +27,13 @@ async def heartbeat() -> None:
         else:
 
             for node_name in app_globals.app_results:
-                heartbeat_list.append(as_line(f"🏠 Node: ", Code(node_name), end=""))
+                heartbeat_list.append(f"🏠 Node: \"{node_name}\"")
                 heartbeat_list.append(f"📍 {app_globals.app_results[node_name]['url']}")
 
                 last_seen = get_last_seen(
-                                last_time=app_globals.app_results[node_name]['last_update'],
-                                current_time=current_time
-                            )
+                    last_time=app_globals.app_results[node_name]['last_update'],
+                    current_time=current_time
+                )
 
                 if app_globals.app_results[node_name]['last_status'] == True:
                     heartbeat_list.append(f"🌿 Status: Online ({last_seen})")
@@ -53,7 +53,7 @@ async def heartbeat() -> None:
                                     as_line(
                                         TextLink(
                                             get_short_address(address=wallet_address),
-                                            url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_address}"
+                                            url=f"{app_globals.app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                                         ),
                                         f" ( {app_globals.app_results[node_name]['wallets'][wallet_address]['final_balance']:,} MAS )"
                                     )
@@ -63,7 +63,7 @@ async def heartbeat() -> None:
                                     as_line(
                                         TextLink(
                                             get_short_address(address=wallet_address),
-                                            url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_address}"
+                                            url=f"{app_globals.app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                                         ),
                                         " ( Unknown MAS )"
                                     )
@@ -78,8 +78,8 @@ async def heartbeat() -> None:
                 heartbeat_list.append("")
 
         t = as_list(
-                "💓 Heartbeat message:", "",
-                *heartbeat_list,
-                f"⏳ Heartbeat schedule: every {app_globals.app_config['service']['heartbeat_period_hours']} hours"
-            )
+            "💓 Heartbeat message:", "",
+            *heartbeat_list,
+            f"⏳ Heartbeat schedule: every {app_globals.app_config['service']['heartbeat_period_hours']} hour(s)"
+        )
         await queue_telegram_message(message_text=t.as_html())

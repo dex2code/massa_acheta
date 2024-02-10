@@ -26,14 +26,14 @@ async def cmd_reset(message: Message, state: FSMContext) -> None:
     if message.chat.id != app_globals.bot.ACHETA_CHAT: return
 
     t = as_list(
-            "⁉ Please confirm that you actually want to reset the service configuration", "",
-            "☝ All your configured nodes and wallets will be erased from bot configuration", "",
-            as_line(
-                "⌨ Type \"",
-                Code("I want to reset the service"),
-                "\" to continue or /cancel to quit the scenario"
-            )
+        "⁉ Please confirm that you actually want to reset the service configuration", "",
+        "☝ All your configured nodes and wallets will be erased from bot configuration", "",
+        as_line(
+            "⌨ Type \"",
+            Code("I really want to reset all settings"),
+            "\" to continue or /cancel to quit the scenario"
         )
+    )
     await message.answer(
         text=t.as_html(),
         parse_mode=ParseMode.HTML,
@@ -53,9 +53,9 @@ async def do_reset(message: Message, state: FSMContext) -> None:
 
     if message.text.upper() != "I WANT TO RESET THE SERVICE":
         t = as_list(
-                "🙆 Reset request rejected", "",
-                "👉 Try /help to learn bot commands"
-            )
+            "🙆 Reset request rejected", "",
+            "👉 Try /help to learn bot commands"
+        )
         await message.answer(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
@@ -72,25 +72,25 @@ async def do_reset(message: Message, state: FSMContext) -> None:
 
     except BaseException as E:
         t = as_list(
-                as_line("‼ Error: Could not reset configuration"),
-                as_line(
-                    "💻 Result: ",
-                    Code(str(E))
-                ),
-                as_line(
-                    "⚠ Try again later or watch logs to check the reason - ",
-                    TextLink(
-                        "More info here",
-                        url="https://github.com/dex2code/massa_acheta/"
-                    )
+            as_line("‼ Error: Could not reset configuration"),
+            as_line(
+                "💻 Result: ",
+                Code(str(E))
+            ),
+            as_line(
+                "⚠ Try again later or watch logs to check the reason - ",
+                TextLink(
+                    "More info here",
+                    url="https://github.com/dex2code/massa_acheta/"
                 )
             )
+        )
 
     else:
         t = as_list(
-                as_line("✅ Reset done "),
-                "👉 You can check new settings using /view_config command"
-            )
+            as_line("✅ Reset done "),
+            "👉 You can check new settings using /view_config command"
+        )
 
 
     await message.answer(

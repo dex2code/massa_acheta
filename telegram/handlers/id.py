@@ -18,15 +18,15 @@ async def cmd_cancel(message: Message) -> None:
     logger.debug("-> Enter Def")
 
     t = as_list(
-            as_line(
-                "👤 User ID: ",
-                Code(message.from_user.id)
-            ),
-            as_line(
-                "💬 Chat ID: ",
-                Code(message.chat.id)
-            )
+        as_line(
+            "👤 User ID: ",
+            Code(message.from_user.id)
+        ),
+        as_line(
+            "💬 Chat ID: ",
+            Code(message.chat.id)
         )
+    )
     await message.answer(
         text=t.as_html(),
         parse_mode=ParseMode.HTML,

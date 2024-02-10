@@ -17,6 +17,8 @@ from app_config import app_config
 '''
 Init results
 '''
+app_results = {}
+
 results_obj = Path(app_config['service']['results_path'])
 
 if not results_obj.exists():
@@ -24,7 +26,7 @@ if not results_obj.exists():
 
     try:
         with open(results_obj, "w") as new_results:
-            new_results.write("{}")
+            new_results.write(json.dumps(app_results))
             new_results.flush()
     
     except BaseException as E:
@@ -38,10 +40,7 @@ else:
     logger.info(f"Loading results from '{results_obj}' file...")
 
 
-app_results = {}
-
 with open(file=results_obj, mode="r") as input_results:
-
     try:
         app_results = json.load(fp=input_results)
 
@@ -51,6 +50,22 @@ with open(file=results_obj, mode="r") as input_results:
 
     else:
         logger.info(f"Successfully loaded results from '{results_obj}' file!")
+
+
+for node_name in app_results:
+    app_results[node_name]['last_status'] = "unknown"
+    app_results[node_name]['last_update'] = 0
+    app_results[node_name]['last_result'] = {"unknown": "Never updated before"}
+
+    for wallet_address in app_results[node_name]['wallets']:
+        app_results[node_name]['wallets'][wallet_address] = {}
+        app_results[node_name]['wallets'][wallet_address]['final_balance'] = 0
+        app_results[node_name]['wallets'][wallet_address]['candidate_rolls'] = 0
+        app_results[node_name]['wallets'][wallet_address]['active_rolls'] = 0
+        app_results[node_name]['wallets'][wallet_address]['missed_blocks'] = 0
+        app_results[node_name]['wallets'][wallet_address]['last_status'] = "unknown"
+        app_results[node_name]['wallets'][wallet_address]['last_update'] = 0
+        app_results[node_name]['wallets'][wallet_address]['last_result'] = {"unknown": "Never updated before"}
 
 
 
@@ -73,10 +88,8 @@ tg_bot = Bot(token=bot.ACHETA_KEY.get_secret_value(), disable_web_page_preview=T
 
 
 '''
-Releases stuff
+Acheta releases stuff
 '''
-latest_massa_release = ""
-
 local_acheta_release = "ACHETA.1.0.3"
 latest_acheta_release = ""
 
@@ -86,6 +99,21 @@ latest_acheta_release = ""
 Global mutex
 '''
 results_lock = asyncio.Lock()
+
+
+
+'''
+MASSA network values
+'''
+massa_network_values =  {
+    "latest_release": "",
+    "current_release": "",
+    "roll_price": 0,
+    "block_reward": 0,
+    "total_stakers": 0,
+    "total_staked_rolls": 0
+}
+
 
 
 if __name__ == "__main__":

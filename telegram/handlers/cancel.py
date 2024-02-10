@@ -19,8 +19,8 @@ async def cmd_cancel(message: Message, state: FSMContext) -> None:
     logger.debug("-> Enter Def")
 
     t = as_list(
-            "❌ Action cancelled!"
-        )
+        "❌ Action cancelled!"
+    )
     await message.answer(
         text=t.as_html(),
         parse_mode=ParseMode.HTML,

@@ -11,7 +11,7 @@ from aiogram.utils.formatting import as_list, as_line, Code, TextLink
 from aiogram.enums import ParseMode
 
 import app_globals
-from tools import get_short_address, pull_node_api
+from tools import pull_http_api, get_short_address
 
 
 class AddressViewer(StatesGroup):
@@ -27,12 +27,8 @@ async def cmd_view_address(message: Message, state: FSMContext) -> None:
     logger.debug("->Enter Def")
     
     t = as_list(
-            as_line(
-                "❓ Please enter MASSA wallet address with leading ",
-                Code("AU..."),
-                " prefix:"
-            )
-        )
+        "❓ Please enter MASSA wallet address with leading \"AU...\" prefix: ",
+    )
     await message.answer(
         text=t.as_html(),
         parse_mode=ParseMode.HTML,
@@ -52,15 +48,15 @@ async def show_address(message: Message, state: FSMContext) -> None:
     wallet_address = message.text
 
     t = as_list(
-            as_line(
-                "⏳ Trying to collect info for wallet: ",
-                TextLink(
-                    get_short_address(wallet_address),
-                    url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_address}"
-                ),
+        as_line(
+            "⏳ Trying to collect info for wallet: ",
+            TextLink(
+                get_short_address(wallet_address),
+                url=f"{app_globals.app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
             ),
-            "This may take some time, Info will be displayed as soon as we receive the answer from Mainnet RPC"
-        )
+        ),
+        "This may take some time, Info will be displayed as soon as we receive the answer from Mainnet RPC"
+    )
 
     await message.answer(
         text=t.as_html(),
@@ -70,58 +66,58 @@ async def show_address(message: Message, state: FSMContext) -> None:
     )
 
 
-    payload =   json.dumps(
-                    {
-                        "id": 0,
-                        "jsonrpc": "2.0",
-                        "method": "get_addresses",
-                        "params": [[wallet_address]]
-                    }
-                )
+    payload = json.dumps(
+        {
+            "id": 0,
+            "jsonrpc": "2.0",
+            "method": "get_addresses",
+            "params": [[wallet_address]]
+        }
+    )
 
     try:
-        wallet_response =   await pull_node_api(
-                                api_url=app_globals.app_config['service']['mainnet_rpc'],
-                                api_payload=payload
-                            )
-        
-        if type(wallet_response) != list or not len(wallet_response):
-            raise Exception("Cannot operate MASSA API result")
+        wallet_answer = await pull_http_api(api_url=app_globals.app_config['service']['mainnet_rpc_url'],
+                                            api_method="POST",
+                                            api_payload=payload,
+                                            api_root_element="result")
 
-        wallet_result = wallet_response[0]
-        wallet_result_address = wallet_result.get("address", "None")
+        wallet_result = wallet_answer.get("result", None)
+        if not wallet_result:
+            raise Exception(f"Wrong answer from MASSA node API ({str(wallet_answer)})")
+
+        if type(wallet_result) != list or not len(wallet_result):
+            raise Exception(f"Wrong answer from MASSA node API ({str(wallet_answer)})")
+
+        wallet_result = wallet_result[0]
+        wallet_result_address = wallet_result.get("address", None)
 
         if wallet_result_address != wallet_address:
-            raise Exception(f"Bad address received from API: '{wallet_result_address}'")
+            raise Exception(f"Bad address received from MASSA node API: '{wallet_result_address}' (expected '{wallet_address}')")
     
     except BaseException as E:
         logger.warning(f"Cannot operate received address result: ({str(E)})")
 
         t = as_list(
-                as_line(
-                    "👛 Wallet: ",
-                    TextLink(
-                        get_short_address(wallet_address),
-                        url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_address}"
-                    )
-                ),
-                as_line(
-                    "⁉ Error getting address info for wallet: ",
-                    TextLink(
-                        get_short_address(wallet_address),
-                        url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_address}"
-                    )
-                ),
-                as_line(
-                    "💻 Result: ",
-                    Code(wallet_response)
-                ),
-                as_line(
-                    "💥 Exception: ",
-                    Code(str(E))
-                ),
-                as_line("⚠️ Check wallet address or try later!")
-            )
+            as_line(
+                "👛 Wallet: ",
+                TextLink(
+                    get_short_address(wallet_address),
+                    url=f"{app_globals.app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
+                )
+            ),
+            as_line(
+                "⁉ Error getting address info for wallet: ",
+                TextLink(
+                    get_short_address(wallet_address),
+                    url=f"{app_globals.app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
+                )
+            ),
+            as_line(
+                "💥 Exception: ",
+                Code(str(E))
+            ),
+            as_line("⚠️ Check wallet address or try later!")
+        )
         await message.answer(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
@@ -148,6 +144,16 @@ async def show_address(message: Message, state: FSMContext) -> None:
         for cycle_info in wallet_result.get("cycle_infos", []):
             if type(cycle_info.get("nok_count", 0)) == int:
                 wallet_missed_blocks += cycle_info.get("nok_count", 0)
+
+        wallet_computed_rewards = ""
+        if (app_globals.massa_network_values['total_staked_rolls'] > 0) and (app_globals.massa_network_values['block_reward'] > 0) and (wallet_active_rolls > 0):
+            my_contribution = app_globals.massa_network_values['total_staked_rolls'] / wallet_active_rolls
+            my_blocks = 172_800 / my_contribution
+            my_reward = round(
+                my_blocks * app_globals.massa_network_values['block_reward'],
+                2
+            )
+            wallet_computed_rewards = f"\n🪙 Possible MAX reward: {my_reward:,} MAS / day\n"
 
         wallet_thread = wallet_result.get("thread", 0)
 
@@ -189,21 +195,22 @@ async def show_address(message: Message, state: FSMContext) -> None:
                 )
 
         t = as_list(
-                as_line(
-                    "👛 Wallet: ",
-                    TextLink(
-                        get_short_address(wallet_address),
-                        url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_address}"
-                    )
-                ),
-                f"💰 Final balance: {wallet_final_balance:,} MAS",
-                f"🧻 Candidate / Active rolls: {wallet_candidate_rolls} / {wallet_active_rolls}",
-                f"🥊 Missed blocks: {wallet_missed_blocks}", "",
-                "🔎 Detailed info:", "",
-                f"🧵 Thread: {wallet_thread}", "",
-                *cycles_list, "",
-                *credit_list,
-            )
+            as_line(
+                "👛 Wallet: ",
+                TextLink(
+                    get_short_address(wallet_address),
+                    url=f"{app_globals.app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
+                )
+            ),
+            f"💰 Final balance: {wallet_final_balance:,} MAS",
+            f"🗞 Candidate / Active rolls: {wallet_candidate_rolls:,} / {wallet_active_rolls:,}",
+            f"🥊 Missed blocks: {wallet_missed_blocks}",
+            wallet_computed_rewards,
+            "🔎 Detailed info:", "",
+            f"🧵 Thread: {wallet_thread}", "",
+            *cycles_list, "",
+            *credit_list,
+        )
         await message.answer(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,

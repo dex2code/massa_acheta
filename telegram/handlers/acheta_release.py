@@ -4,7 +4,7 @@ from aiogram import Router
 from aiogram.filters import Command
 from aiogram.types import Message
 from aiogram.enums import ParseMode
-from aiogram.utils.formatting import as_list, as_line, Code, TextLink
+from aiogram.utils.formatting import as_list, as_line, TextLink
 
 import app_globals
 
@@ -22,25 +22,19 @@ async def cmd_acheta_release(message: Message) -> None:
         update_needed = as_line("👌 No updates needed")
     else:
         update_needed = as_line(
-                            "❗ Please update your bot - ",
-                            TextLink(
-                                "More info here",
-                                url="https://github.com/dex2code/massa_acheta/"
-                            )
-                        )
+            "❗ Please update your bot - ",
+            TextLink(
+                "More info here",
+                url="https://github.com/dex2code/massa_acheta/"
+            )
+        )
 
     t = as_list(
-            as_line(
-                "🦗 Latest released ACHETA version: ",
-                Code(app_globals.latest_acheta_release)
-            ),
-            as_line(
-                "💾 You have version: ",
-                Code(app_globals.local_acheta_release)
-            ),
-            update_needed,
-            as_line(f"⏳ Service checks releases: every {app_globals.app_config['service']['main_loop_period_sec']} seconds")
-        )
+        f"🦗 Latest released ACHETA version: \"{app_globals.latest_acheta_release}\"",
+        f"💾 You have version: \"{app_globals.local_acheta_release}\"", "",
+        update_needed,
+        as_line(f"⏳ Service checks releases: every {app_globals.app_config['service']['main_loop_period_sec']} seconds")
+    )
     await message.answer(
         text=t.as_html(),
         parse_mode=ParseMode.HTML,

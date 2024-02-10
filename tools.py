@@ -8,44 +8,69 @@ import app_globals
 
 
 @logger.catch
-async def pull_node_api(
-    api_url: str="",
-    api_header: object={"content-type": "application/json"},
-    api_payload: object={},
-    api_content_type: str="application/json",
-    api_session_timeout: int=app_globals.app_config['service']['http_session_timeout_sec'],
-    api_probe_timeout: int=app_globals.app_config['service']['http_probe_timeout_sec']) -> object:
+async def pull_http_api(api_url: str=None,
+                        api_method: str="GET",
+                        api_header: object={"content-type": "application/json"},
+                        api_payload: object={},
+                        api_content_type: str="application/json",
+                        api_root_element: str=None,
+                        api_session_timeout: int=app_globals.app_config['service']['http_session_timeout_sec'],
+                        api_probe_timeout: int=app_globals.app_config['service']['http_probe_timeout_sec']) -> object:
+
     logger.debug(f"-> Enter Def")
 
     api_session_timeout = aiohttp.ClientTimeout(total=api_session_timeout)
     api_probe_timeout = aiohttp.ClientTimeout(total=api_probe_timeout)
-    api_response_obj = {"error": "Cannot operate MASSA API answer"}
+
+    api_response_text = "No response from remote HTTP API"
+    api_response_obj = {"error": "No response from remote HTTP API"}
 
     try:
         async with aiohttp.ClientSession(timeout=api_session_timeout) as session:
-            async with session.post(url=api_url, headers=api_header, data=api_payload, timeout=api_probe_timeout) as api_response:
 
-                if api_response.status != 200:
-                    raise Exception(f"MASSA API HTTP Error '{str(api_response.status)}'")
+            if api_method == "GET":
+                async with session.get(url=api_url, headers=api_header, timeout=api_probe_timeout) as api_response:
+                    if api_response.status != 200:
+                        raise Exception(f"Remote HTTP API Error '{str(api_response.status)}'")
+                    if api_response.content_type != api_content_type:
+                        raise Exception(f"Remote HTTP API wrong content type '{str(api_response.content_type)}'")
+                    api_response_text = await api_response.text()
 
-                if api_response.content_type != api_content_type:
-                    raise Exception(f"MASSA API wrong content type '{str(api_response.content_type)}'")
+            elif api_method == "POST":
+                async with session.post(url=api_url, headers=api_header, data=api_payload, timeout=api_probe_timeout) as api_response:
+                    if api_response.status != 200:
+                        raise Exception(f"Remote HTTP API Error '{str(api_response.status)}'")
+                    if api_response.content_type != api_content_type:
+                        raise Exception(f"Remote API wrong content type '{str(api_response.content_type)}'")
+                    api_response_text = await api_response.text()
 
-                api_response_obj = await api_response.json(content_type=api_content_type)
+            else:
+                raise Exception(f"Unknown HTTP API method '{api_method}'")
 
-        api_response_result = api_response_obj.get("result", "")
-        if api_response_result == "":
-            raise Exception(f"MASSA API no result in API answer '{str(api_response_obj)}'")
+
+        if api_content_type == "application/json":
+            api_response_obj = json.loads(s=api_response_text)
+
+            if not api_root_element:
+                api_result = {"result": api_response_obj}
+            else:
+                api_result = api_response_obj.get(api_root_element, None)
+                if not api_result:
+                    raise Exception(f"A mandatory key '{api_root_element}' missed in remote HTTP API response: {api_response_text}")
+                else:
+                    api_result = {"result": api_result}
+        else:
+            api_result = {"result": api_response_text}
 
     except BaseException as E:
-        logger.error(f"Exception in API request for URL '{api_url}': ({str(E)})")
-        api_response_result = { "error": str(E) }
+        logger.error(f"Exception in remote HTTP API request for URL '{api_url}': ({str(E)})")
+        api_result = {"error": str(E)}
 
     else:
-        logger.info(f"Successfully pulled result from API '{api_url}'")
+        logger.info(f"Successfully pulled from remote HTTP API '{api_url}'")
 
     finally:
-        return api_response_result
+        return api_result
 
 
 
@@ -141,7 +166,7 @@ def get_last_seen(last_time: float=0.0, current_time: float=0.0) -> str:
 def get_short_address(address: str="") -> str:
     logger.debug("-> Enter Def")
 
-    if len(address) > 15:
+    if len(address) > 16:
         return f"{address[0:8]}...{address[-6:]}"
     else:
         return address

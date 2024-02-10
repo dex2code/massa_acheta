@@ -29,9 +29,9 @@ async def cmd_view_node(message: Message, state: FSMContext) -> None:
     
     if len(app_globals.app_results) == 0:
         t = as_list(
-                "⭕ Node list is empty", "",
-                "👉 Try /help to learn how to add a node to bot"
-            )
+            "⭕ Node list is empty", "",
+            "👉 Try /help to learn how to add a node to bot"
+        )
         await message.answer(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
@@ -42,8 +42,8 @@ async def cmd_view_node(message: Message, state: FSMContext) -> None:
         return
 
     t = as_list(
-            "👉 Tap the node to view or /cancel to quit the scenario",
-        )
+        "👉 Tap the node to view or /cancel to quit the scenario",
+    )
     await message.answer(
         text=t.as_html(),
         parse_mode=ParseMode.HTML,
@@ -66,12 +66,9 @@ async def show_node(message: Message, state: FSMContext) -> None:
 
     if node_name not in app_globals.app_results:
         t = as_list(
-                as_line(
-                    "‼ Error: Unknown node ",
-                    Code(node_name)
-                ),
-                "👉 Try /view_node to view another node or /help to learn how to add a node to bot"
-            )
+            f"‼ Error: Unknown node \"{node_name}\"", "",
+            "👉 Try /view_node to view another node or /help to learn how to add a node to bot"
+        )
         await message.answer(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
@@ -98,20 +95,16 @@ async def show_node(message: Message, state: FSMContext) -> None:
         node_status = f"☠️ Status: Offline (last seen: {last_seen})"
 
         t = as_list(
-                as_line(
-                    "🏠 Node: ",
-                    Code(node_name),
-                    end=""
-                ),
-                f"📍 {app_globals.app_results[node_name]['url']}",
-                f"{wallets_attached}", "",
-                f"{node_status}", "",
-                as_line(
-                    "💻 Result: ",
-                    Code(app_globals.app_results[node_name]['last_result'])
-                ),
-                f"☝ Service checks updates: every {app_globals.app_config['service']['main_loop_period_sec']} seconds"
-            )
+            f"🏠 Node: \"{node_name}\"",
+            f"📍 {app_globals.app_results[node_name]['url']}",
+            f"{wallets_attached}", "",
+            f"{node_status}", "",
+            as_line(
+                "💻 Result: ",
+                Code(app_globals.app_results[node_name]['last_result'])
+            ),
+            f"☝ Service checks updates: every {app_globals.app_config['service']['main_loop_period_sec']} seconds"
+        )
     else:
         node_status = f"🌿 Status: Online (last seen: {last_seen})"
 
@@ -119,10 +112,10 @@ async def show_node(message: Message, state: FSMContext) -> None:
         node_ip = app_globals.app_results[node_name]['last_result'].get("node_ip", "Not known")
 
         node_version = app_globals.app_results[node_name]['last_result'].get("version", "Not known")
-        if node_version != app_globals.latest_massa_release:
-            node_version += f" ❗ Update to {app_globals.latest_massa_release}"
+        if node_version != app_globals.massa_network_values['latest_release']:
+            node_update_needed = f"❗ Update to \"{app_globals.massa_network_values['latest_release']}\""
         else:
-            node_version += " (latest)"
+            node_update_needed = "(latest)"
 
         current_cycle = app_globals.app_results[node_name]['last_result'].get("current_cycle", "Not known")
         chain_id = app_globals.app_results[node_name]['last_result'].get("chain_id", "Not known")
@@ -133,23 +126,22 @@ async def show_node(message: Message, state: FSMContext) -> None:
         banned_peer_count = app_globals.app_results[node_name]['last_result']['network_stats'].get("banned_peer_count", 0)
 
         t = as_list(
-                as_line(
-                    "🏠 Node: ",
-                    Code(node_name),
-                    end=""
-                ),
-                f"📍 {app_globals.app_results[node_name]['url']}",
-                f"{wallets_attached}", "",
-                f"{node_status}", "",
-                f"🆔: {get_short_address(node_id)}", "",
-                f"↕ Routable IP: {node_ip}", "",
-                f"💾 Release: {node_version}", "",
-                f"🌀 Cycle: {current_cycle}", "",
-                f"↔ In / Out connections: {in_connection_count} / {out_connection_count}", "",
-                f"🙋 Known / Banned peers: {known_peer_count} / {banned_peer_count}", "",
-                f"🔗 Chain ID: {chain_id}", "",
-                f"☝ Service checks updates: every {app_globals.app_config['service']['main_loop_period_sec']} seconds"
-            )
+            f"🏠 Node: \"{node_name}\"",
+            f"📍 {app_globals.app_results[node_name]['url']}",
+            f"{wallets_attached}", "",
+            f"{node_status}", "",
+            as_line(
+                "🆔: ",
+                Code(get_short_address(node_id))
+            ),
+            f"🎯 Routable IP: {node_ip}", "",
+            f"💾 Release: \"{node_version}\" {node_update_needed}", "",
+            f"🌀 Cycle: {current_cycle}", "",
+            f"↔ In / Out connections: {in_connection_count} / {out_connection_count}", "",
+            f"🙋 Known / Banned peers: {known_peer_count} / {banned_peer_count}", "",
+            f"🔗 Chain ID: {chain_id}", "",
+            f"☝ Service checks updates: every {app_globals.app_config['service']['main_loop_period_sec']} seconds"
+        )
 
     await message.answer(
         text=t.as_html(),

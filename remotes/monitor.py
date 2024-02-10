@@ -26,10 +26,10 @@ async def monitor() -> None:
         async with app_globals.results_lock:
 
             await asyncio.gather(*node_coros)
-            await asyncio.sleep(delay=1)
+            await asyncio.sleep(delay=0.1)
 
             await asyncio.gather(*wallet_coros)
-            await asyncio.sleep(delay=1)
+            await asyncio.sleep(delay=0.1)
 
         await asyncio.gather(check_releases())
 

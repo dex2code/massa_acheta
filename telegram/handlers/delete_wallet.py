@@ -30,9 +30,9 @@ async def cmd_delete_wallet(message: Message, state: FSMContext) -> None:
     
     if len(app_globals.app_results) == 0:
         t = as_list(
-                "⭕ Node list is empty", "",
-                "👉 Try /help to learn how to add a node to bot"
-            )
+            "⭕ Node list is empty", "",
+            "👉 Try /help to learn how to add a node to bot"
+        )
         await message.answer(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
@@ -44,8 +44,8 @@ async def cmd_delete_wallet(message: Message, state: FSMContext) -> None:
 
 
     t = as_list(
-            "❓ Tap the node to select or /cancel to quit the scenario:",
-        )
+        "❓ Tap the node to select or /cancel to quit the scenario:",
+    )
     await message.answer(
         text=t.as_html(),
         parse_mode=ParseMode.HTML,
@@ -69,12 +69,9 @@ async def select_wallet_to_delete(message: Message, state: FSMContext) -> None:
 
     if node_name not in app_globals.app_results:
         t = as_list(
-                as_line(
-                    "‼ Error: Unknown node ",
-                    Code(node_name)
-                ),
-                "👉 Try /delete_wallet to delete another wallet or /help to learn bot commands"
-            )
+            f"‼ Error: Unknown node \"{node_name}\"", "",
+            "👉 Try /delete_wallet to delete another wallet or /help to learn bot commands"
+        )
         await message.answer(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
@@ -87,12 +84,9 @@ async def select_wallet_to_delete(message: Message, state: FSMContext) -> None:
 
     if len(app_globals.app_results[node_name]['wallets']) == 0:
         t = as_list(
-                as_line(
-                    "⭕ No wallets attached to node ",
-                    Code(node_name)
-                ),
-                "👉 Try /add_wallet to add a wallet or /help to learn bot commands"
-            )
+            f"⭕ No wallets attached to node \"{node_name}\"", "",
+            "👉 Try /add_wallet to add a wallet or /help to learn bot commands"
+        )
         await message.answer(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
@@ -104,8 +98,8 @@ async def select_wallet_to_delete(message: Message, state: FSMContext) -> None:
         return
 
     t = as_list(
-            "❓ Tap the wallet to select or /cancel to quit the scenario:",
-        )
+        "❓ Tap the wallet to select or /cancel to quit the scenario:",
+    )
     await message.answer(
         text=t.as_html(),
         parse_mode=ParseMode.HTML,
@@ -130,16 +124,16 @@ async def delete_wallet(message: Message, state: FSMContext) -> None:
 
     if wallet_address not in app_globals.app_results[node_name]['wallets']:
         t = as_list(
-                as_line(
-                    "‼ Error: Wallet ",
-                    TextLink(
-                        get_short_address(address=wallet_address),
-                        url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_address}"
-                    ),
-                    f" is not attached to node {node_name}"
+            as_line(
+                "‼ Error: Wallet ",
+                TextLink(
+                    get_short_address(address=wallet_address),
+                    url=f"{app_globals.app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                 ),
-                "👉 Try /delete_wallet to delete another wallet or /help to learn bot commands"
-            )
+                f" is not attached to node {node_name}"
+            ),
+            "👉 Try /delete_wallet to delete another wallet or /help to learn bot commands"
+        )
         await message.answer(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
@@ -158,43 +152,43 @@ async def delete_wallet(message: Message, state: FSMContext) -> None:
         logger.error(f"Cannot remove wallet '{wallet_address}' from node '{node_name}': ({str(E)})")
 
         t = as_list(
-                as_line(
-                    "‼ Error: Could not delete wallet ",
-                    TextLink(
-                        get_short_address(wallet_address),
-                        url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_address}"
-                    ),
-                    " from node ",
-                    Code(get_short_address(node_name)),
+            as_line(
+                "‼ Error: Could not delete wallet ",
+                TextLink(
+                    get_short_address(wallet_address),
+                    url=f"{app_globals.app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                 ),
-                as_line(
-                    "💻 Result: ",
-                    Code(str(E))
-                ),
-                as_line(
-                    "⚠ Try again later or watch logs to check the reason - ",
-                    TextLink(
-                        "More info here",
-                        url="https://github.com/dex2code/massa_acheta/"
-                    )
+                " from node ",
+                Code(get_short_address(node_name)),
+            ),
+            as_line(
+                "💻 Result: ",
+                Code(str(E))
+            ),
+            as_line(
+                "⚠ Try again later or watch logs to check the reason - ",
+                TextLink(
+                    "More info here",
+                    url="https://github.com/dex2code/massa_acheta/"
                 )
             )
+        )
 
     else:
         logger.info(f"Successfully removed wallet '{wallet_address}' from node '{node_name}'")
 
         t = as_list(
-                as_line(
-                    "✅ Successfully removed wallet ",
-                    TextLink(
-                        get_short_address(wallet_address),
-                        url=f"{app_globals.app_config['service']['mainnet_explorer']}/address/{wallet_address}"
-                    ),
-                    " from node ",
-                    Code(get_short_address(node_name)),
+            as_line(
+                "✅ Successfully removed wallet ",
+                TextLink(
+                    get_short_address(wallet_address),
+                    url=f"{app_globals.app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                 ),
-                "👉 You can check new settings using /view_config command"
-            )
+                " from node ",
+                Code(get_short_address(node_name)),
+            ),
+            "👉 You can check new settings using /view_config command"
+        )
 
 
     await message.answer(

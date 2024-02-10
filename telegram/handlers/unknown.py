@@ -3,7 +3,7 @@ from loguru import logger
 from aiogram import Router, F
 from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram.fsm.context import FSMContext
-from aiogram.utils.formatting import as_list, as_line, Code
+from aiogram.utils.formatting import as_list
 from aiogram.enums import ParseMode
 
 import app_globals
@@ -18,13 +18,9 @@ async def cmd_unknown(message: Message, state: FSMContext) -> None:
     logger.debug("-> Enter Def")
 
     t = as_list(
-            as_line(
-                "⁉ Error: Unknown command '",
-                Code(message.text),
-                "'"
-            ),
-            "👉 Try /help to learn bot commands"
-        )
+        f"⁉ Error: Unknown command \"{message.text}\"", "",
+        "👉 Try /help to learn bot commands"
+    )
     await message.answer(
         text=t.as_html(),
         reply_markup=ReplyKeyboardRemove(),
