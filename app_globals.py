@@ -111,7 +111,8 @@ massa_network_values =  {
     "roll_price": 0,
     "block_reward": 0,
     "total_stakers": 0,
-    "total_staked_rolls": 0
+    "total_staked_rolls": 0,
+    "last_updated": 0
 }
 
 

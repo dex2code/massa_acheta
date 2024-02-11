@@ -2,9 +2,11 @@ from loguru import logger
 
 import asyncio
 import json
-from tools import pull_http_api
+from time import time as t_now
 
 import app_globals
+
+from tools import pull_http_api
 
 
 @logger.catch
@@ -257,6 +259,7 @@ async def massa() -> None:
                 logger.warning(f"Error pulling /info from massexplo.io")
 
         if success_flag:
+            app_globals.massa_network_values['last_updated'] = t_now()
             logger.info(f"Successfully collected MASSA mainnet network info")
         else:
             logger.warning(f"Could not collect MASSA mainnet network info")

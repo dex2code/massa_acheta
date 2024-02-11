@@ -5,9 +5,11 @@ from aiogram.filters import Command
 from aiogram.types import Message
 from aiogram.enums import ParseMode
 from aiogram.utils.formatting import as_list
+from time import time as t_now
 
 import app_globals
 
+from tools import get_last_seen
 
 router = Router()
 
@@ -17,6 +19,10 @@ router = Router()
 async def cmd_massa_info(message: Message) -> None:
     logger.debug("-> Enter Def")
 
+    info_last_update = get_last_seen(
+        last_time=app_globals.massa_network_values['last_last_updated'],
+        current_time=t_now()
+    )
     t = as_list(
         f"📚 MASSA network info:", "",
         f"💾 Latest released MASSA version: \"{app_globals.massa_network_values['latest_release']}\"",
@@ -25,6 +31,7 @@ async def cmd_massa_info(message: Message) -> None:
         f"💰 Block reward: {app_globals.massa_network_values['block_reward']} MAS", "",
         f"👥 Total stakers: {app_globals.massa_network_values['total_stakers']:,}",
         f"🗞 Total staked rolls: {app_globals.massa_network_values['total_staked_rolls']:,}", "",
+        f"Info updated: {info_last_update}", "",
         f"☝ Service checks updates: every {app_globals.app_config['service']['massa_network_update_period_hours']} hour(s)"
 
     )
