@@ -74,6 +74,8 @@ async def show_credits(message: Message, state: FSMContext) -> None:
     deferred_credits.append("💳 Deferred credits:")
     deferred_credits.append(" ⦙")
 
+    now_unix = int(t_now())
+
     for wallet_credit in wallet_credits:
         try:
             credit_amount = wallet_credit.get("amount", 0)
@@ -93,7 +95,7 @@ async def show_credits(message: Message, state: FSMContext) -> None:
             logger.warning(f"Cannot compute deferred credit ({str(E)}) for credit '{wallet_credit}'")
         
         else:
-            if credit_unix < t_now():
+            if credit_unix < now_unix:
                 deferred_credits.append(
                     as_line(
                         " ⦙… ",
