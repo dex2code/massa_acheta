@@ -14,6 +14,7 @@ async def heartbeat() -> None:
 
     while True:
 
+        logger.info(f"Sleeping for {app_globals.app_config['service']['heartbeat_period_hours'] * 60 * 60} seconds...")
         await asyncio.sleep(delay=(app_globals.app_config['service']['heartbeat_period_hours'] * 60 * 60))
         logger.info(f"Heartbeat planner shedule time")
 

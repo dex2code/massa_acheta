@@ -34,8 +34,8 @@ async def monitor() -> None:
         await asyncio.gather(check_releases())
 
         logger.debug(f"Current app_results:\n{json.dumps(obj=app_globals.app_results, indent=4)}")
-        logger.info(f"Sleeping for {app_globals.app_config['service']['main_loop_period_sec']} seconds...")
 
+        logger.info(f"Sleeping for {app_globals.app_config['service']['main_loop_period_sec']} seconds...")
         await asyncio.sleep(delay=app_globals.app_config['service']['main_loop_period_sec'])
 
 
