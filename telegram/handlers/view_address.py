@@ -210,7 +210,8 @@ async def show_address(message: Message, state: FSMContext) -> None:
             "🔎 Detailed info:", "",
             f"🧵 Thread: {wallet_thread}", "",
             *cycles_list, "",
-            *credit_list,
+            *credit_list, "",
+            "☝ To view ALL deferred credits try /view_credits command"
         )
         await message.answer(
             text=t.as_html(),
