@@ -44,7 +44,7 @@ async def main() -> None:
         BotCommand(command="/view_node", description="View node status"),
         BotCommand(command="/view_wallet", description="View wallet info"),
         BotCommand(command="/view_address", description="View any wallet info"),
-        BotCommand(command="/view_credits", description="View wallet credits"),
+        BotCommand(command="/view_credits", description="View any wallet credits"),
         BotCommand(command="/add_node", description="Add node to bot"),
         BotCommand(command="/add_wallet", description="Add wallet to bot"),
         BotCommand(command="/delete_node", description="Delete node from bot"),
