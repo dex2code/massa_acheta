@@ -3,7 +3,7 @@ from loguru import logger
 from aiogram import Router
 from aiogram.filters import Command
 from aiogram.types import Message
-from aiogram.utils.formatting import as_list, as_line, TextLink
+from aiogram.utils.formatting import as_list, as_line, TextLink, Code
 from aiogram.enums import ParseMode
 
 import app_globals
@@ -41,6 +41,10 @@ async def cmd_start(message: Message) -> None:
                     "More info here",
                     url="https://github.com/dex2code/massa_acheta/"
                 )
+            ),
+            as_line(
+                "🎁 If You want to thank the author: ",
+                Code("AU1242WU5NazPti7e64jdVjrCS5r3o9znxQJMEUJjv4xG2G75dvwn")
             )
         )
 
@@ -85,6 +89,10 @@ async def cmd_start(message: Message) -> None:
                     "More info here",
                     url="https://github.com/dex2code/massa_acheta/"
                 )
+            ),
+            as_line(
+                "🎁 If You want to thank the author: ",
+                Code("AU1242WU5NazPti7e64jdVjrCS5r3o9znxQJMEUJjv4xG2G75dvwn")
             )
         )
 
