@@ -1,13 +1,13 @@
 from loguru import logger
 
-import json
 from datetime import datetime
+from time import time as t_now
 from aiogram import Router, F
 from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram.filters import Command, StateFilter
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
-from aiogram.utils.formatting import as_list, as_line, TextLink
+from aiogram.utils.formatting import as_list, as_line, TextLink, Strikethrough
 from aiogram.enums import ParseMode
 
 import app_globals
@@ -93,9 +93,25 @@ async def show_credits(message: Message, state: FSMContext) -> None:
             logger.warning(f"Cannot compute deferred credit ({str(E)}) for credit '{wallet_credit}'")
         
         else:
-            deferred_credits.append(
-                f" ⦙…  {credit_date}: {credit_amount:,} MAS"
-            )
+            if credit_unix < t_now():
+                deferred_credits.append(
+                    as_line(
+                        " ⦙… ",
+                        Strikethrough(
+                            f"{credit_date}: {credit_amount:,} MAS"
+                        ),
+                        end=""
+                    )
+                )
+            else:
+                deferred_credits.append(
+                    as_line(
+                        " ⦙… ",
+                        f"{credit_date}: {credit_amount:,} MAS",
+                        end=""
+                    )
+                )
+
             deferred_credits.append(" ⦙")
 
     deferred_credits[-1] = ""
