@@ -1,5 +1,14 @@
 from loguru import logger
-logger.add("main.log", format="\"{time}\", \"{level}\", \"{file}:{line}\", \"{module}:{function}\", \"{message}\"", level="INFO", rotation="1 week", compression="zip")
+logger.add(
+    "main.log",
+    format="\"{time}\", \"{level}\", \"{file}:{line}\", \"{module}:{function}\", \"{message}\"",
+    level="INFO",
+    rotation="1 week",
+    compression="zip",
+    enqueue=True,
+    backtrace=True,
+    diagnose=True
+)
 
 import asyncio
 import json
