@@ -108,6 +108,7 @@ MASSA network values
 massa_network_values =  {
     "latest_release": "",
     "current_release": "",
+    "current_cycle": 0,
     "roll_price": 0,
     "block_reward": 0,
     "total_stakers": 0,

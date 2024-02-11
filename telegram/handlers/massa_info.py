@@ -28,6 +28,7 @@ async def cmd_massa_info(message: Message) -> None:
         f"📚 MASSA network info:", "",
         f"💾 Latest released MASSA version: \"{app_globals.massa_network_values['latest_release']}\"",
         f"🏃 Current MASSA release: \"{app_globals.massa_network_values['current_release']}\"", "",
+        f"🌀 Current cycle: {app_globals.massa_network_values['current_cycle']}", "",
         f"🪙 Roll price: {app_globals.massa_network_values['roll_price']:,} MAS",
         f"💰 Block reward: {app_globals.massa_network_values['block_reward']} MAS", "",
         f"👥 Total stakers: {app_globals.massa_network_values['total_stakers']:,}",

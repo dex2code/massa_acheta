@@ -33,6 +33,11 @@ async def massa_get_info() -> bool:
             logger.warning(f"No stakers in MASSA mainnet RPC /info answer ({str(massa_info_answer)})")
             return False
 
+        massa_current_cycle = massa_info_result.get("current_cycle", None)
+        if not massa_current_cycle:
+            logger.warning(f"No stakers in MASSA mainnet RPC /info answer ({str(massa_info_answer)})")
+            return False
+
     except BaseException as E:
         logger.warning(f"Cannot operate MASSA mainnet RPC /info answer: ({str(E)})")
         return False
@@ -40,6 +45,7 @@ async def massa_get_info() -> bool:
     else:
         app_globals.massa_network_values['current_release'] = massa_mainnet_release
         app_globals.massa_network_values['total_stakers'] = massa_total_stakers
+        app_globals.massa_network_values['current_cycle'] = massa_current_cycle
         return True
 
 

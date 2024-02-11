@@ -19,7 +19,7 @@ app_config['service']['http_session_timeout_sec'] = 300
 app_config['service']['http_probe_timeout_sec'] = 120
 
 app_config['service']['heartbeat_period_hours'] = 6
-app_config['service']['massa_network_update_period_hours'] = 1
+app_config['service']['massa_network_update_period_mins'] = 30
 
 app_config['service']['massa_release_url'] = "https://api.github.com/repos/massalabs/massa/releases/latest"
 app_config['service']['acheta_release_url'] = "https://api.github.com/repos/dex2code/massa_acheta/releases/latest"
