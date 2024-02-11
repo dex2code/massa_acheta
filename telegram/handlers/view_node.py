@@ -25,6 +25,7 @@ router = Router()
 @logger.catch
 async def cmd_view_node(message: Message, state: FSMContext) -> None:
     logger.debug("->Enter Def")
+    logger.info(f"-> Got '{message.text}' command from user '{message.chat.id}'")
     if not await check_privacy(message=message): return
     
     if len(app_globals.app_results) == 0:
@@ -60,6 +61,7 @@ async def cmd_view_node(message: Message, state: FSMContext) -> None:
 @logger.catch
 async def show_node(message: Message, state: FSMContext) -> None:
     logger.debug("-> Enter Def")
+    logger.info(f"-> Got '{message.text}' command from user '{message.chat.id}'")
     if not await check_privacy(message=message): return
 
     node_name = message.text

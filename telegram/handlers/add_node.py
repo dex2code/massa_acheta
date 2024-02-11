@@ -26,6 +26,7 @@ router = Router()
 @logger.catch
 async def cmd_add_node(message: Message, state: FSMContext) -> None:
     logger.debug("->Enter Def")
+    logger.info(f"-> Got '{message.text}' command from user '{message.chat.id}'")
     if not await check_privacy(message=message): return
     
     t = as_list(
@@ -46,6 +47,7 @@ async def cmd_add_node(message: Message, state: FSMContext) -> None:
 @logger.catch
 async def input_nodename_to_add(message: Message, state: FSMContext) -> None:
     logger.debug("-> Enter Def")
+    logger.info(f"-> Got '{message.text}' command from user '{message.chat.id}'")
     if not await check_privacy(message=message): return
 
     node_name = message.text
@@ -85,6 +87,7 @@ async def input_nodename_to_add(message: Message, state: FSMContext) -> None:
 @logger.catch
 async def add_node(message: Message, state: FSMContext) -> None:
     logger.debug("-> Enter Def")
+    logger.info(f"-> Got '{message.text}' command from user '{message.chat.id}'")
     if not await check_privacy(message=message): return
 
     user_state = await state.get_data()

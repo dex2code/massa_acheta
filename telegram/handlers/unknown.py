@@ -16,6 +16,7 @@ router = Router()
 @logger.catch
 async def cmd_unknown(message: Message, state: FSMContext) -> None:
     logger.debug("-> Enter Def")
+    logger.info(f"-> Got '{message.text}' command from user '{message.chat.id}'")
 
     t = as_list(
         f"⁉ Error: Unknown command \"{message.text}\"", "",

@@ -16,6 +16,7 @@ router = Router()
 @logger.catch
 async def cmd_ping(message: Message) -> None:
     logger.debug("-> Enter Def")
+    logger.info(f"-> Got '{message.text}' command from user '{message.chat.id}'")
 
     t = as_list(
         as_line("🏓 Pong!")

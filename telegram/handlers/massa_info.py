@@ -18,6 +18,7 @@ router = Router()
 @logger.catch
 async def cmd_massa_info(message: Message) -> None:
     logger.debug("-> Enter Def")
+    logger.info(f"-> Got '{message.text}' command from user '{message.chat.id}'")
 
     info_last_update = get_last_seen(
         last_time=app_globals.massa_network_values['last_updated'],

@@ -25,7 +25,8 @@ router = Router()
 @logger.catch
 async def cmd_view_address(message: Message, state: FSMContext) -> None:
     logger.debug("->Enter Def")
-    
+    logger.info(f"-> Got '{message.text}' command from user '{message.chat.id}'")
+
     t = as_list(
         "❓ Please enter MASSA wallet address with leading \"AU...\" prefix: ",
     )
@@ -44,6 +45,7 @@ async def cmd_view_address(message: Message, state: FSMContext) -> None:
 @logger.catch
 async def show_address(message: Message, state: FSMContext) -> None:
     logger.debug("-> Enter Def")
+    logger.info(f"-> Got '{message.text}' command from user '{message.chat.id}'")
 
     wallet_address = message.text
 
