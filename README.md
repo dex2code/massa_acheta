@@ -152,3 +152,11 @@ To reset the whole service configuration use:
 
 ## Notes
 Although you can install Acheta on the same host where your MASSA node is installed, I recommend using a different remote host for Acheta because in case the MASSA node fails, Acheta will be able to notify you about it.
+
+
+
+## Thank you!
+If You want to thank the author:
+```
+AU1242WU5NazPti7e64jdVjrCS5r3o9znxQJMEUJjv4xG2G75dvwn
+```
