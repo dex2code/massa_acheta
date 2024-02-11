@@ -20,7 +20,7 @@ async def cmd_massa_info(message: Message) -> None:
     logger.debug("-> Enter Def")
 
     info_last_update = get_last_seen(
-        last_time=app_globals.massa_network_values['last_last_updated'],
+        last_time=app_globals.massa_network_values['last_updated'],
         current_time=t_now()
     )
     t = as_list(
