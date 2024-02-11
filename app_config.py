@@ -11,6 +11,7 @@ app_config['telegram']['sending_timeout_sec'] = 5
 
 # Service settings
 app_config['service']['results_path'] = "app_results.json"
+app_config['service']['deferred_credits_path'] = "deferred_credits.json"
 
 app_config['service']['main_loop_period_sec'] = 600
 

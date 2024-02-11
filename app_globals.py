@@ -117,5 +117,31 @@ massa_network_values =  {
 
 
 
+'''
+Init deferred_credits
+'''
+deferred_credits = {}
+
+deferred_credits_obj = Path(app_config['service']['deferred_credits_path'])
+
+if not deferred_credits_obj.exists():
+    logger.error(f"No deferred_credits file '{deferred_credits_obj}' exists. Skipping...")
+
+else:
+    logger.info(f"Loading deferred_credits from '{deferred_credits_obj}' file...")
+
+    with open(file=deferred_credits_obj, mode="r") as input_deferred_credits:
+        try:
+            deferred_credits = json.load(fp=input_deferred_credits)
+
+        except BaseException as E:
+            logger.error(f"Cannot load deferred_credits from '{deferred_credits_obj}': ({str(E)})")
+
+        else:
+            logger.info(f"Successfully loaded deferred_credits from '{deferred_credits_obj}' file!")
+
+
+
+
 if __name__ == "__main__":
     pass

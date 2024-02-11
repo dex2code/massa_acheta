@@ -59,7 +59,6 @@ async def show_address(message: Message, state: FSMContext) -> None:
         ),
         "This may take some time, so info will be displayed as soon as we receive the answer from MASSA Mainnet RPC"
     )
-
     await message.answer(
         text=t.as_html(),
         parse_mode=ParseMode.HTML,
