@@ -35,7 +35,11 @@ async def check_node(node_name: str="") -> None:
 
         node_chain_id = node_result.get("chain_id", None)
         if not node_chain_id:
-            raise Exception(f"No chain_id in MASSA node API answer")
+            raise Exception(f"No 'chain_id' in MASSA node API answer")
+        
+        node_current_cycle = node_result.get("current_cycle", None)
+        if not node_current_cycle:
+            raise Exception(f"No 'current_cycle' in MASSA node API answer")
 
     except BaseException as E:
         logger.warning(f"Node '{node_name}' ({app_globals.app_results[node_name]['url']}) seems dead! ({str(E)})")
@@ -63,13 +67,29 @@ async def check_node(node_name: str="") -> None:
             t = as_list(
                 f"🏠 Node: \"{node_name}\"",
                 f"📍 {app_globals.app_results[node_name]['url']}", "",
-                f"🌿 Become alive with chain ID: {node_chain_id}"
+                f"🌿 Become alive with chain ID: {node_chain_id}",
+                f"🌀 Current cycle: {node_current_cycle}"
             )
             await queue_telegram_message(message_text=t.as_html())
 
+        else:
+            # If Node Cycle number is less than MASSA Cycle number
+            if node_current_cycle < app_globals.massa_network_values['current_cycle']:
+                t = as_list(
+                    f"🏠 Node: \"{node_name}\"",
+                    f"📍 {app_globals.app_results[node_name]['url']}", "",
+                    f"🌀 Cycle number mismatch!", "",
+                    f"👁 Node Cycle ID is less than expected ({node_current_cycle} < {app_globals.massa_network_values['current_cycle']})", "",
+                    "⚠️ Check node status!"
+                )
+                await queue_telegram_message(message_text=t.as_html())
+
         app_globals.app_results[node_name]['last_status'] = True
         app_globals.app_results[node_name]['last_update'] = t_now()
+        app_globals.app_results[node_name]['last_chain_id'] = node_chain_id
+        app_globals.app_results[node_name]['last_cycle'] = node_current_cycle
         app_globals.app_results[node_name]['last_result'] = node_result
+
 
     finally:
         logger.debug(f"API result for node '{node_name}' ({app_globals.app_results[node_name]['url']}):\n{json.dumps(obj=app_globals.app_results[node_name]['last_result'], indent=4)}")

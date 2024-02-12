@@ -54,6 +54,8 @@ with open(file=results_obj, mode="r") as input_results:
 
 for node_name in app_results:
     app_results[node_name]['last_status'] = "unknown"
+    app_results[node_name]['last_chain_id'] = 0
+    app_results[node_name]['last_cycle'] = 0
     app_results[node_name]['last_update'] = 0
     app_results[node_name]['last_result'] = {"unknown": "Never updated before"}
 
@@ -90,7 +92,7 @@ tg_bot = Bot(token=bot.ACHETA_KEY.get_secret_value(), disable_web_page_preview=T
 '''
 Acheta releases stuff
 '''
-local_acheta_release = "ACHETA.1.0.5"
+local_acheta_release = "ACHETA.1.0.6"
 latest_acheta_release = ""
 
 

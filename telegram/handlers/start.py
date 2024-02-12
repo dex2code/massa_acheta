@@ -26,7 +26,7 @@ async def cmd_start(message: Message) -> None:
             "⦙",
             "⦙… /view_address : View any wallet info",
             "⦙",
-            "⦙… /view_credits : View any wallet credits 💥",
+            "⦙… /view_credits : View any wallet credits",
             "⦙",
             "⦙… /massa_info : Show MASSA network info",
             "⦙",
@@ -43,8 +43,11 @@ async def cmd_start(message: Message) -> None:
                 )
             ),
             as_line(
-                "🎁 If You want to thank the author: ",
-                Code("AU1242WU5NazPti7e64jdVjrCS5r3o9znxQJMEUJjv4xG2G75dvwn")
+                "🎁 Wanna thank the author? ",
+                TextLink(
+                    "Ask me how",
+                    url="https://github.com/dex2code/massa_acheta#thank-you"
+                )
             )
         )
 
@@ -62,7 +65,7 @@ async def cmd_start(message: Message) -> None:
             "⦙",
             "⦙… /view_address : View any wallet info",
             "⦙",
-            "⦙… /view_credits : View any wallet credits 💥",
+            "⦙… /view_credits : View any wallet credits",
             "⦙",
             "⦙… /add_node : Add node to bot",
             "⦙",
@@ -89,10 +92,6 @@ async def cmd_start(message: Message) -> None:
                     "More info here",
                     url="https://github.com/dex2code/massa_acheta/"
                 )
-            ),
-            as_line(
-                "🎁 If You want to thank the author: ",
-                Code("AU1242WU5NazPti7e64jdVjrCS5r3o9znxQJMEUJjv4xG2G75dvwn")
             )
         )
 

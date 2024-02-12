@@ -119,8 +119,8 @@ async def show_node(message: Message, state: FSMContext) -> None:
         else:
             node_update_needed = "(latest)"
 
-        current_cycle = app_globals.app_results[node_name]['last_result'].get("current_cycle", "Not known")
-        chain_id = app_globals.app_results[node_name]['last_result'].get("chain_id", "Not known")
+        current_cycle = app_globals.app_results[node_name]['last_cycle']
+        chain_id = app_globals.app_results[node_name]['last_chain_id']
 
         in_connection_count = app_globals.app_results[node_name]['last_result']['network_stats'].get("in_connection_count", 0)
         out_connection_count = app_globals.app_results[node_name]['last_result']['network_stats'].get("out_connection_count", 0)

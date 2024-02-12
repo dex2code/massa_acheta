@@ -35,7 +35,6 @@ async def cmd_massa_info(message: Message) -> None:
         f"🗞 Total staked rolls: {app_globals.massa_network_values['total_staked_rolls']:,}", "",
         f"👁 Info updated: {info_last_update}", "",
         f"☝ Service checks updates: every {app_globals.app_config['service']['massa_network_update_period_mins']} mins"
-
     )
     await message.answer(
         text=t.as_html(),

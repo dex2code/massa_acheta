@@ -21,6 +21,14 @@ async def heartbeat() -> None:
         current_time = t_now()
 
         heartbeat_list = []
+        heartbeat_list.append(
+            as_list(
+                "📚 MASSA network info:",
+                f" 👥 Total stakers: {app_globals.massa_network_values['total_stakers']:,}",
+                f" 🗞 Total staked rolls: {app_globals.massa_network_values['total_staked_rolls']:,}",
+                f"👁 Info updated: {get_last_seen(last_time=app_globals.massa_network_values['last_updated'], current_time=current_time)}", "\n",
+            )
+        )
 
         if len(app_globals.app_results) == 0:
             heartbeat_list.append("⭕ Node list is empty\n")
