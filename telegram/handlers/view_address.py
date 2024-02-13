@@ -21,31 +21,9 @@ class AddressViewer(StatesGroup):
 router = Router()
 
 
-@router.message(StateFilter(None), Command("view_address"))
 @logger.catch
-async def cmd_view_address(message: Message, state: FSMContext) -> None:
-    logger.debug("->Enter Def")
-    logger.info(f"-> Got '{message.text}' command from user '{message.chat.id}'")
-
-    t = as_list(
-        "❓ Please enter MASSA wallet address with leading \"AU...\" prefix: ",
-    )
-    await message.answer(
-        text=t.as_html(),
-        parse_mode=ParseMode.HTML,
-        request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
-    )
-
-    await state.set_state(AddressViewer.waiting_address)
-    return
-
-
-
-@router.message(AddressViewer.waiting_address, F.text.startswith("AU"))
-@logger.catch
-async def show_address(message: Message, state: FSMContext) -> None:
+async def send_address(message: Message) -> None:
     logger.debug("-> Enter Def")
-    logger.info(f"-> Got '{message.text}' command from user '{message.chat.id}'")
 
     wallet_address = message.text
 
@@ -218,6 +196,38 @@ async def show_address(message: Message, state: FSMContext) -> None:
             parse_mode=ParseMode.HTML,
             request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
         )
+
+    return
+
+
+
+@router.message(StateFilter(None), Command("view_address"))
+@logger.catch
+async def cmd_view_address(message: Message, state: FSMContext) -> None:
+    logger.debug("->Enter Def")
+    logger.info(f"-> Got '{message.text}' command from user '{message.chat.id}'")
+
+    t = as_list(
+        "❓ Please enter MASSA wallet address with leading \"AU...\" prefix: ",
+    )
+    await message.answer(
+        text=t.as_html(),
+        parse_mode=ParseMode.HTML,
+        request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+    )
+
+    await state.set_state(AddressViewer.waiting_address)
+    return
+
+
+
+@router.message(AddressViewer.waiting_address, F.text.startswith("AU"))
+@logger.catch
+async def show_address(message: Message, state: FSMContext) -> None:
+    logger.debug("-> Enter Def")
+    logger.info(f"-> Got '{message.text}' command from user '{message.chat.id}'")
+
+    await send_address(message=message)
 
     await state.clear()
     return
