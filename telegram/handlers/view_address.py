@@ -25,37 +25,11 @@ router = Router()
 async def send_address(message: Message, wallet_address: str="") -> None:
     logger.debug("-> Enter Def")
 
-    t = as_list(
-        as_line(
-            "⏳ Trying to collect info for wallet: ",
-            TextLink(
-                get_short_address(wallet_address),
-                url=f"{app_globals.app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
-            ),
-        ),
-        "This may take some time, so info will be displayed as soon as we receive the answer from MASSA Mainnet RPC"
-    )
-    await message.answer(
-        text=t.as_html(),
-        parse_mode=ParseMode.HTML,
-        reply_markup=ReplyKeyboardRemove(),
-        request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
-    )
-
-
-    payload = json.dumps(
-        {
-            "id": 0,
-            "jsonrpc": "2.0",
-            "method": "get_addresses",
-            "params": [[wallet_address]]
-        }
-    )
 
     try:
         wallet_answer = await pull_http_api(api_url=app_globals.app_config['service']['mainnet_rpc_url'],
                                             api_method="POST",
-                                            api_payload=payload,
+                                            #api_payload=payload,
                                             api_root_element="result")
 
         wallet_result = wallet_answer.get("result", None)
@@ -219,6 +193,33 @@ async def cmd_view_address(message: Message, state: FSMContext) -> None:
                 text=t.as_html(),
                 parse_mode=ParseMode.HTML,
                 request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+            )
+        else:
+            t = as_list(
+                as_line(
+                    "⏳ Trying to collect info for wallet: ",
+                    TextLink(
+                        get_short_address(wallet_address),
+                        url=f"{app_globals.app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
+                    ),
+                ),
+                "This may take some time, so info will be displayed as soon as we receive the answer from MASSA Mainnet RPC"
+            )
+            await message.reply(
+                text=t.as_html(),
+                parse_mode=ParseMode.HTML,
+                reply_markup=ReplyKeyboardRemove(),
+                request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+            )
+
+
+            payload = json.dumps(
+                {
+                    "id": 0,
+                    "jsonrpc": "2.0",
+                    "method": "get_addresses",
+                    "params": [[wallet_address]]
+                }
             )
 
 
