@@ -32,9 +32,7 @@ async def cmd_start(message: Message) -> None:
             "⦙",
             "⦙… /massa_info : Show MASSA network info",
             "⦙",
-            "⦙… /ping : Pong!",
-            "⦙",
-            "⦙… /id : Show your TG ID", "",
+            "⦙… /view_id : Show your TG ID", "",
             as_line(
                 "👉 ",
                 TextLink(
@@ -81,9 +79,7 @@ async def cmd_start(message: Message) -> None:
             "⦙",
             "⦙… /acheta_release : Actual Acheta release",
             "⦙",
-            "⦙… /ping : Pong!",
-            "⦙",
-            "⦙… /id : Show your TG ID",
+            "⦙… /view_id : Show your TG ID",
             "⦙",
             "⦙… /cancel : Cancel ongoing scenario",
             "⦙",

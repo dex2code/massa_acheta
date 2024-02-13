@@ -4,7 +4,7 @@ from datetime import datetime
 from time import time as t_now
 from aiogram import Router, F
 from aiogram.types import Message, ReplyKeyboardRemove
-from aiogram.filters import Command, StateFilter
+from aiogram.filters import Command
 from aiogram.utils.formatting import as_list, as_line, TextLink, Strikethrough, Underline
 from aiogram.enums import ParseMode
 
@@ -15,7 +15,7 @@ from tools import get_short_address
 router = Router()
 
 
-@router.message(StateFilter(None), Command("view_credits"))
+@router.message(Command("view_credits"))
 @logger.catch
 async def cmd_view_credits(message: Message) -> None:
     logger.debug("->Enter Def")

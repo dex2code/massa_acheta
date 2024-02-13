@@ -25,11 +25,10 @@ from telegram.queue import queue_telegram_message, operate_telegram_queue
 
 from telegram.handlers import start
 from telegram.handlers import cancel
-from telegram.handlers import view_config, view_node, view_wallet, view_address, view_credits, view_earnings
+from telegram.handlers import view_config, view_node, view_wallet, view_address, view_credits, view_earnings, view_id
 from telegram.handlers import add_node, add_wallet
 from telegram.handlers import delete_node, delete_wallet
 from telegram.handlers import massa_info, acheta_release
-from telegram.handlers import ping, id
 from telegram.handlers import reset
 from telegram.handlers import unknown
 
@@ -44,8 +43,7 @@ async def main() -> None:
         BotCommand(command="/view_credits", description="View any wallet credits"),
         BotCommand(command="/view_earnings", description="View earnings for staking"),
         BotCommand(command="/massa_info", description="Show MASSA network info"),
-        BotCommand(command="/ping", description="Pong!"),
-        BotCommand(command="/id", description="Show your TG ID"),
+        BotCommand(command="/view_id", description="Show your TG ID"),
     ]
     await app_globals.tg_bot.set_my_commands(bot_commands)
 
@@ -86,6 +84,7 @@ async def main() -> None:
     app_globals.tg_dp.include_router(view_address.router)
     app_globals.tg_dp.include_router(view_credits.router)
     app_globals.tg_dp.include_router(view_earnings.router)
+    app_globals.tg_dp.include_router(view_id.router)
 
     app_globals.tg_dp.include_router(add_node.router)
     app_globals.tg_dp.include_router(add_wallet.router)
@@ -95,9 +94,6 @@ async def main() -> None:
 
     app_globals.tg_dp.include_router(massa_info.router)
     app_globals.tg_dp.include_router(acheta_release.router)
-
-    app_globals.tg_dp.include_router(ping.router)
-    app_globals.tg_dp.include_router(id.router)
 
     app_globals.tg_dp.include_router(reset.router)
 
