@@ -83,7 +83,7 @@ async def cmd_view_earnings(message: Message) -> None:
     t = as_list(
         f"🏦 Total number of staked Rolls in MASSA Mainnet: {app_globals.massa_network_values['total_staked_rolls']:,} (updated: {massa_updated})", "",
         f"🍰 Your contribution is: {rolls_number} Rolls ({my_percentage}%)", "",
-        f"🪙 Your theoretically MAX earnings: {my_reward} MAS / day", "",
+        f"🪙 Your theoretically MAX earnings ≈ {my_reward} MAS / day", "",
         as_line(
             "👉 ",
             TextLink(

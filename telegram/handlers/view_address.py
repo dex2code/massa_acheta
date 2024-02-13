@@ -146,7 +146,7 @@ async def cmd_view_address(message: Message) -> None:
                 my_blocks * app_globals.massa_network_values['block_reward'],
                 2
             )
-            wallet_computed_rewards = f"\n🪙 Possible MAX reward: {my_reward:,} MAS / day\n"
+            wallet_computed_rewards = f"\n🪙 Possible MAX reward ≈ {my_reward:,} MAS / day\n"
 
         wallet_thread = wallet_result.get("thread", 0)
 
