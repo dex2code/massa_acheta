@@ -18,7 +18,7 @@ router = Router()
 @logger.catch
 async def cmd_massa_info(message: Message) -> None:
     logger.debug("-> Enter Def")
-    logger.info(f"-> Got '{message.text}' command from user '{message.chat.id}'")
+    logger.info(f"-> Got '{message.text}' command from user '{message.from_user.id}' in chat '{message.chat.id}'")
 
     computed_rewards = ""
     my_contribution = app_globals.massa_network_values['total_staked_rolls'] / 100

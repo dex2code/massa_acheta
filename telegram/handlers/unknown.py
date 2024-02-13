@@ -18,7 +18,7 @@ async def cmd_unknown(message: Message, state: FSMContext) -> None:
     logger.debug("-> Enter Def")
     if message.chat.id != app_globals.bot.ACHETA_CHAT: return
 
-    logger.info(f"-> Got '{message.text}' command from user '{message.chat.id}'")
+    logger.info(f"-> Got '{message.text}' command from user '{message.from_user.id}' in chat '{message.chat.id}'")
     t = as_list(
         f"⁉ Error: Unknown command \"{message.text}\"", "",
         "👉 Try /help to learn bot commands"
