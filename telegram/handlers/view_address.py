@@ -22,10 +22,8 @@ router = Router()
 
 
 @logger.catch
-async def send_address(message: Message) -> None:
+async def send_address(message: Message, wallet_address: str="") -> None:
     logger.debug("-> Enter Def")
-
-    wallet_address = message.text
 
     t = as_list(
         as_line(
@@ -207,16 +205,34 @@ async def cmd_view_address(message: Message, state: FSMContext) -> None:
     logger.debug("->Enter Def")
     logger.info(f"-> Got '{message.text}' command from user '{message.chat.id}'")
 
-    t = as_list(
-        "❓ Please enter MASSA wallet address with leading \"AU...\" prefix: ",
-    )
-    await message.answer(
-        text=t.as_html(),
-        parse_mode=ParseMode.HTML,
-        request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
-    )
+    message_list = message.text.split()
 
-    await state.set_state(AddressViewer.waiting_address)
+    if len(message_list) > 1:
+        wallet_address = message_list[1]
+
+        if not wallet_address.startswith("AU"):
+            t = as_list(
+                "‼ Wrong wallet address format", "",
+                "☝ Try /view_address AU... command"
+            )
+            await message.reply(
+                text=t.as_html(),
+                parse_mode=ParseMode.HTML,
+                request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+            )
+
+
+    else:
+        t = as_list(
+            "❓ No wallet address defined", "",
+            "☝ Try /view_address AU... command"
+        )
+        await message.reply(
+            text=t.as_html(),
+            parse_mode=ParseMode.HTML,
+            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+        )
+
     return
 
 

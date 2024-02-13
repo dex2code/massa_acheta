@@ -19,6 +19,7 @@ async def cmd_unknown(message: Message, state: FSMContext) -> None:
     logger.info(f"-> Got '{message.text}' command from user '{message.chat.id}'")
 
     if message.chat.id != app_globals.bot.ACHETA_CHAT:
+        await state.clear()
         return
 
     t = as_list(
