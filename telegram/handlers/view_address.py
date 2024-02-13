@@ -24,7 +24,7 @@ async def cmd_view_address(message: Message) -> None:
 
     message_list = message.text.split()
 
-    if message_list < 2:
+    if len(message_list) < 2:
         t = as_list(
             "❓ No wallet address defined", "",
             "☝ Try /view_address AU... command"
