@@ -53,7 +53,7 @@ async def do_reset(message: Message, state: FSMContext) -> None:
     logger.info(f"-> Got '{message.text}' command from user '{message.from_user.id}' in chat '{message.chat.id}'")
     if not await check_privacy(message=message): return
 
-    if message.text.upper() != "I WANT TO RESET THE SERVICE":
+    if message.text.upper() != "I REALLY WANT TO RESET ALL SETTINGS":
         t = as_list(
             "🙆 Reset request rejected", "",
             "👉 Try /help to learn bot commands"
