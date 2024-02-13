@@ -52,23 +52,6 @@ async def cmd_view_address(message: Message) -> None:
 
         return
 
-    t = as_list(
-        as_line(
-            "⏳ Trying to collect info for wallet: ",
-            TextLink(
-                get_short_address(wallet_address),
-                url=f"{app_globals.app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
-            ),
-        ),
-        "This may take some time, so info will be displayed as soon as we receive the answer from MASSA Mainnet RPC"
-    )
-    await message.reply(
-        text=t.as_html(),
-        parse_mode=ParseMode.HTML,
-        reply_markup=ReplyKeyboardRemove(),
-        request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
-    )
-
     payload = json.dumps(
         {
             "id": 0,

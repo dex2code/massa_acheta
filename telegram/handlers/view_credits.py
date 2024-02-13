@@ -5,8 +5,6 @@ from time import time as t_now
 from aiogram import Router, F
 from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram.filters import Command, StateFilter
-from aiogram.fsm.context import FSMContext
-from aiogram.fsm.state import State, StatesGroup
 from aiogram.utils.formatting import as_list, as_line, TextLink, Strikethrough
 from aiogram.enums import ParseMode
 
@@ -14,40 +12,45 @@ import app_globals
 from tools import get_short_address
 
 
-class CreditViewer(StatesGroup):
-    waiting_address = State()
-
-
 router = Router()
 
 
 @router.message(StateFilter(None), Command("view_credits"))
 @logger.catch
-async def cmd_view_credits(message: Message, state: FSMContext) -> None:
+async def cmd_view_credits(message: Message) -> None:
     logger.debug("->Enter Def")
     logger.info(f"-> Got '{message.text}' command from user '{message.chat.id}'")
 
-    t = as_list(
-        "❓ Please enter MASSA wallet address with leading \"AU...\" prefix: ",
-    )
-    await message.answer(
-        text=t.as_html(),
-        parse_mode=ParseMode.HTML,
-        request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
-    )
+    message_list = message.text.split()
 
-    await state.set_state(CreditViewer.waiting_address)
-    return
+    if len(message_list) < 2:
+        t = as_list(
+            "❓ No wallet address defined", "",
+            "☝ Try /view_address AU... command"
+        )
+        await message.reply(
+            text=t.as_html(),
+            parse_mode=ParseMode.HTML,
+            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+        )
 
+        return
+    
+    wallet_address = message_list[1]
 
+    if not wallet_address.startswith("AU"):
+        t = as_list(
+            "‼ Wrong wallet address format", "",
+            "☝ Try /view_address AU... command"
+        )
+        await message.reply(
+            text=t.as_html(),
+            parse_mode=ParseMode.HTML,
+            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+        )
 
-@router.message(CreditViewer.waiting_address, F.text.startswith("AU"))
-@logger.catch
-async def show_credits(message: Message, state: FSMContext) -> None:
-    logger.debug("-> Enter Def")
-    logger.info(f"-> Got '{message.text}' command from user '{message.chat.id}'")
+        return
 
-    wallet_address = message.text
     wallet_credits = app_globals.deferred_credits.get(wallet_address, None)
 
     if not wallet_credits or type(wallet_credits) != list or len(wallet_credits) == 0:
@@ -61,13 +64,12 @@ async def show_credits(message: Message, state: FSMContext) -> None:
             ),
             "🙅 No deferred credits available"
         )
-        await message.answer(
+        await message.reply(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
             request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
         )
 
-        await state.clear()
         return
 
     deferred_credits = []
@@ -118,7 +120,6 @@ async def show_credits(message: Message, state: FSMContext) -> None:
 
     deferred_credits[-1] = ""
 
-
     t = as_list(
         as_line(
             "👛 Wallet: ",
@@ -136,12 +137,11 @@ async def show_credits(message: Message, state: FSMContext) -> None:
             )
         )
     )
-    await message.answer(
+    await message.reply(
         text=t.as_html(),
         parse_mode=ParseMode.HTML,
         reply_markup=ReplyKeyboardRemove(),
         request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
     )
 
-    await state.clear()
     return
