@@ -36,7 +36,7 @@ async def cmd_view_wallet(message: Message, state: FSMContext) -> None:
             "⭕ Node list is empty", "",
             "👉 Try /help to learn how to add a node to bot"
         )
-        await message.answer(
+        await message.reply(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
             request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
@@ -49,7 +49,7 @@ async def cmd_view_wallet(message: Message, state: FSMContext) -> None:
     t = as_list(
         "❓ Tap the node to select or /cancel to quit the scenario",
     )
-    await message.answer(
+    await message.reply(
         text=t.as_html(),
         parse_mode=ParseMode.HTML,
         reply_markup=kb_nodes(),
@@ -76,7 +76,7 @@ async def select_wallet_to_show(message: Message, state: FSMContext) -> None:
             f"‼ Error: Unknown node \"{node_name}\"", "",
             "👉 Try /view_wallet to view another wallet or /help to learn bot commands"
         )
-        await message.answer(
+        await message.reply(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
             reply_markup=ReplyKeyboardRemove(),
@@ -91,7 +91,7 @@ async def select_wallet_to_show(message: Message, state: FSMContext) -> None:
             f"⭕ No wallets attached to node {node_name}", "",
             "👉 Try /add_wallet to add wallet to the node or /help to learn bot commands"
         )
-        await message.answer(
+        await message.reply(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
             reply_markup=ReplyKeyboardRemove(),
@@ -104,7 +104,7 @@ async def select_wallet_to_show(message: Message, state: FSMContext) -> None:
     t = as_list(
         "❓ Tap the wallet to select or /cancel to quit the scenario:",
     )
-    await message.answer(
+    await message.reply(
         text=t.as_html(),
         parse_mode=ParseMode.HTML,
         reply_markup=kb_wallets(node_name=node_name),
@@ -139,7 +139,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
             ),
             "👉 Try /view_wallet to view another wallet or /help to learn bot commands"
         )
-        await message.answer(
+        await message.reply(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
             request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
@@ -274,7 +274,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
         )
 
 
-    await message.answer(
+    await message.reply(
         text=t.as_html(),
         parse_mode=ParseMode.HTML,
         reply_markup=ReplyKeyboardRemove(),

@@ -21,7 +21,7 @@ async def cmd_ping(message: Message) -> None:
     t = as_list(
         as_line("🏓 Pong!")
     )
-    await message.answer(
+    await message.reply(
         text=t.as_html(),
         parse_mode=ParseMode.HTML,
         request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']

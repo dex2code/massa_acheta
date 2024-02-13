@@ -35,7 +35,7 @@ async def cmd_reset(message: Message, state: FSMContext) -> None:
             "\" to continue or /cancel to quit the scenario"
         )
     )
-    await message.answer(
+    await message.reply(
         text=t.as_html(),
         parse_mode=ParseMode.HTML,
         request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
@@ -58,7 +58,7 @@ async def do_reset(message: Message, state: FSMContext) -> None:
             "🙆 Reset request rejected", "",
             "👉 Try /help to learn bot commands"
         )
-        await message.answer(
+        await message.reply(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
             request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
@@ -95,7 +95,7 @@ async def do_reset(message: Message, state: FSMContext) -> None:
         )
 
 
-    await message.answer(
+    await message.reply(
         text=t.as_html(),
         parse_mode=ParseMode.HTML,
         request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']

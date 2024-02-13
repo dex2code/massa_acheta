@@ -28,7 +28,7 @@ async def cmd_cancel(message: Message) -> None:
             Code(message.chat.id)
         )
     )
-    await message.answer(
+    await message.reply(
         text=t.as_html(),
         parse_mode=ParseMode.HTML,
         request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']

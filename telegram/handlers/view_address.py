@@ -3,9 +3,8 @@ from loguru import logger
 import json
 from datetime import datetime
 from aiogram import Router, F
-from aiogram.types import Message, ReplyKeyboardRemove
+from aiogram.types import Message
 from aiogram.filters import Command, StateFilter
-from aiogram.fsm.context import FSMContext
 from aiogram.utils.formatting import as_list, as_line, Code, TextLink
 from aiogram.enums import ParseMode
 

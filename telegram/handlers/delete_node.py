@@ -33,7 +33,7 @@ async def cmd_delete_node(message: Message, state: FSMContext) -> None:
             "⭕ Node list is empty", "",
             "👉 Try /help to learn how to add a node to bot"
         )
-        await message.answer(
+        await message.reply(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
             request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
@@ -46,7 +46,7 @@ async def cmd_delete_node(message: Message, state: FSMContext) -> None:
     t = as_list(
         "❓ Tap the node to select or /cancel to quit the scenario:",
     )
-    await message.answer(
+    await message.reply(
         text=t.as_html(),
         parse_mode=ParseMode.HTML,
         reply_markup=kb_nodes(),
@@ -72,7 +72,7 @@ async def delete_node(message: Message, state: FSMContext) -> None:
             f"‼ Error: Unknown node \"{node_name}\"", "",
             as_line("👉 Try /delete_node to delete another node or /help to learn bot commands")
         )
-        await message.answer(
+        await message.reply(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
             reply_markup=ReplyKeyboardRemove(),
@@ -118,7 +118,7 @@ async def delete_node(message: Message, state: FSMContext) -> None:
         )
 
 
-    await message.answer(
+    await message.reply(
         text=t.as_html(),
         parse_mode=ParseMode.HTML,
         reply_markup=ReplyKeyboardRemove(),

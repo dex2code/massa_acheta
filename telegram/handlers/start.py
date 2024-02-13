@@ -32,9 +32,7 @@ async def cmd_start(message: Message) -> None:
             "⦙",
             "⦙… /ping : Pong!",
             "⦙",
-            "⦙… /id : Show your TG ID",
-            "⦙",
-            "⦙… /cancel : Cancel ongoing scenario", "",
+            "⦙… /id : Show your TG ID", "",
             as_line(
                 "👉 ",
                 TextLink(
@@ -95,7 +93,7 @@ async def cmd_start(message: Message) -> None:
             )
         )
 
-    await message.answer(
+    await message.reply(
         text=t.as_html(),
         parse_mode=ParseMode.HTML,
         request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']

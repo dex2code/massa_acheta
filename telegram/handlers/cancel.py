@@ -22,7 +22,7 @@ async def cmd_cancel(message: Message, state: FSMContext) -> None:
     t = as_list(
         "❌ Action cancelled!"
     )
-    await message.answer(
+    await message.reply(
         text=t.as_html(),
         parse_mode=ParseMode.HTML,
         reply_markup=ReplyKeyboardRemove(),

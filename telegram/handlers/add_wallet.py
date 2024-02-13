@@ -35,7 +35,7 @@ async def cmd_add_wallet(message: Message, state: FSMContext) -> None:
             "⭕ Node list is empty", "",
             "👉 Try /add_node to add a node or /help to learn bot commands"
         )
-        await message.answer(
+        await message.reply(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
             request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
@@ -48,7 +48,7 @@ async def cmd_add_wallet(message: Message, state: FSMContext) -> None:
     t = as_list(
         "❓ Tap the node to select or /cancel to quit the scenario:",
     )
-    await message.answer(
+    await message.reply(
         text=t.as_html(),
         parse_mode=ParseMode.HTML,
         reply_markup=kb_nodes(),
@@ -75,7 +75,7 @@ async def input_wallet_to_add(message: Message, state: FSMContext) -> None:
             f"‼ Error: Unknown node \"{node_name}\"", "",
             "👉 Try /add_wallet to add another wallet or /help to learn bot commands"
         )
-        await message.answer(
+        await message.reply(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
             reply_markup=ReplyKeyboardRemove(),
@@ -88,7 +88,7 @@ async def input_wallet_to_add(message: Message, state: FSMContext) -> None:
     t = as_list(
         "❓ Please enter MASSA wallet address with leading \"AU...\" prefix or /cancel to quit the scenario:"
     )
-    await message.answer(
+    await message.reply(
         text=t.as_html(),
         parse_mode=ParseMode.HTML,
         reply_markup=ReplyKeyboardRemove(),
@@ -123,7 +123,7 @@ async def add_wallet(message: Message, state: FSMContext) -> None:
             ),
             "👉 Try /add_wallet to add another wallet or /help to learn bot commands"
         )
-        await message.answer(
+        await message.reply(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
             request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
@@ -185,7 +185,7 @@ async def add_wallet(message: Message, state: FSMContext) -> None:
         )
 
 
-    await message.answer(
+    await message.reply(
         text=t.as_html(),
         parse_mode=ParseMode.HTML,
         request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']

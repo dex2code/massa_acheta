@@ -23,7 +23,7 @@ async def cmd_unknown(message: Message, state: FSMContext) -> None:
         f"⁉ Error: Unknown command \"{message.text}\"", "",
         "👉 Try /help to learn bot commands"
     )
-    await message.answer(
+    await message.reply(
         text=t.as_html(),
         reply_markup=ReplyKeyboardRemove(),
         parse_mode=ParseMode.HTML,

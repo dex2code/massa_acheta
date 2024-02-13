@@ -33,7 +33,7 @@ async def cmd_view_node(message: Message, state: FSMContext) -> None:
             "⭕ Node list is empty", "",
             "👉 Try /help to learn how to add a node to bot"
         )
-        await message.answer(
+        await message.reply(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
             request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
@@ -45,7 +45,7 @@ async def cmd_view_node(message: Message, state: FSMContext) -> None:
     t = as_list(
         "👉 Tap the node to view or /cancel to quit the scenario",
     )
-    await message.answer(
+    await message.reply(
         text=t.as_html(),
         parse_mode=ParseMode.HTML,
         reply_markup=kb_nodes(),
@@ -71,7 +71,7 @@ async def show_node(message: Message, state: FSMContext) -> None:
             f"‼ Error: Unknown node \"{node_name}\"", "",
             "👉 Try /view_node to view another node or /help to learn how to add a node to bot"
         )
-        await message.answer(
+        await message.reply(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
             reply_markup=ReplyKeyboardRemove(),
@@ -145,7 +145,7 @@ async def show_node(message: Message, state: FSMContext) -> None:
             f"☝ Service checks updates: every {app_globals.app_config['service']['main_loop_period_sec']} seconds"
         )
 
-    await message.answer(
+    await message.reply(
         text=t.as_html(),
         parse_mode=ParseMode.HTML,
         reply_markup=ReplyKeyboardRemove(),
