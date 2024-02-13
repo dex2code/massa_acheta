@@ -20,6 +20,15 @@ async def cmd_massa_info(message: Message) -> None:
     logger.debug("-> Enter Def")
     logger.info(f"-> Got '{message.text}' command from user '{message.chat.id}'")
 
+    wallet_computed_rewards = ""
+    my_contribution = app_globals.massa_network_values['total_staked_rolls'] / 100
+    my_blocks = 172_800 / my_contribution
+    my_reward = round(
+        my_blocks * app_globals.massa_network_values['block_reward'],
+        2
+    )
+    wallet_computed_rewards = f"\n🪙 Computed rewards for 100 Rolls: {my_reward:,} MAS / day\n"
+
     info_last_update = get_last_seen(
         last_time=app_globals.massa_network_values['last_updated'],
         current_time=t_now()
@@ -33,6 +42,7 @@ async def cmd_massa_info(message: Message) -> None:
         f"💰 Block reward: {app_globals.massa_network_values['block_reward']} MAS", "",
         f"👥 Total stakers: {app_globals.massa_network_values['total_stakers']:,}",
         f"🗞 Total staked rolls: {app_globals.massa_network_values['total_staked_rolls']:,}", "",
+        wallet_computed_rewards,
         f"👁 Info updated: {info_last_update}", "",
         f"☝ Service checks updates: every {app_globals.app_config['service']['massa_network_update_period_mins']} mins"
     )
