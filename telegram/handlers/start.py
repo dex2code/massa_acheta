@@ -3,7 +3,7 @@ from loguru import logger
 from aiogram import Router
 from aiogram.filters import Command
 from aiogram.types import Message
-from aiogram.utils.formatting import as_list, as_line, TextLink, Code
+from aiogram.utils.formatting import as_list, as_line, TextLink
 from aiogram.enums import ParseMode
 
 import app_globals
@@ -27,6 +27,8 @@ async def cmd_start(message: Message) -> None:
             "⦙… /view_address <address> : View any wallet info",
             "⦙",
             "⦙… /view_credits <address> : View any wallet credits",
+            "⦙",
+            "⦙… /view_earnings <Rolls_number> : View earnings for Rolls number",
             "⦙",
             "⦙… /massa_info : Show MASSA network info",
             "⦙",
@@ -64,6 +66,8 @@ async def cmd_start(message: Message) -> None:
             "⦙… /view_address <address> : View any wallet info",
             "⦙",
             "⦙… /view_credits <address> : View any wallet credits",
+            "⦙",
+            "⦙… /view_earnings <Rolls_number> : View earnings for Rolls number",
             "⦙",
             "⦙… /add_node : Add node to bot",
             "⦙",

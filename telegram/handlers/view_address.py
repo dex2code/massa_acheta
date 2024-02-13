@@ -5,7 +5,7 @@ from datetime import datetime
 from aiogram import Router, F
 from aiogram.types import Message
 from aiogram.filters import Command, StateFilter
-from aiogram.utils.formatting import as_list, as_line, Code, TextLink
+from aiogram.utils.formatting import as_list, as_line, Code, TextLink, Underline
 from aiogram.enums import ParseMode
 
 import app_globals
@@ -26,7 +26,11 @@ async def cmd_view_address(message: Message) -> None:
     if len(message_list) < 2:
         t = as_list(
             "❓ No wallet address defined", "",
-            "☝ Try /view_address AU... command"
+            as_line(
+                "☝ Try /view_address ",
+                Underline("AU..."),
+                " command"
+            )
         )
         await message.reply(
             text=t.as_html(),
@@ -41,7 +45,11 @@ async def cmd_view_address(message: Message) -> None:
     if not wallet_address.startswith("AU"):
         t = as_list(
             "‼ Wrong wallet address format", "",
-            "☝ Try /view_address AU... command"
+            as_line(
+                "☝ Try /view_address ",
+                Underline("AU..."),
+                " command"
+            )
         )
         await message.reply(
             text=t.as_html(),
