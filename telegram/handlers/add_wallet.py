@@ -35,11 +35,14 @@ async def cmd_add_wallet(message: Message, state: FSMContext) -> None:
             "⭕ Node list is empty", "",
             "👉 Try /add_node to add a node or /help to learn bot commands"
         )
-        await message.reply(
-            text=t.as_html(),
-            parse_mode=ParseMode.HTML,
-            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
-        )
+        try:
+            await message.reply(
+                text=t.as_html(),
+                parse_mode=ParseMode.HTML,
+                request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+            )
+        except:
+            logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
 
         await state.clear()
         return
@@ -48,12 +51,15 @@ async def cmd_add_wallet(message: Message, state: FSMContext) -> None:
     t = as_list(
         "❓ Tap the node to select or /cancel to quit the scenario:",
     )
-    await message.reply(
-        text=t.as_html(),
-        parse_mode=ParseMode.HTML,
-        reply_markup=kb_nodes(),
-        request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
-    )
+    try:
+        await message.reply(
+            text=t.as_html(),
+            parse_mode=ParseMode.HTML,
+            reply_markup=kb_nodes(),
+            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+        )
+    except:
+        logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
 
     await state.set_state(WalletAdder.waiting_node_name)
     return
@@ -75,12 +81,15 @@ async def input_wallet_to_add(message: Message, state: FSMContext) -> None:
             f"‼ Error: Unknown node \"{node_name}\"", "",
             "👉 Try /add_wallet to add another wallet or /help to learn bot commands"
         )
-        await message.reply(
-            text=t.as_html(),
-            parse_mode=ParseMode.HTML,
-            reply_markup=ReplyKeyboardRemove(),
-            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
-        )
+        try:
+            await message.reply(
+                text=t.as_html(),
+                parse_mode=ParseMode.HTML,
+                reply_markup=ReplyKeyboardRemove(),
+                request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+            )
+        except:
+            logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
 
         await state.clear()
         return
@@ -88,12 +97,15 @@ async def input_wallet_to_add(message: Message, state: FSMContext) -> None:
     t = as_list(
         "❓ Please enter MASSA wallet address with leading \"AU...\" prefix or /cancel to quit the scenario:"
     )
-    await message.reply(
-        text=t.as_html(),
-        parse_mode=ParseMode.HTML,
-        reply_markup=ReplyKeyboardRemove(),
-        request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
-    )
+    try:
+        await message.reply(
+            text=t.as_html(),
+            parse_mode=ParseMode.HTML,
+            reply_markup=ReplyKeyboardRemove(),
+            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+        )
+    except:
+        logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
 
     await state.set_state(WalletAdder.waiting_wallet_address)
     return
@@ -123,11 +135,14 @@ async def add_wallet(message: Message, state: FSMContext) -> None:
             ),
             "👉 Try /add_wallet to add another wallet or /help to learn bot commands"
         )
-        await message.reply(
-            text=t.as_html(),
-            parse_mode=ParseMode.HTML,
-            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
-        )
+        try:
+            await message.reply(
+                text=t.as_html(),
+                parse_mode=ParseMode.HTML,
+                request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+            )
+        except:
+            logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
 
         await state.clear()
         return
@@ -184,12 +199,14 @@ async def add_wallet(message: Message, state: FSMContext) -> None:
             "☝ Please note that info for this wallet will be updated a bit later!"
         )
 
-
-    await message.reply(
-        text=t.as_html(),
-        parse_mode=ParseMode.HTML,
-        request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
-    )
+    try:
+        await message.reply(
+            text=t.as_html(),
+            parse_mode=ParseMode.HTML,
+            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+        )
+    except:
+        logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
 
     await state.clear()
 

@@ -34,11 +34,14 @@ async def cmd_delete_wallet(message: Message, state: FSMContext) -> None:
             "⭕ Node list is empty", "",
             "👉 Try /help to learn how to add a node to bot"
         )
-        await message.reply(
-            text=t.as_html(),
-            parse_mode=ParseMode.HTML,
-            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
-        )
+        try:
+            await message.reply(
+                text=t.as_html(),
+                parse_mode=ParseMode.HTML,
+                request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+            )
+        except:
+            logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
 
         await state.clear()
         return
@@ -47,12 +50,15 @@ async def cmd_delete_wallet(message: Message, state: FSMContext) -> None:
     t = as_list(
         "❓ Tap the node to select or /cancel to quit the scenario:",
     )
-    await message.reply(
-        text=t.as_html(),
-        parse_mode=ParseMode.HTML,
-        reply_markup=kb_nodes(),
-        request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
-    )
+    try:
+        await message.reply(
+            text=t.as_html(),
+            parse_mode=ParseMode.HTML,
+            reply_markup=kb_nodes(),
+            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+        )
+    except:
+        logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
 
     await state.set_state(WalletRemover.waiting_node_name)
     return
@@ -74,12 +80,15 @@ async def select_wallet_to_delete(message: Message, state: FSMContext) -> None:
             f"‼ Error: Unknown node \"{node_name}\"", "",
             "👉 Try /delete_wallet to delete another wallet or /help to learn bot commands"
         )
-        await message.reply(
-            text=t.as_html(),
-            parse_mode=ParseMode.HTML,
-            reply_markup=ReplyKeyboardRemove(),
-            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
-        )
+        try:
+            await message.reply(
+                text=t.as_html(),
+                parse_mode=ParseMode.HTML,
+                reply_markup=ReplyKeyboardRemove(),
+                request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+            )
+        except:
+            logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
 
         await state.clear()
         return
@@ -89,12 +98,15 @@ async def select_wallet_to_delete(message: Message, state: FSMContext) -> None:
             f"⭕ No wallets attached to node \"{node_name}\"", "",
             "👉 Try /add_wallet to add a wallet or /help to learn bot commands"
         )
-        await message.reply(
-            text=t.as_html(),
-            parse_mode=ParseMode.HTML,
-            reply_markup=ReplyKeyboardRemove(),
-            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
-        )
+        try:
+            await message.reply(
+                text=t.as_html(),
+                parse_mode=ParseMode.HTML,
+                reply_markup=ReplyKeyboardRemove(),
+                request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+            )
+        except:
+            logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
 
         await state.clear()
         return
@@ -102,12 +114,15 @@ async def select_wallet_to_delete(message: Message, state: FSMContext) -> None:
     t = as_list(
         "❓ Tap the wallet to select or /cancel to quit the scenario:",
     )
-    await message.reply(
-        text=t.as_html(),
-        parse_mode=ParseMode.HTML,
-        reply_markup=kb_wallets(node_name=node_name),
-        request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
-    )
+    try:
+        await message.reply(
+            text=t.as_html(),
+            parse_mode=ParseMode.HTML,
+            reply_markup=kb_wallets(node_name=node_name),
+            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+        )
+    except:
+        logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
 
     await state.set_state(WalletRemover.waiting_wallet_address)
     return
@@ -137,12 +152,16 @@ async def delete_wallet(message: Message, state: FSMContext) -> None:
             ),
             "👉 Try /delete_wallet to delete another wallet or /help to learn bot commands"
         )
-        await message.reply(
-            text=t.as_html(),
-            parse_mode=ParseMode.HTML,
-            reply_markup=ReplyKeyboardRemove(),
-            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
-        )
+        try:
+            await message.reply(
+                text=t.as_html(),
+                parse_mode=ParseMode.HTML,
+                reply_markup=ReplyKeyboardRemove(),
+                request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+            )
+        except:
+            logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
+
         await state.clear()
         return
 
@@ -193,13 +212,15 @@ async def delete_wallet(message: Message, state: FSMContext) -> None:
             "👉 You can check new settings using /view_config command"
         )
 
-
-    await message.reply(
-        text=t.as_html(),
-        parse_mode=ParseMode.HTML,
-        reply_markup=ReplyKeyboardRemove(),
-        request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
-    )
+    try:
+        await message.reply(
+            text=t.as_html(),
+            parse_mode=ParseMode.HTML,
+            reply_markup=ReplyKeyboardRemove(),
+            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+        )
+    except:
+        logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
 
     await state.clear()
     return

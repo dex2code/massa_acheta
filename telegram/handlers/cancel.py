@@ -22,12 +22,15 @@ async def cmd_cancel(message: Message, state: FSMContext) -> None:
     t = as_list(
         "❌ Action cancelled!"
     )
-    await message.reply(
-        text=t.as_html(),
-        parse_mode=ParseMode.HTML,
-        reply_markup=ReplyKeyboardRemove(),
-        request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
-    )
+    try:
+        await message.reply(
+            text=t.as_html(),
+            parse_mode=ParseMode.HTML,
+            reply_markup=ReplyKeyboardRemove(),
+            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+        )
+    except:
+        logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
 
     await state.clear()
     return

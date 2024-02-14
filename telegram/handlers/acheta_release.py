@@ -37,10 +37,13 @@ async def cmd_acheta_release(message: Message) -> None:
         update_needed,
         as_line(f"⏳ Service checks releases: every {app_globals.app_config['service']['main_loop_period_sec']} seconds")
     )
-    await message.reply(
-        text=t.as_html(),
-        parse_mode=ParseMode.HTML,
-        request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
-    )
+    try:
+        await message.reply(
+            text=t.as_html(),
+            parse_mode=ParseMode.HTML,
+            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+        )
+    except:
+        logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
 
     return

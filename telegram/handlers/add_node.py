@@ -32,11 +32,14 @@ async def cmd_add_node(message: Message, state: FSMContext) -> None:
     t = as_list(
         "❓ Please enter a short name for the new node (nickname) or /cancel to quit the scenario:",
     )
-    await message.reply(
-        text=t.as_html(),
-        parse_mode=ParseMode.HTML,
-        request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
-    )
+    try:
+        await message.reply(
+            text=t.as_html(),
+            parse_mode=ParseMode.HTML,
+            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+        )
+    except:
+        logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
 
     await state.set_state(NodeAdder.waiting_node_name)
     return
@@ -58,11 +61,14 @@ async def input_nodename_to_add(message: Message, state: FSMContext) -> None:
             f"‼ Error: Node with nickname \"{node_name}\" already exists", "",
             "👉 Try /add_node to add another node or /help to learn bot commands"
         )
-        await message.reply(
-            text=t.as_html(),
-            parse_mode=ParseMode.HTML,
-            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
-        )
+        try:
+            await message.reply(
+                text=t.as_html(),
+                parse_mode=ParseMode.HTML,
+                request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+            )
+        except:
+            logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
 
         await state.clear()
         return
@@ -72,11 +78,14 @@ async def input_nodename_to_add(message: Message, state: FSMContext) -> None:
         f"❓ Please enter API URL for the new node \"{node_name}\" with leading \"http(s)://...\" prefix or /cancel to quit the scenario: ", "",
         "💭 Typically API URL looks like: http://ip.ad.dre.ss:33035/api/v2"
     )
-    await message.reply(
-        text=t.as_html(),
-        parse_mode=ParseMode.HTML,
-        request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
-    )
+    try:
+        await message.reply(
+            text=t.as_html(),
+            parse_mode=ParseMode.HTML,
+            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+        )
+    except:
+        logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
 
     await state.set_state(NodeAdder.waiting_node_url)
     return
@@ -144,12 +153,14 @@ async def add_node(message: Message, state: FSMContext) -> None:
             )
         )
 
-
-    await message.reply(
-        text=t.as_html(),
-        parse_mode=ParseMode.HTML,
-        request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
-    )
+    try:
+        await message.reply(
+            text=t.as_html(),
+            parse_mode=ParseMode.HTML,
+            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+        )
+    except:
+        logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
 
     await state.clear()
 

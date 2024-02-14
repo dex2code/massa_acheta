@@ -32,11 +32,14 @@ async def cmd_view_address(message: Message) -> None:
                 " command"
             )
         )
-        await message.reply(
-            text=t.as_html(),
-            parse_mode=ParseMode.HTML,
-            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
-        )
+        try:
+            await message.reply(
+                text=t.as_html(),
+                parse_mode=ParseMode.HTML,
+                request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+            )
+        except:
+            logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
 
         return
     
@@ -51,11 +54,14 @@ async def cmd_view_address(message: Message) -> None:
                 " command"
             )
         )
-        await message.reply(
-            text=t.as_html(),
-            parse_mode=ParseMode.HTML,
-            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
-        )
+        try:
+            await message.reply(
+                text=t.as_html(),
+                parse_mode=ParseMode.HTML,
+                request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+            )
+        except:
+            logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
 
         return
 
@@ -111,11 +117,14 @@ async def cmd_view_address(message: Message) -> None:
             ),
             as_line("⚠️ Check wallet address or try later!")
         )
-        await message.reply(
-            text=t.as_html(),
-            parse_mode=ParseMode.HTML,
-            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
-        )
+        try:
+            await message.reply(
+                text=t.as_html(),
+                parse_mode=ParseMode.HTML,
+                request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+            )
+        except:
+            logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
 
     else:
         logger.info(f"Successfully received result for address '{wallet_address}'")
@@ -205,10 +214,13 @@ async def cmd_view_address(message: Message) -> None:
             *credit_list, "",
             "☝ To view ALL deferred credits try /view_credits command"
         )
-        await message.reply(
-            text=t.as_html(),
-            parse_mode=ParseMode.HTML,
-            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
-        )
+        try:
+            await message.reply(
+                text=t.as_html(),
+                parse_mode=ParseMode.HTML,
+                request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+            )
+        except:
+            logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
 
     return

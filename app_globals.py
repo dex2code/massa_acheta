@@ -92,7 +92,7 @@ tg_bot = Bot(token=bot.ACHETA_KEY.get_secret_value(), disable_web_page_preview=T
 '''
 Acheta releases stuff
 '''
-local_acheta_release = "ACHETA.1.0.7"
+local_acheta_release = "ACHETA.1.0.8"
 latest_acheta_release = ""
 
 

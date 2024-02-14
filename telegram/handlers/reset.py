@@ -35,11 +35,14 @@ async def cmd_reset(message: Message, state: FSMContext) -> None:
             "\" to continue or /cancel to quit the scenario"
         )
     )
-    await message.reply(
-        text=t.as_html(),
-        parse_mode=ParseMode.HTML,
-        request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
-    )
+    try:
+        await message.reply(
+            text=t.as_html(),
+            parse_mode=ParseMode.HTML,
+            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+        )
+    except:
+        logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
 
     await state.set_state(ResetState.reset_sure)
     return
@@ -58,11 +61,14 @@ async def do_reset(message: Message, state: FSMContext) -> None:
             "🙆 Reset request rejected", "",
             "👉 Try /help to learn bot commands"
         )
-        await message.reply(
-            text=t.as_html(),
-            parse_mode=ParseMode.HTML,
-            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
-        )
+        try:
+            await message.reply(
+                text=t.as_html(),
+                parse_mode=ParseMode.HTML,
+                request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+            )
+        except:
+            logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
 
         await state.clear()
         return
@@ -94,12 +100,14 @@ async def do_reset(message: Message, state: FSMContext) -> None:
             "👉 You can check new settings using /view_config command"
         )
 
-
-    await message.reply(
-        text=t.as_html(),
-        parse_mode=ParseMode.HTML,
-        request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
-    )
+    try:
+        await message.reply(
+            text=t.as_html(),
+            parse_mode=ParseMode.HTML,
+            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+        )
+    except:
+        logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
 
     await state.clear()
     return

@@ -7,19 +7,24 @@ import app_globals
 
 
 @logger.catch
-async def queue_telegram_message(message_text: str="") -> None:
+async def queue_telegram_message(chat_id: str=app_globals.bot.ACHETA_CHAT, message_text: str="") -> bool:
     logger.debug(f"-> Enter Def")
 
     try:
-        app_globals.telegram_queue.append(message_text)
+        app_globals.telegram_queue.append(
+            {
+                "chat_id": chat_id,
+                "message_text": message_text
+            }
+        )
     
     except BaseException as E:
         logger.error(f"Cannot add telegram message to queue : ({str(E)})")
+        return False
 
     else:
         logger.info(f"Successfully added telegram message to queue!")
-
-    return
+        return True
 
 
 
@@ -37,9 +42,12 @@ async def operate_telegram_queue() -> None:
             continue
 
         try:
+            chat_id = app_globals.telegram_queue[0]['chat_id']
+            message_text = app_globals.telegram_queue[0]['message_text']
+
             await app_globals.tg_bot.send_message(
-                chat_id=app_globals.bot.ACHETA_CHAT,
-                text=app_globals.telegram_queue[0],
+                chat_id=chat_id,
+                text=message_text,
                 parse_mode=ParseMode.HTML,
                 request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
             )
