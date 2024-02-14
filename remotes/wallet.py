@@ -173,7 +173,7 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
                     f"🏠 Node: \"{node_name}\"",
                     as_line(f"📍 {app_globals.app_results[node_name]['url']}"),
                     as_line(
-                        "🥊 New missed blocks on wallet:",
+                        "🥊 New missed blocks on wallet: ",
                         TextLink(
                             get_short_address(address=wallet_address),
                             url=f"{app_globals.app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
