@@ -2,7 +2,7 @@ from loguru import logger
 
 from aiogram import Router, F
 from aiogram.filters import Command, StateFilter
-from aiogram.types import Message, ReplyKeyboardRemove
+from aiogram.types import Message
 from aiogram.enums import ParseMode
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
@@ -92,8 +92,8 @@ async def cmd_view_earnings(message: Message, state: FSMContext) -> None:
                 request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
             )
             await state.set_state(EarningsViewer.waiting_rolls_number)
-        except:
-            logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
+        except BaseException as E:
+            logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
 
         return
 
@@ -105,8 +105,8 @@ async def cmd_view_earnings(message: Message, state: FSMContext) -> None:
             parse_mode=ParseMode.HTML,
             request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
         )
-    except:
-        logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
+    except BaseException as E:
+        logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
 
     await state.clear()
     return
@@ -127,8 +127,8 @@ async def show_earnings(message: Message, state: FSMContext) -> None:
             parse_mode=ParseMode.HTML,
             request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
         )
-    except:
-        logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
+    except BaseException as E:
+        logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
 
     await state.clear()
     return
