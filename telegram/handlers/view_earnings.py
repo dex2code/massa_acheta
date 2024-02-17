@@ -98,7 +98,7 @@ async def cmd_view_earnings(message: Message, state: FSMContext) -> None:
         return
 
     rolls_number = message_list[1]
-    t = get_earnings(rolls_number=rolls_number)
+    t = await get_earnings(rolls_number=rolls_number)
     try:
         await message.reply(
             text=t.as_html(),
@@ -120,7 +120,7 @@ async def show_earnings(message: Message, state: FSMContext) -> None:
     logger.info(f"-> Got '{message.text}' command from user '{message.from_user.id}' in chat '{message.chat.id}'")
 
     rolls_number = message.text
-    t = get_earnings(rolls_number=rolls_number)
+    t = await get_earnings(rolls_number=rolls_number)
     try:
         await message.reply(
             text=t.as_html(),
