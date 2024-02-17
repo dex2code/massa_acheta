@@ -195,7 +195,9 @@ async def cmd_view_address(message: Message, state: FSMContext) -> None:
                 "☝ The wallet address must start with ",
                 Underline("AU"),
                 " prefix"
-            )
+            ),
+            "👉 Use /cancel to quit the scenario"
+
         )
         try:
             await message.reply(
