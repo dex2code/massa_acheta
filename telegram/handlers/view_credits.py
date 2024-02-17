@@ -30,7 +30,7 @@ async def get_credits(wallet_address: str="") -> Text:
             as_line(
                 "☝ Try /view_address with ",
                 Underline("AU..."),
-                " wallet address"
+                " wallet address or /cancel to quit the scenario"
             )
         )
 
