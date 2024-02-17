@@ -15,9 +15,8 @@ import app_globals
 from tools import pull_http_api, get_short_address
 
 
-class AddresssViewer(StatesGroup):
+class AddressViewer(StatesGroup):
     waiting_wallet_address = State()
-
 
 router = Router()
 
@@ -27,7 +26,7 @@ async def get_address(wallet_address: str="") -> Text:
     logger.debug("-> Enter Def")
 
     if not wallet_address.startswith("AU"):
-        t = as_list(
+        return as_list(
             "‼ Wrong wallet address format (expected a string starting with AU prefix)", "",
             as_line(
                 "☝ Try /view_address with ",
@@ -35,7 +34,6 @@ async def get_address(wallet_address: str="") -> Text:
                 " wallet address"
             )
         )
-        return t
 
     payload = json.dumps(
         {
@@ -205,7 +203,7 @@ async def cmd_view_address(message: Message, state: FSMContext) -> None:
                 parse_mode=ParseMode.HTML,
                 request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
             )
-            await state.set_state(AddresssViewer.waiting_wallet_address)
+            await state.set_state(AddressViewer.waiting_wallet_address)
         except BaseException as E:
             logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
             await state.clear()
@@ -228,7 +226,7 @@ async def cmd_view_address(message: Message, state: FSMContext) -> None:
 
 
 
-@router.message(AddresssViewer.waiting_wallet_address, F.text.startswith("AU"))
+@router.message(AddressViewer.waiting_wallet_address, F.text.startswith("AU"))
 @logger.catch
 async def show_address(message: Message, state: FSMContext) -> None:
     logger.debug("-> Enter Def")

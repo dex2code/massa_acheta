@@ -17,7 +17,6 @@ from tools import get_last_seen
 class EarningsViewer(StatesGroup):
     waiting_rolls_number = State()
 
-
 router = Router()
 
 
@@ -29,8 +28,9 @@ async def get_earnings(rolls_number: int=1) -> Text:
         rolls_number = int(rolls_number)
         if rolls_number < 1 or rolls_number > app_globals.massa_network_values['total_staked_rolls']:
             raise Exception
+
     except BaseException:
-        t = as_list(
+        return as_list(
             f"‼ Wrong Rolls number value (expected number between 1 and {app_globals.massa_network_values['total_staked_rolls']})", "",
             as_line(
                 "☝ Try /view_earnings ",
@@ -38,38 +38,36 @@ async def get_earnings(rolls_number: int=1) -> Text:
                 " command"
             )
         )
-        return t
 
-    my_contribution = app_globals.massa_network_values['total_staked_rolls'] / rolls_number
-    my_blocks = 172_800 / my_contribution
-    my_reward = int(
-        my_blocks * app_globals.massa_network_values['block_reward']
-    )
+    else:
+        my_contribution = app_globals.massa_network_values['total_staked_rolls'] / rolls_number
+        my_blocks = 172_800 / my_contribution
+        my_reward = int(
+            my_blocks * app_globals.massa_network_values['block_reward']
+        )
 
-    massa_updated = get_last_seen(
-        last_time=app_globals.massa_network_values['last_updated'],
-        current_time=t_now()
-    )
+        massa_updated = get_last_seen(
+            last_time=app_globals.massa_network_values['last_updated'],
+            current_time=t_now()
+        )
 
-    my_percentage = round(
-        (rolls_number / app_globals.massa_network_values['total_staked_rolls']) * 100,
-        6
-    )
+        my_percentage = round(
+            (rolls_number / app_globals.massa_network_values['total_staked_rolls']) * 100,
+            6
+        )
 
-    t = as_list(
-        f"🏦 Total number of staked Rolls in MASSA Mainnet: {app_globals.massa_network_values['total_staked_rolls']:,} (updated: {massa_updated})", "",
-        f"🍰 Your contribution is: {rolls_number} Rolls ({my_percentage}%)", "",
-        f"🪙 Your theoretically MAX earnings ≈ {my_reward} MAS / day", "",
-        as_line(
-            "👉 ",
-            TextLink(
-                "More info here",
-                url="https://docs.massa.net/docs/learn/tokenomics#example-how-to-compute-my-expected-staking-rewards-"
+        return as_list(
+            f"🏦 Total number of staked Rolls in MASSA Mainnet: {app_globals.massa_network_values['total_staked_rolls']:,} (updated: {massa_updated})", "",
+            f"🍰 Your contribution is: {rolls_number} Rolls ({my_percentage}%)", "",
+            f"🪙 Your theoretically MAX earnings ≈ {my_reward} MAS / day", "",
+            as_line(
+                "👉 ",
+                TextLink(
+                    "More info here",
+                    url="https://docs.massa.net/docs/learn/tokenomics#example-how-to-compute-my-expected-staking-rewards-"
+                )
             )
         )
-    )
-
-    return t
 
 
 

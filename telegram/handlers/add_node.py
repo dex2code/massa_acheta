@@ -18,7 +18,6 @@ class NodeAdder(StatesGroup):
     waiting_node_name = State()
     waiting_node_url = State()
 
-
 router = Router()
 
 

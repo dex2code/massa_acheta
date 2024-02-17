@@ -15,7 +15,6 @@ from tools import save_app_results, check_privacy
 class ResetState(StatesGroup):
     reset_sure = State()
 
-
 router = Router()
 
 

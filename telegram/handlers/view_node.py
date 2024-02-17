@@ -17,7 +17,6 @@ from tools import get_last_seen, get_short_address, check_privacy
 class NodeViewer(StatesGroup):
     waiting_node_name = State()
 
-
 router = Router()
 
 

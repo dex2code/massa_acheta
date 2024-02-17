@@ -10,6 +10,7 @@ import app_globals
 
 from tools import check_privacy
 
+
 router = Router()
 
 

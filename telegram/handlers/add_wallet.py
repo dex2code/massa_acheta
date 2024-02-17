@@ -19,7 +19,6 @@ class WalletAdder(StatesGroup):
     waiting_node_name = State()
     waiting_wallet_address = State()
 
-
 router = Router()
 
 
