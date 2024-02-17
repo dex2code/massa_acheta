@@ -31,7 +31,7 @@ async def get_address(wallet_address: str="") -> Text:
             as_line(
                 "☝ Try /view_address with ",
                 Underline("AU..."),
-                " wallet address or /cancel to quit the scenario"
+                " wallet address"
             )
         )
 
@@ -66,7 +66,7 @@ async def get_address(wallet_address: str="") -> Text:
     except BaseException as E:
         logger.warning(f"Cannot operate received address result: ({str(E)})")
 
-        t = as_list(
+        return as_list(
             as_line(
                 "👛 Wallet: ",
                 TextLink(
@@ -158,7 +158,7 @@ async def get_address(wallet_address: str="") -> Text:
                     f" ⋅ {credit_date}: {credit_amount:,} MAS"
                 )
 
-        t = as_list(
+        return as_list(
             as_line(
                 "👛 Wallet: ",
                 TextLink(
@@ -176,8 +176,6 @@ async def get_address(wallet_address: str="") -> Text:
             *credit_list, "",
             "☝ To view ALL deferred credits try /view_credits command"
         )
-
-    return t
 
 
 

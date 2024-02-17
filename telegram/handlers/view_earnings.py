@@ -35,7 +35,7 @@ async def get_earnings(rolls_number: int=1) -> Text:
             as_line(
                 "☝ Try /view_earnings ",
                 Underline("Rolls_number"),
-                " command or /cancel to quit the scenario"
+                " command"
             )
         )
 
