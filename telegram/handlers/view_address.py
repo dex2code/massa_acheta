@@ -244,6 +244,6 @@ async def show_address(message: Message, state: FSMContext) -> None:
         )
     except BaseException as E:
         logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
-        await state.clear()
 
+    await state.clear()
     return
