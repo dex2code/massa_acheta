@@ -83,7 +83,7 @@ async def cmd_view_earnings(message: Message, state: FSMContext) -> None:
     if len(message_list) < 2:
         t = as_list(
             "❓ Please answer with a certain number of staked rolls: ", "",
-            f"☝ The answer must be an integer between 0 and {app_globals.massa_network_values['total_staked_rolls']}"
+            f"☝ The answer must be an integer between 1 and {app_globals.massa_network_values['total_staked_rolls']}"
         )
         try:
             await message.reply(
