@@ -27,7 +27,7 @@ async def get_earnings(rolls_number: int=1) -> Text:
 
     try:
         rolls_number = int(rolls_number)
-        if rolls_number < 0 or rolls_number > app_globals.massa_network_values['total_staked_rolls']:
+        if rolls_number < 1 or rolls_number > app_globals.massa_network_values['total_staked_rolls']:
             raise Exception
     except BaseException:
         t = as_list(
