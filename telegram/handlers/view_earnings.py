@@ -41,7 +41,10 @@ async def get_earnings(rolls_number: int=1) -> Text:
 
     else:
         my_contribution = app_globals.massa_network_values['total_staked_rolls'] / rolls_number
-        my_blocks = 172_800 / my_contribution
+        if my_contribution == 0:
+            my_blocks = 0
+        else:
+            my_blocks = 172_800 / my_contribution
         my_reward = int(
             my_blocks * app_globals.massa_network_values['block_reward']
         )
