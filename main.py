@@ -40,7 +40,6 @@ async def main() -> None:
     logger.debug(f"-> Enter Def")
 
     public_obj = Path("public")
-
     if not public_obj.exists():
         logger.info(f"No file '{public_obj}' exists. Private menu applied.")
         bot_commands = [
@@ -71,6 +70,7 @@ async def main() -> None:
             BotCommand(command="/view_earnings", description="View rewards for staking"),
             BotCommand(command="/massa_info", description="Show MASSA network info"),
             BotCommand(command="/view_id", description="Show your TG ID"),
+            BotCommand(command="/cancel", description="Cancel ongoing scenario")
         ]
 
     await app_globals.tg_bot.set_my_commands(bot_commands)

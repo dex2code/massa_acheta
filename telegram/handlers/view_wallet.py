@@ -42,8 +42,8 @@ async def cmd_view_wallet(message: Message, state: FSMContext) -> None:
                 parse_mode=ParseMode.HTML,
                 request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
             )
-        except:
-            logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
+        except BaseException as E:
+            logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
 
         await state.clear()
         return
@@ -59,10 +59,10 @@ async def cmd_view_wallet(message: Message, state: FSMContext) -> None:
             reply_markup=kb_nodes(),
             request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
         )
-    except:
-        logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
+        await state.set_state(WalletViewer.waiting_node_name)
+    except BaseException as E:
+        logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
 
-    await state.set_state(WalletViewer.waiting_node_name)
     return
 
 
@@ -89,8 +89,8 @@ async def select_wallet_to_show(message: Message, state: FSMContext) -> None:
                 reply_markup=ReplyKeyboardRemove(),
                 request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
             )
-        except:
-            logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
+        except BaseException as E:
+            logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
 
         await state.clear()
         return
@@ -107,8 +107,8 @@ async def select_wallet_to_show(message: Message, state: FSMContext) -> None:
                 reply_markup=ReplyKeyboardRemove(),
                 request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
             )
-        except:
-            logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
+        except BaseException as E:
+            logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
 
         await state.clear()
         return
@@ -123,10 +123,10 @@ async def select_wallet_to_show(message: Message, state: FSMContext) -> None:
             reply_markup=kb_wallets(node_name=node_name),
             request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
         )
-    except:
-        logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
+        await state.set_state(WalletViewer.waiting_wallet_address)
+    except BaseException as E:
+        logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
 
-    await state.set_state(WalletViewer.waiting_wallet_address)
     return
 
 
@@ -160,8 +160,8 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
                 parse_mode=ParseMode.HTML,
                 request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
             )
-        except:
-            logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
+        except BaseException as E:
+            logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
 
         await state.clear()
         return
@@ -298,8 +298,8 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
             reply_markup=ReplyKeyboardRemove(),
             request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
         )
-    except:
-        logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
+    except BaseException as E:
+        logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
 
     await state.clear()
     return

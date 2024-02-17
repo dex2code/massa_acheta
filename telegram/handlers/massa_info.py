@@ -52,7 +52,7 @@ async def cmd_massa_info(message: Message) -> None:
             parse_mode=ParseMode.HTML,
             request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
         )
-    except:
-        logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
+    except BaseException as E:
+        logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
 
     return

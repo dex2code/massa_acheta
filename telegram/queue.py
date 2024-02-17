@@ -54,7 +54,7 @@ async def operate_telegram_queue() -> None:
 
         except BaseException as E:
             logger.error(f"Could not send telegram message to chat_id '{app_globals.bot.ACHETA_CHAT}': ({str(E)})")
-        
+
         else:
             logger.info(f"Successfully sent message to chat_id '{app_globals.bot.ACHETA_CHAT}' ({number_unsent_messages - 1} unsent message(s) in queue)")
             app_globals.telegram_queue.popleft()

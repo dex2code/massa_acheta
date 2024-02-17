@@ -39,8 +39,8 @@ async def cmd_delete_node(message: Message, state: FSMContext) -> None:
                 parse_mode=ParseMode.HTML,
                 request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
             )
-        except:
-            logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
+        except BaseException as E:
+            logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
 
         await state.clear()
         return
@@ -56,10 +56,10 @@ async def cmd_delete_node(message: Message, state: FSMContext) -> None:
             reply_markup=kb_nodes(),
             request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
         )
-    except:
-        logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
+        await state.set_state(NodeRemover.waiting_node_name)
+    except BaseException as E:
+        logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
 
-    await state.set_state(NodeRemover.waiting_node_name)
     return
 
 
@@ -85,8 +85,8 @@ async def delete_node(message: Message, state: FSMContext) -> None:
                 reply_markup=ReplyKeyboardRemove(),
                 request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
             )
-        except:
-            logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
+        except BaseException as E:
+            logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
 
         await state.clear()
         return
@@ -133,8 +133,8 @@ async def delete_node(message: Message, state: FSMContext) -> None:
             reply_markup=ReplyKeyboardRemove(),
             request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
         )
-    except:
-        logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
+    except BaseException as E:
+        logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
 
     await state.clear()
     return

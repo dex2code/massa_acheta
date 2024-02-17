@@ -41,10 +41,10 @@ async def cmd_reset(message: Message, state: FSMContext) -> None:
             parse_mode=ParseMode.HTML,
             request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
         )
-    except:
-        logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
+        await state.set_state(ResetState.reset_sure)
+    except BaseException as E:
+        logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
 
-    await state.set_state(ResetState.reset_sure)
     return
 
 
@@ -67,8 +67,8 @@ async def do_reset(message: Message, state: FSMContext) -> None:
                 parse_mode=ParseMode.HTML,
                 request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
             )
-        except:
-            logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
+        except BaseException as E:
+            logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
 
         await state.clear()
         return
@@ -106,8 +106,8 @@ async def do_reset(message: Message, state: FSMContext) -> None:
             parse_mode=ParseMode.HTML,
             request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
         )
-    except:
-        logger.error("Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}'")
+    except BaseException as E:
+        logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
 
     await state.clear()
     return
