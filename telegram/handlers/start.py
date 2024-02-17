@@ -1,7 +1,7 @@
 from loguru import logger
 
 from aiogram import Router
-from aiogram.filters import Command
+from aiogram.filters import Command, StateFilter
 from aiogram.types import Message
 from aiogram.utils.formatting import as_list, as_line, TextLink
 from aiogram.enums import ParseMode
@@ -12,7 +12,7 @@ import app_globals
 router = Router()
 
 
-@router.message(Command("start", "help"))
+@router.message(StateFilter(None), Command("start", "help"))
 @logger.catch
 async def cmd_start(message: Message) -> None:
     logger.debug("-> Enter Def")

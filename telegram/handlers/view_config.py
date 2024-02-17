@@ -1,7 +1,7 @@
 from loguru import logger
 
 from aiogram import Router
-from aiogram.filters import Command
+from aiogram.filters import Command, StateFilter
 from aiogram.types import Message
 from aiogram.enums import ParseMode
 from aiogram.utils.formatting import as_list, as_line, TextLink, as_numbered_list
@@ -13,7 +13,7 @@ from tools import get_short_address, check_privacy
 router = Router()
 
 
-@router.message(Command("view_config"))
+@router.message(StateFilter(None), Command("view_config"))
 @logger.catch
 async def cmd_view_config(message: Message) -> None:
     logger.debug("-> Enter Def")

@@ -62,6 +62,7 @@ async def cmd_view_wallet(message: Message, state: FSMContext) -> None:
         await state.set_state(WalletViewer.waiting_node_name)
     except BaseException as E:
         logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
+        await state.clear()
 
     return
 
@@ -126,6 +127,7 @@ async def select_wallet_to_show(message: Message, state: FSMContext) -> None:
         await state.set_state(WalletViewer.waiting_wallet_address)
     except BaseException as E:
         logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
+        await state.clear()
 
     return
 

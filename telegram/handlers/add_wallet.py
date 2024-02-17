@@ -61,6 +61,7 @@ async def cmd_add_wallet(message: Message, state: FSMContext) -> None:
         await state.set_state(WalletAdder.waiting_node_name)
     except BaseException as E:
         logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
+        await state.clear()
 
     return
 
@@ -107,6 +108,7 @@ async def input_wallet_to_add(message: Message, state: FSMContext) -> None:
         await state.set_state(WalletAdder.waiting_wallet_address)
     except BaseException as E:
         logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
+        await state.clear()
 
     return
 

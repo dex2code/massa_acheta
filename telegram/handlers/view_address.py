@@ -5,65 +5,37 @@ from datetime import datetime
 from aiogram import Router, F
 from aiogram.types import Message
 from aiogram.filters import Command, StateFilter
-from aiogram.utils.formatting import as_list, as_line, Code, TextLink, Underline
+from aiogram.utils.formatting import as_list, as_line, Code, TextLink, Underline, Text
 from aiogram.enums import ParseMode
+from aiogram.fsm.context import FSMContext
+from aiogram.fsm.state import State, StatesGroup
+
 
 import app_globals
 from tools import pull_http_api, get_short_address
 
 
+class AddresssViewer(StatesGroup):
+    waiting_wallet_address = State()
+
+
 router = Router()
 
 
-@router.message(StateFilter(None), Command("view_address"))
 @logger.catch
-async def cmd_view_address(message: Message) -> None:
-    logger.debug("->Enter Def")
-    logger.info(f"-> Got '{message.text}' command from user '{message.from_user.id}' in chat '{message.chat.id}'")
-
-    message_list = message.text.split()
-
-    if len(message_list) < 2:
-        t = as_list(
-            "❓ No wallet address defined", "",
-            as_line(
-                "☝ Try /view_address ",
-                Underline("AU..."),
-                " command"
-            )
-        )
-        try:
-            await message.reply(
-                text=t.as_html(),
-                parse_mode=ParseMode.HTML,
-                request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
-            )
-        except BaseException as E:
-            logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
-
-        return
-    
-    wallet_address = message_list[1]
+async def get_address(wallet_address: str="") -> Text:
+    logger.debug("-> Enter Def")
 
     if not wallet_address.startswith("AU"):
         t = as_list(
-            "‼ Wrong wallet address format", "",
+            "‼ Wrong wallet address format (expected a string starting with AU prefix)", "",
             as_line(
-                "☝ Try /view_address ",
+                "☝ Try /view_address with ",
                 Underline("AU..."),
-                " command"
+                " wallet address"
             )
         )
-        try:
-            await message.reply(
-                text=t.as_html(),
-                parse_mode=ParseMode.HTML,
-                request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
-            )
-        except BaseException as E:
-            logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
-
-        return
+        return t
 
     payload = json.dumps(
         {
@@ -88,11 +60,11 @@ async def cmd_view_address(message: Message) -> None:
             raise Exception(f"Wrong answer from MASSA node API ({str(wallet_answer)})")
 
         wallet_result = wallet_result[0]
-        wallet_result_address = wallet_result.get("address", None)
 
+        wallet_result_address = wallet_result.get("address", None)
         if wallet_result_address != wallet_address:
             raise Exception(f"Bad address received from MASSA node API: '{wallet_result_address}' (expected '{wallet_address}')")
-            
+
     except BaseException as E:
         logger.warning(f"Cannot operate received address result: ({str(E)})")
 
@@ -117,14 +89,6 @@ async def cmd_view_address(message: Message) -> None:
             ),
             as_line("⚠️ Check wallet address or try later!")
         )
-        try:
-            await message.reply(
-                text=t.as_html(),
-                parse_mode=ParseMode.HTML,
-                request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
-            )
-        except BaseException as E:
-            logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
 
     else:
         logger.info(f"Successfully received result for address '{wallet_address}'")
@@ -214,13 +178,72 @@ async def cmd_view_address(message: Message) -> None:
             *credit_list, "",
             "☝ To view ALL deferred credits try /view_credits command"
         )
+
+    return t
+
+
+
+@router.message(StateFilter(None), Command("view_address"))
+@logger.catch
+async def cmd_view_address(message: Message, state: FSMContext) -> None:
+    logger.debug("->Enter Def")
+    logger.info(f"-> Got '{message.text}' command from user '{message.from_user.id}' in chat '{message.chat.id}'")
+
+    message_list = message.text.split()
+    if len(message_list) < 2:
+        t = as_list(
+            "❓ Please answer with a wallet address you want to explore: ", "",
+            as_line(
+                "☝ The wallet address must start with ",
+                Underline("AU"),
+                " prefix"
+            )
+        )
         try:
             await message.reply(
                 text=t.as_html(),
                 parse_mode=ParseMode.HTML,
                 request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
             )
+            await state.set_state(AddresssViewer.waiting_wallet_address)
         except BaseException as E:
             logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
+            await state.clear()
+
+        return
+
+    wallet_address = message_list[1]
+    t = await get_address(wallet_address=wallet_address)
+    try:
+        await message.reply(
+            text=t.as_html(),
+            parse_mode=ParseMode.HTML,
+            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+        )
+    except BaseException as E:
+        logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
+        await state.clear()
+
+    return
+
+
+
+@router.message(AddresssViewer.waiting_wallet_address, F.text.startswith("AU"))
+@logger.catch
+async def show_address(message: Message, state: FSMContext) -> None:
+    logger.debug("-> Enter Def")
+    logger.info(f"-> Got '{message.text}' command from user '{message.from_user.id}' in chat '{message.chat.id}'")
+
+    wallet_address = message.text
+    t = await get_address(wallet_address=wallet_address)
+    try:
+        await message.reply(
+            text=t.as_html(),
+            parse_mode=ParseMode.HTML,
+            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+        )
+    except BaseException as E:
+        logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
+        await state.clear()
 
     return

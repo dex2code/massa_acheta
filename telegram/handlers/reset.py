@@ -44,6 +44,7 @@ async def cmd_reset(message: Message, state: FSMContext) -> None:
         await state.set_state(ResetState.reset_sure)
     except BaseException as E:
         logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
+        await state.clear()
 
     return
 

@@ -1,7 +1,7 @@
 from loguru import logger
 
 from aiogram import Router
-from aiogram.filters import Command
+from aiogram.filters import Command, StateFilter
 from aiogram.types import Message
 from aiogram.enums import ParseMode
 from aiogram.utils.formatting import as_list, as_line, TextLink
@@ -13,7 +13,7 @@ from tools import check_privacy
 router = Router()
 
 
-@router.message(Command("acheta_release"))
+@router.message(StateFilter(None), Command("acheta_release"))
 @logger.catch
 async def cmd_acheta_release(message: Message) -> None:
     logger.debug("-> Enter Def")

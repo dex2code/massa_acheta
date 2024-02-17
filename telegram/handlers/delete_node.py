@@ -59,6 +59,7 @@ async def cmd_delete_node(message: Message, state: FSMContext) -> None:
         await state.set_state(NodeRemover.waiting_node_name)
     except BaseException as E:
         logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
+        await state.clear()
 
     return
 

@@ -1,7 +1,7 @@
 from loguru import logger
 
 from aiogram import Router
-from aiogram.filters import Command
+from aiogram.filters import Command, StateFilter
 from aiogram.types import Message
 from aiogram.enums import ParseMode
 from aiogram.utils.formatting import as_list
@@ -14,7 +14,7 @@ from tools import get_last_seen
 router = Router()
 
 
-@router.message(Command("massa_info"))
+@router.message(StateFilter(None), Command("massa_info"))
 @logger.catch
 async def cmd_massa_info(message: Message) -> None:
     logger.debug("-> Enter Def")

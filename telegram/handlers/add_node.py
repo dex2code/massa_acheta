@@ -41,6 +41,7 @@ async def cmd_add_node(message: Message, state: FSMContext) -> None:
         await state.set_state(NodeAdder.waiting_node_name)
     except BaseException as E:
         logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
+        await state.clear()
 
     return
 
@@ -87,6 +88,7 @@ async def input_nodename_to_add(message: Message, state: FSMContext) -> None:
         await state.set_state(NodeAdder.waiting_node_url)
     except BaseException as E:
         logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
+        await state.clear()
 
     return
 
