@@ -121,7 +121,13 @@ async def show_earnings(message: Message, state: FSMContext) -> None:
     logger.debug("-> Enter Def")
     logger.info(f"-> Got '{message.text}' command from user '{message.from_user.id}' in chat '{message.chat.id}'")
 
-    rolls_number = message.text
+    rolls_number = "0"
+    command_list = message.text.split()
+    for cmd in command_list:
+        if cmd.isdigit():
+            rolls_number = cmd
+            break
+
     t = await get_earnings(rolls_number=rolls_number)
     try:
         await message.reply(

@@ -162,13 +162,19 @@ async def cmd_view_credits(message: Message, state: FSMContext) -> None:
 
 
 
-@router.message(CreditsViewer.waiting_wallet_address, F.text.startswith("AU"))
+@router.message(CreditsViewer.waiting_wallet_address, F.text)
 @logger.catch
 async def show_credits(message: Message, state: FSMContext) -> None:
     logger.debug("-> Enter Def")
     logger.info(f"-> Got '{message.text}' command from user '{message.from_user.id}' in chat '{message.chat.id}'")
 
-    wallet_address = message.text
+    wallet_address = ""
+    command_list = message.text.split()
+    for cmd in command_list:
+        if cmd.startswith("AU"):
+            wallet_address = cmd
+            break
+
     t = await get_credits(wallet_address=wallet_address)
     try:
         await message.reply(
