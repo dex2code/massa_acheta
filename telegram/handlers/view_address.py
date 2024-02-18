@@ -237,6 +237,7 @@ async def show_address(message: Message, state: FSMContext) -> None:
     for cmd in command_list:
         if cmd.startswith("AU"):
             wallet_address = cmd
+            break
 
     t = await get_address(wallet_address=wallet_address)
     try:
