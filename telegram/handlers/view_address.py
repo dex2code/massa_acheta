@@ -174,7 +174,7 @@ async def get_address(wallet_address: str="") -> Text:
             f"🧵 Thread: {wallet_thread}", "",
             *cycles_list, "",
             *credit_list, "",
-            "☝ To view ALL deferred credits try /view_credits command or /help to learn bot commands"
+            "☝ To view ALL deferred credits try /view_credits or /help to learn bot commands"
         )
 
 
