@@ -188,7 +188,7 @@ async def add_wallet(message: Message, state: FSMContext) -> None:
         logger.info(f"Successfully added wallet '{wallet_address}' to node '{node_name}'")
         t = as_list(
             as_line(
-                "✅ Successfully added wallet: ",
+                "👌 Successfully added wallet: ",
                 TextLink(
                     get_short_address(wallet_address),
                     url=f"{app_globals.app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"

@@ -76,7 +76,7 @@ async def input_nodename_to_add(message: Message, state: FSMContext) -> None:
 
     t = as_list(
         f"❓ Please enter API URL for the new node \"{node_name}\" with leading \"http(s)://...\" prefix or /cancel to quit the scenario: ", "",
-        "💭 Typically API URL looks like: http://ip.ad.dre.ss:33035/api/v2"
+        "☝ Typically API URL looks like: http://ip.ad.dre.ss:33035/api/v2"
     )
     try:
         await message.reply(

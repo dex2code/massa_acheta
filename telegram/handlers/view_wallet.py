@@ -195,7 +195,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
                 end=""
             ),
             as_line(
-                "👁 Last successful data update: ",
+                "👁 Last successful info update: ",
                 wallet_last_seen
             ),
             as_line(

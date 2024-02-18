@@ -25,7 +25,7 @@ async def cmd_acheta_release(message: Message) -> None:
         update_needed = as_line("👌 No updates needed")
     else:
         update_needed = as_line(
-            "❗ Please update your bot - ",
+            "☝ Please update your bot - ",
             TextLink(
                 "More info here",
                 url="https://github.com/dex2code/massa_acheta/"

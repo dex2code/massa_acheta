@@ -202,7 +202,7 @@ async def delete_wallet(message: Message, state: FSMContext) -> None:
 
         t = as_list(
             as_line(
-                "✅ Successfully removed wallet ",
+                "👌 Successfully removed wallet ",
                 TextLink(
                     get_short_address(wallet_address),
                     url=f"{app_globals.app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"

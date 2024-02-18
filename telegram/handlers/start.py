@@ -92,6 +92,13 @@ async def cmd_start(message: Message) -> None:
                     "More info here",
                     url="https://github.com/dex2code/massa_acheta/"
                 )
+            ),
+            as_line(
+                "🎁 Wanna thank the author? ",
+                TextLink(
+                    "Ask me how",
+                    url="https://github.com/dex2code/massa_acheta#thank-you"
+                )
             )
         )
 

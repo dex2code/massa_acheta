@@ -141,10 +141,7 @@ async def show_node(message: Message, state: FSMContext) -> None:
             f"📍 {app_globals.app_results[node_name]['url']}",
             f"{wallets_attached}", "",
             f"{node_status}", "",
-            as_line(
-                "🆔: ",
-                Code(get_short_address(node_id))
-            ),
+            f"🆔: {get_short_address(node_id)}", "",
             f"🎯 Routable IP: {node_ip}", "",
             f"💾 Release: \"{node_version}\" {node_update_needed}", "",
             f"🌀 Cycle: {current_cycle}", "",
