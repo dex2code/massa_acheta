@@ -226,13 +226,18 @@ async def cmd_view_address(message: Message, state: FSMContext) -> None:
 
 
 
-@router.message(AddressViewer.waiting_wallet_address, F.text.startswith("AU"))
+@router.message(AddressViewer.waiting_wallet_address, F.text)
 @logger.catch
 async def show_address(message: Message, state: FSMContext) -> None:
     logger.debug("-> Enter Def")
     logger.info(f"-> Got '{message.text}' command from user '{message.from_user.id}' in chat '{message.chat.id}'")
 
-    wallet_address = message.text
+    wallet_address = None
+    command_list = message.text.split()
+    for cmd in command_list:
+        if cmd.startswith("AU"):
+            wallet_address = cmd
+
     t = await get_address(wallet_address=wallet_address)
     try:
         await message.reply(
