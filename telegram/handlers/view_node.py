@@ -114,7 +114,7 @@ async def show_node(message: Message, state: FSMContext) -> None:
                 "💻 Result: ",
                 Code(app_globals.app_results[node_name]['last_result'])
             ),
-            f"☝ Service checks updates: every {app_globals.app_config['service']['main_loop_period_sec']} seconds"
+            f"☝ Service checks updates: every {app_globals.app_config['service']['main_loop_period_min']} minutes"
         )
     else:
         node_status = f"🌿 Status: Online (last seen: {last_seen})"
@@ -148,7 +148,7 @@ async def show_node(message: Message, state: FSMContext) -> None:
             f"↔ In / Out connections: {in_connection_count} / {out_connection_count}", "",
             f"🙋 Known / Banned peers: {known_peer_count} / {banned_peer_count}", "",
             f"🔗 Chain ID: {chain_id}", "",
-            f"☝ Service checks updates: every {app_globals.app_config['service']['main_loop_period_sec']} seconds"
+            f"☝ Service checks updates: every {app_globals.app_config['service']['main_loop_period_min']} minutes"
         )
 
     try:

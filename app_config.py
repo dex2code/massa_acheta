@@ -13,13 +13,14 @@ app_config['telegram']['sending_timeout_sec'] = 5
 app_config['service']['results_path'] = "app_results.json"
 app_config['service']['deferred_credits_path'] = "deferred_credits.json"
 
-app_config['service']['main_loop_period_sec'] = 600
+app_config['service']['main_loop_period_min'] = 10
 
 app_config['service']['http_session_timeout_sec'] = 300
 app_config['service']['http_probe_timeout_sec'] = 120
 
 app_config['service']['heartbeat_period_hours'] = 6
-app_config['service']['massa_network_update_period_mins'] = 30
+app_config['service']['massa_network_update_period_min'] = 30
+app_config['service']['massa_network_stat_keep_days'] = 7
 
 app_config['service']['massa_release_url'] = "https://api.github.com/repos/massalabs/massa/releases/latest"
 app_config['service']['acheta_release_url'] = "https://api.github.com/repos/dex2code/massa_acheta/releases/latest"
@@ -29,3 +30,4 @@ app_config['service']['mainnet_explorer_url'] = "https://explorer.massa.net/main
 app_config['service']['massexplo_api_url'] = "https://api.massexplo.io/info?network=MainNet"
 
 app_config['service']['mainnet_stakers_bundle'] = 1000
+

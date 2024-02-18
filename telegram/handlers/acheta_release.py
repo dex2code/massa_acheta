@@ -36,7 +36,7 @@ async def cmd_acheta_release(message: Message) -> None:
         f"🦗 Latest released ACHETA version: \"{app_globals.latest_acheta_release}\"",
         f"💾 You have version: \"{app_globals.local_acheta_release}\"", "",
         update_needed,
-        as_line(f"⏳ Service checks releases: every {app_globals.app_config['service']['main_loop_period_sec']} seconds")
+        as_line(f"⏳ Service checks releases: every {app_globals.app_config['service']['main_loop_period_min']} minutes")
     )
     try:
         await message.reply(

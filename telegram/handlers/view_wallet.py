@@ -203,7 +203,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
                 Code(app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'])
             ),
             as_line("⚠️ Check wallet address or node settings!"),
-            f"☝ Service checks updates: every {app_globals.app_config['service']['main_loop_period_sec']} seconds"
+            f"☝ Service checks updates: every {app_globals.app_config['service']['main_loop_period_min']} minutes"
         )
 
         t = as_list(
@@ -289,7 +289,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
             as_line(f"🧵 Thread: {wallet_thread}"),
             *cycles_list, "",
             *credit_list, "",
-            f"☝ Service checks updates: every {app_globals.app_config['service']['main_loop_period_sec']} seconds"
+            f"☝ Service checks updates: every {app_globals.app_config['service']['main_loop_period_min']} minutes"
         )
 
     try:

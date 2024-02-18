@@ -265,11 +265,22 @@ async def massa() -> None:
                 logger.warning(f"Error pulling /info from massexplo.io")
 
         if success_flag:
+            time_now = t_now()
+
             app_globals.massa_network['values']['last_updated'] = t_now()
+            app_globals.massa_network['stat'].append(
+                {
+                    "time": time_now,
+                    "stakers": app_globals.massa_network['values']['total_stakers'],
+                    'rolls': app_globals.massa_network['values']['total_staked_rolls']
+                }
+            )
             logger.info(f"Successfully collected MASSA mainnet network info")
+            logger.info(f"Successfully stored MASSA stat ({len(app_globals.massa_network['stat'])} measures)")
+
         else:
             logger.warning(f"Could not collect MASSA mainnet network info")
-        logger.debug(f"Current MASSA network values:\n{json.dumps(obj=app_globals.massa_network['values'], indent=4)}")
 
-        logger.info(f"Sleeping for {app_globals.app_config['service']['massa_network_update_period_mins'] * 60} seconds...")
-        await asyncio.sleep(delay=app_globals.app_config['service']['massa_network_update_period_mins'] * 60)
+        logger.debug(f"Current MASSA network values:\n{json.dumps(obj=app_globals.massa_network['values'], indent=4)}")
+        logger.info(f"Sleeping for {app_globals.app_config['service']['massa_network_update_period_min'] * 60} seconds...")
+        await asyncio.sleep(delay=app_globals.app_config['service']['massa_network_update_period_min'] * 60)
