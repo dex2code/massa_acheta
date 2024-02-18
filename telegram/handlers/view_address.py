@@ -232,7 +232,7 @@ async def show_address(message: Message, state: FSMContext) -> None:
     logger.debug("-> Enter Def")
     logger.info(f"-> Got '{message.text}' command from user '{message.from_user.id}' in chat '{message.chat.id}'")
 
-    wallet_address = None
+    wallet_address = ""
     command_list = message.text.split()
     for cmd in command_list:
         if cmd.startswith("AU"):
