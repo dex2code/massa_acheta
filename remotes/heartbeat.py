@@ -28,7 +28,7 @@ async def heartbeat() -> None:
                 my_blocks * app_globals.massa_network_values['block_reward'],
                 2
             )
-            computed_rewards = f"🪙 MAX rewards for 100 Rolls ≈ {my_reward:,} MAS / day"
+            computed_rewards = f"🪙 Estimated rewards for 100 Rolls ≈ {my_reward:,} MAS / day"
 
         heartbeat_list = []
         heartbeat_list.append(
