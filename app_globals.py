@@ -121,7 +121,7 @@ massa_network['values'] =  {
 }
 massa_network['stat'] = deque(
     maxlen=int(
-        app_config['service']['massa_stat_keep_days'] * 24 * 60 / app_config['service']['massa_network_update_period_min']
+        app_config['service']['massa_network_stat_keep_days'] * 24 * 60 / app_config['service']['massa_network_update_period_min']
     )
 )
 
