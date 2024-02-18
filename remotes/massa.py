@@ -267,7 +267,7 @@ async def massa() -> None:
         if success_flag:
             time_now = t_now()
 
-            app_globals.massa_network['values']['last_updated'] = t_now()
+            app_globals.massa_network['values']['last_updated'] = time_now
             app_globals.massa_network['stat'].append(
                 {
                     "time": time_now,
