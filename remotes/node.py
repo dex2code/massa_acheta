@@ -74,12 +74,12 @@ async def check_node(node_name: str="") -> None:
 
         else:
             # If Node Cycle number is less than MASSA Cycle number
-            if node_current_cycle < app_globals.massa_network_values['current_cycle']:
+            if node_current_cycle < app_globals.massa_network['values']['current_cycle']:
                 t = as_list(
                     f"🏠 Node: \"{node_name}\"",
                     f"📍 {app_globals.app_results[node_name]['url']}", "",
                     f"🌀 Cycle number mismatch!", "",
-                    f"👁 Node Cycle ID is less than expected ({node_current_cycle} < {app_globals.massa_network_values['current_cycle']})", "",
+                    f"👁 Node Cycle ID is less than expected ({node_current_cycle} < {app_globals.massa_network['values']['current_cycle']})", "",
                     "⚠️ Check node status!"
                 )
                 await queue_telegram_message(message_text=t.as_html())

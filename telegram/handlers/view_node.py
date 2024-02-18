@@ -123,8 +123,8 @@ async def show_node(message: Message, state: FSMContext) -> None:
         node_ip = app_globals.app_results[node_name]['last_result'].get("node_ip", "Not known")
 
         node_version = app_globals.app_results[node_name]['last_result'].get("version", "Not known")
-        if node_version != app_globals.massa_network_values['latest_release']:
-            node_update_needed = f"❗ Update to \"{app_globals.massa_network_values['latest_release']}\""
+        if node_version != app_globals.massa_network['values']['latest_release']:
+            node_update_needed = f"❗ Update to \"{app_globals.massa_network['values']['latest_release']}\""
         else:
             node_update_needed = "(latest)"
 

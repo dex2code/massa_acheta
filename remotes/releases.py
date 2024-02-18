@@ -1,6 +1,5 @@
 from loguru import logger
 
-import aiohttp
 from aiogram.utils.formatting import as_list, as_line, TextLink
 
 import app_globals
@@ -26,19 +25,19 @@ async def massa_release() -> None:
         logger.warning(f"Cannot get latest MASSA release version: ({str(E)}). Result: {massa_release_answer}")
 
     else:
-        logger.info(f"Got latest MASSA release version: '{massa_release_result}' (current is: '{app_globals.massa_network_values['latest_release']}')")
+        logger.info(f"Got latest MASSA release version: '{massa_release_result}' (current is: '{app_globals.massa_network['values']['latest_release']}')")
 
-        if app_globals.massa_network_values['latest_release'] == "":
+        if app_globals.massa_network['values']['latest_release'] == "":
             pass
 
-        elif app_globals.massa_network_values['latest_release'] != massa_release_result:
+        elif app_globals.massa_network['values']['latest_release'] != massa_release_result:
             t = as_list(
                 f"💾 A new MASSA version released: {massa_release_result}", "",
                 "⚠ Check your nodes and update it if needed!"
             )
             await queue_telegram_message(message_text=t.as_html())
         
-        app_globals.massa_network_values['latest_release'] = massa_release_result
+        app_globals.massa_network['values']['latest_release'] = massa_release_result
 
     return
 

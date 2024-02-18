@@ -26,12 +26,12 @@ async def get_earnings(rolls_number: int=1) -> Text:
 
     try:
         rolls_number = int(rolls_number)
-        if rolls_number < 1 or rolls_number > app_globals.massa_network_values['total_staked_rolls']:
+        if rolls_number < 1 or rolls_number > app_globals.massa_network['values']['total_staked_rolls']:
             raise Exception
 
     except BaseException:
         return as_list(
-            f"‼ Wrong Rolls number value (expected number between 1 and {app_globals.massa_network_values['total_staked_rolls']})", "",
+            f"‼ Wrong Rolls number value (expected number between 1 and {app_globals.massa_network['values']['total_staked_rolls']})", "",
             as_line(
                 "☝ Try /view_earnings ",
                 Underline("Rolls_number"),
@@ -40,27 +40,27 @@ async def get_earnings(rolls_number: int=1) -> Text:
         )
 
     else:
-        my_contribution = app_globals.massa_network_values['total_staked_rolls'] / rolls_number
+        my_contribution = app_globals.massa_network['values']['total_staked_rolls'] / rolls_number
         if my_contribution == 0:
             my_blocks = 0
         else:
             my_blocks = 172_800 / my_contribution
         my_reward = int(
-            my_blocks * app_globals.massa_network_values['block_reward']
+            my_blocks * app_globals.massa_network['values']['block_reward']
         )
 
         massa_updated = get_last_seen(
-            last_time=app_globals.massa_network_values['last_updated'],
+            last_time=app_globals.massa_network['values']['last_updated'],
             current_time=t_now()
         )
 
         my_percentage = round(
-            (rolls_number / app_globals.massa_network_values['total_staked_rolls']) * 100,
+            (rolls_number / app_globals.massa_network['values']['total_staked_rolls']) * 100,
             6
         )
 
         return as_list(
-            f"🏦 Total number of staked Rolls in MASSA Mainnet: {app_globals.massa_network_values['total_staked_rolls']:,} (updated: {massa_updated})", "",
+            f"🏦 Total number of staked Rolls in MASSA Mainnet: {app_globals.massa_network['values']['total_staked_rolls']:,} (updated: {massa_updated})", "",
             f"🍰 Your contribution is: {rolls_number} Rolls ({my_percentage}%)", "",
             f"🪙 Your estimated earnings ≈ {my_reward} MAS / day", "",
             as_line(
@@ -84,7 +84,7 @@ async def cmd_view_earnings(message: Message, state: FSMContext) -> None:
     if len(message_list) < 2:
         t = as_list(
             "❓ Please answer with a certain number of staked rolls: ", "",
-            f"☝ The answer must be an integer between 1 and {app_globals.massa_network_values['total_staked_rolls']}", "",
+            f"☝ The answer must be an integer between 1 and {app_globals.massa_network['values']['total_staked_rolls']}", "",
             "👉 Use /cancel to quit the scenario"
         )
         try:

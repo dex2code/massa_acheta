@@ -22,28 +22,28 @@ async def cmd_massa_info(message: Message) -> None:
     logger.info(f"-> Got '{message.text}' command from user '{message.from_user.id}' in chat '{message.chat.id}'")
 
     computed_rewards = ""
-    if (app_globals.massa_network_values['total_staked_rolls'] > 0) and (app_globals.massa_network_values['block_reward'] > 0):
-        my_contribution = app_globals.massa_network_values['total_staked_rolls'] / 100
+    if (app_globals.massa_network['values']['total_staked_rolls'] > 0) and (app_globals.massa_network['values']['block_reward'] > 0):
+        my_contribution = app_globals.massa_network['values']['total_staked_rolls'] / 100
         my_blocks = 172_800 / my_contribution
         my_reward = round(
-            my_blocks * app_globals.massa_network_values['block_reward'],
+            my_blocks * app_globals.massa_network['values']['block_reward'],
             2
         )
         computed_rewards = f"🪙 Estimated earnings for 100 Rolls ≈ {my_reward:,} MAS / day"
 
     info_last_update = get_last_seen(
-        last_time=app_globals.massa_network_values['last_updated'],
+        last_time=app_globals.massa_network['values']['last_updated'],
         current_time=t_now()
     )
     t = as_list(
         f"📚 MASSA network info:", "",
-        f"💾 Latest released MASSA version: \"{app_globals.massa_network_values['latest_release']}\"",
-        f"🏃 Current MASSA release: \"{app_globals.massa_network_values['current_release']}\"", "",
-        f"🌀 Current cycle: {app_globals.massa_network_values['current_cycle']}", "",
-        f"🪙 Roll price: {app_globals.massa_network_values['roll_price']:,} MAS",
-        f"💰 Block reward: {app_globals.massa_network_values['block_reward']} MAS", "",
-        f"👥 Total stakers: {app_globals.massa_network_values['total_stakers']:,}",
-        f"🗞 Total staked rolls: {app_globals.massa_network_values['total_staked_rolls']:,}", "",
+        f"💾 Latest released MASSA version: \"{app_globals.massa_network['values']['latest_release']}\"",
+        f"🏃 Current MASSA release: \"{app_globals.massa_network['values']['current_release']}\"", "",
+        f"🌀 Current cycle: {app_globals.massa_network['values']['current_cycle']}", "",
+        f"🪙 Roll price: {app_globals.massa_network['values']['roll_price']:,} MAS",
+        f"💰 Block reward: {app_globals.massa_network['values']['block_reward']} MAS", "",
+        f"👥 Total stakers: {app_globals.massa_network['values']['total_stakers']:,}",
+        f"🗞 Total staked rolls: {app_globals.massa_network['values']['total_staked_rolls']:,}", "",
         computed_rewards, "",
         f"👁 Info updated: {info_last_update}", "",
         f"☝ Service checks updates: every {app_globals.app_config['service']['massa_network_update_period_mins']} mins"

@@ -10,6 +10,7 @@ from aiogram.enums import ParseMode
 from collections import deque
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import SecretStr
+from collections import deque
 
 from app_config import app_config
 
@@ -107,7 +108,8 @@ results_lock = asyncio.Lock()
 '''
 MASSA network values
 '''
-massa_network_values =  {
+massa_network = {}
+massa_network['values'] =  {
     "latest_release": "",
     "current_release": "",
     "current_cycle": 0,
@@ -117,7 +119,7 @@ massa_network_values =  {
     "total_staked_rolls": 0,
     "last_updated": 0
 }
-
+massa_network['stat'] = deque()
 
 
 '''

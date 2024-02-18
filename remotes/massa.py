@@ -43,9 +43,9 @@ async def massa_get_info() -> bool:
         return False
 
     else:
-        app_globals.massa_network_values['current_release'] = massa_mainnet_release
-        app_globals.massa_network_values['total_stakers'] = massa_total_stakers
-        app_globals.massa_network_values['current_cycle'] = massa_current_cycle
+        app_globals.massa_network['values']['current_release'] = massa_mainnet_release
+        app_globals.massa_network['values']['total_stakers'] = massa_total_stakers
+        app_globals.massa_network['values']['current_cycle'] = massa_current_cycle
         return True
 
 
@@ -101,8 +101,8 @@ async def massa_get_status() -> bool:
         return False
 
     else:
-        app_globals.massa_network_values['block_reward'] = massa_block_reward
-        app_globals.massa_network_values['roll_price'] = massa_roll_price
+        app_globals.massa_network['values']['block_reward'] = massa_block_reward
+        app_globals.massa_network['values']['roll_price'] = massa_roll_price
         return True
 
 
@@ -163,7 +163,7 @@ async def massa_get_stakers() -> bool:
 
         await asyncio.sleep(delay=1)
 
-    app_globals.massa_network_values['total_staked_rolls'] = massa_total_rolls
+    app_globals.massa_network['values']['total_staked_rolls'] = massa_total_rolls
     return True
 
 
@@ -221,11 +221,11 @@ async def massexplo_get_data() -> bool:
         return False
 
     else:
-        app_globals.massa_network_values['current_release'] = massa_mainnet_release
-        app_globals.massa_network_values['total_stakers'] = massa_total_stakers
-        app_globals.massa_network_values['block_reward'] = massa_block_reward
-        app_globals.massa_network_values['roll_price'] = massa_roll_price
-        app_globals.massa_network_values['total_staked_rolls'] = massa_total_rolls
+        app_globals.massa_network['values']['current_release'] = massa_mainnet_release
+        app_globals.massa_network['values']['total_stakers'] = massa_total_stakers
+        app_globals.massa_network['values']['block_reward'] = massa_block_reward
+        app_globals.massa_network['values']['roll_price'] = massa_roll_price
+        app_globals.massa_network['values']['total_staked_rolls'] = massa_total_rolls
         return True
 
 
@@ -265,11 +265,11 @@ async def massa() -> None:
                 logger.warning(f"Error pulling /info from massexplo.io")
 
         if success_flag:
-            app_globals.massa_network_values['last_updated'] = t_now()
+            app_globals.massa_network['values']['last_updated'] = t_now()
             logger.info(f"Successfully collected MASSA mainnet network info")
         else:
             logger.warning(f"Could not collect MASSA mainnet network info")
-        logger.debug(f"Current MASSA network values:\n{json.dumps(obj=app_globals.massa_network_values, indent=4)}")
+        logger.debug(f"Current MASSA network values:\n{json.dumps(obj=app_globals.massa_network['values'], indent=4)}")
 
         logger.info(f"Sleeping for {app_globals.app_config['service']['massa_network_update_period_mins'] * 60} seconds...")
         await asyncio.sleep(delay=app_globals.app_config['service']['massa_network_update_period_mins'] * 60)
