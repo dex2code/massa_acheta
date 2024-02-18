@@ -251,3 +251,25 @@ async def show_address(message: Message, state: FSMContext) -> None:
 
     await state.clear()
     return
+
+
+
+@router.message(StateFilter(None), F.text.startswith("AU"))
+@logger.catch
+async def cmd_default(message: Message) -> None:
+    logger.debug("-> Enter Def")
+    logger.info(f"-> Got '{message.text}' command from user '{message.from_user.id}' in chat '{message.chat.id}'")
+
+    wallet_address = message.text
+
+    t = await get_address(wallet_address=wallet_address)
+    try:
+        await message.reply(
+            text=t.as_html(),
+            parse_mode=ParseMode.HTML,
+            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+        )
+    except BaseException as E:
+        logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
+
+    return
