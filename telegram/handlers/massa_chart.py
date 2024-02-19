@@ -99,7 +99,7 @@ async def cmd_massa_chart(message: Message) -> None:
                     "data": [],
                     "datalabels": {
                       "display": True,
-                      "align": "end"
+                      "align": 135
                     }
                 }
 
