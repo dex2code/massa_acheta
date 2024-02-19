@@ -272,7 +272,7 @@ async def massa() -> None:
                     "time": time_now,
                     "stakers": app_globals.massa_network['values']['total_stakers'],
                     "rolls": app_globals.massa_network['values']['total_staked_rolls'],
-                    "rewards": get_rewards(rolls_number=100)
+                    "rewards": await get_rewards(rolls_number=100)
                 }
             )
             logger.info(f"Successfully collected MASSA mainnet network info")

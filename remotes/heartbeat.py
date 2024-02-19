@@ -20,7 +20,7 @@ async def heartbeat() -> None:
 
         current_time = t_now()
 
-        computed_rewards = get_rewards(rolls_number=100)
+        computed_rewards = await get_rewards(rolls_number=100)
 
         heartbeat_list = []
         heartbeat_list.append(

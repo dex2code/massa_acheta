@@ -21,7 +21,7 @@ async def cmd_massa_info(message: Message) -> None:
     logger.debug("-> Enter Def")
     logger.info(f"-> Got '{message.text}' command from user '{message.from_user.id}' in chat '{message.chat.id}'")
 
-    wallet_computed_rewards = get_rewards(rolls_number=100)
+    wallet_computed_rewards = await get_rewards(rolls_number=100)
 
     info_last_update = get_last_seen(
         last_time=app_globals.massa_network['values']['last_updated'],
