@@ -37,6 +37,7 @@ async def cmd_massa_chart(message: Message) -> None:
                         "display": True,
                         "position": "left"
                     },
+
                     {
                         "id": "rewards",
                         "display": False,
@@ -44,6 +45,7 @@ async def cmd_massa_chart(message: Message) -> None:
                             "min": 0
                         }
                     },
+
                     {
                         "id": "stakers",
                         "display": True,
@@ -119,7 +121,7 @@ async def cmd_massa_chart(message: Message) -> None:
             chart_config['data']['datasets'][2]['data'].append(stakers)
 
             min_stakers = min(chart_config['data']['datasets'][2]['data'])
-            min_stakers = (int(min_stakers * 0.95) // 100) * 100
+            min_stakers = (min_stakers // 100) * 100
             max_stakers = max(chart_config['data']['datasets'][2]['data'])
             max_stakers = (int(max_stakers * 1.2) // 100) * 100
             chart_config['options']['scales']['yAxes'][2]['ticks']['min'] = min_stakers
