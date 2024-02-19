@@ -35,11 +35,7 @@ async def cmd_massa_chart(message: Message) -> None:
                     {
                         "id": "rolls",
                         "display": True,
-                        "position": "left",
-                        "ticks": {
-                            "min": 0,
-                            "max": 0
-                        }
+                        "position": "left"
                     },
                     {
                         "id": "rewards",
@@ -122,17 +118,10 @@ async def cmd_massa_chart(message: Message) -> None:
             chart_config['data']['datasets'][1]['data'].append(rewards)
             chart_config['data']['datasets'][2]['data'].append(stakers)
 
-            min_rolls = min(chart_config['data']['datasets'][0]['data'])
-            min_rolls = int(min_rolls * 0.9)
-            max_rolls = max(chart_config['data']['datasets'][0]['data'])
-            max_rolls = int(max_rolls * 1.1)
-            chart_config['options']['scales']['yAxes'][0]['ticks']['min'] = min_rolls
-            chart_config['options']['scales']['yAxes'][0]['ticks']['max'] = max_rolls
-
             min_stakers = min(chart_config['data']['datasets'][2]['data'])
-            min_stakers = int(min_stakers * 0.95)
+            min_stakers = (int(min_stakers * 0.95) // 100) * 100
             max_stakers = max(chart_config['data']['datasets'][2]['data'])
-            max_stakers = int(max_stakers * 1.2)
+            max_stakers = (int(max_stakers * 1.2) // 100) * 100
             chart_config['options']['scales']['yAxes'][2]['ticks']['min'] = min_stakers
             chart_config['options']['scales']['yAxes'][2]['ticks']['max'] = max_stakers
 
