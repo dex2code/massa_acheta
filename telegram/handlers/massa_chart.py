@@ -47,6 +47,9 @@ async def cmd_massa_chart(message: Message) -> None:
                         "position": "right",
                         "gridLines": {
                             "drawOnChartArea": False
+                        },
+                        "ticks": {
+                            "min": 0
                         }
                     }
                 ]
@@ -80,12 +83,17 @@ async def cmd_massa_chart(message: Message) -> None:
 
         label = measure['time']
         label = datetime.utcfromtimestamp(label).strftime("%b, %-d")
-        stakers = measure['stakers']
+
         rolls = measure['rolls']
+        stakers = measure['stakers']
 
         chart_config['data']['labels'].append(label)
         chart_config['data']['datasets'][0]['data'].append(rolls)
         chart_config['data']['datasets'][1]['data'].append(stakers)
+
+        min_stakers = min(chart_config['data']['datasets'][1]['data'])
+        min_stakers = int(min_stakers * 0.9)
+        chart_config['options']['scales']['yAxes'][1]['ticks']['min'] = min_stakers
 
     chart = QuickChart()
     chart.device_pixel_ratio = 2.0
@@ -95,7 +103,6 @@ async def cmd_massa_chart(message: Message) -> None:
     chart_url = chart.get_url()
 
     try:
-        logger.warning(json.dumps(obj=chart_config, indent=4))
         await message.answer_photo(
             photo=chart_url,
             caption="MASSA Mainnet chart",
