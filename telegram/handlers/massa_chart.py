@@ -38,7 +38,7 @@ async def cmd_massa_chart(message: Message) -> None:
                         "position": "left",
                         "ticks": {
                             "min": 0,
-                            "suggestedMax": 0
+                            "max": 0
                         }
                     },
                     {
@@ -57,7 +57,7 @@ async def cmd_massa_chart(message: Message) -> None:
                         },
                         "ticks": {
                             "min": 0,
-                            "suggestedMax": 0
+                            "max": 0
                         }
                     }
                 ]
@@ -123,18 +123,18 @@ async def cmd_massa_chart(message: Message) -> None:
             chart_config['data']['datasets'][2]['data'].append(stakers)
 
             min_rolls = min(chart_config['data']['datasets'][0]['data'])
-            min_rolls = int(min_rolls * 0.95)
+            min_rolls = int(min_rolls * 0.9)
             max_rolls = max(chart_config['data']['datasets'][0]['data'])
-            max_rolls = int(max_rolls * 1.05)
+            max_rolls = int(max_rolls * 1.1)
             chart_config['options']['scales']['yAxes'][0]['ticks']['min'] = min_rolls
-            chart_config['options']['scales']['yAxes'][0]['ticks']['suggestedMax'] = max_rolls
+            chart_config['options']['scales']['yAxes'][0]['ticks']['max'] = max_rolls
 
             min_stakers = min(chart_config['data']['datasets'][2]['data'])
             min_stakers = int(min_stakers * 0.95)
             max_stakers = max(chart_config['data']['datasets'][2]['data'])
             max_stakers = int(max_stakers * 1.2)
             chart_config['options']['scales']['yAxes'][2]['ticks']['min'] = min_stakers
-            chart_config['options']['scales']['yAxes'][2]['ticks']['suggestedMax'] = max_stakers
+            chart_config['options']['scales']['yAxes'][2]['ticks']['max'] = max_stakers
 
         chart = QuickChart()
         chart.device_pixel_ratio = 2.0
