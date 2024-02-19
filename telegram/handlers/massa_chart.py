@@ -1,5 +1,6 @@
 from loguru import logger
 
+import asyncio
 from aiogram import Router
 from aiogram.filters import Command, StateFilter
 from aiogram.types import Message
@@ -107,12 +108,14 @@ async def cmd_massa_chart(message: Message) -> None:
     stakers_chart_url = stakers_chart.get_url()
 
     rolls_chart = QuickChart()
+    rolls_chart.device_pixel_ratio = 2.0
     rolls_chart.width = 600
     rolls_chart.height = 300
     rolls_chart.config = rolls_chart_config
     rolls_chart_url = rolls_chart.get_url()
 
     rewards_chart = QuickChart()
+    rewards_chart.device_pixel_ratio = 2.0
     rewards_chart.width = 600
     rewards_chart.height = 300
     rewards_chart.config = rewards_chart_config
@@ -122,16 +125,23 @@ async def cmd_massa_chart(message: Message) -> None:
     try:
         await message.answer_photo(
             photo=stakers_chart_url,
+            caption="Active stakers chart",
             request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
         )
+        await asyncio.sleep(delay=0.5)
+
         await message.answer_photo(
             photo=rolls_chart_url,
             request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
         )
+        await asyncio.sleep(delay=0.5)
+
         await message.answer_photo(
             photo=rewards_chart_url,
             request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
         )
+        await asyncio.sleep(delay=0.5)
+
     except BaseException as E:
         logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
 
