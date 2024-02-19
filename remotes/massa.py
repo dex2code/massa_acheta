@@ -6,7 +6,7 @@ from time import time as t_now
 
 import app_globals
 
-from tools import pull_http_api, get_rewards
+from tools import pull_http_api
 
 
 @logger.catch
@@ -15,8 +15,7 @@ async def massa_get_info() -> bool:
 
     massa_info_answer = {"error": "No response from MASSA mainnet RPC (/info)"}
     try:
-        massa_info_answer = await pull_http_api(api_url=f"{app_globals.app_config['service']['mainnet_rpc_url']}/info",
-                                                api_method="GET")
+        massa_info_answer = await pull_http_api(api_url=f"{app_globals.app_config['service']['mainnet_rpc_url']}/info", api_method="GET")
 
         massa_info_result = massa_info_answer.get("result", None)
         if not massa_info_result:
@@ -272,8 +271,7 @@ async def massa() -> None:
                 {
                     "time": time_now,
                     "stakers": app_globals.massa_network['values']['total_stakers'],
-                    "rolls": app_globals.massa_network['values']['total_staked_rolls'],
-                    "rewards": get_rewards(rolls_number=100)
+                    "rolls": app_globals.massa_network['values']['total_staked_rolls']
                 }
             )
             logger.info(f"Successfully collected MASSA mainnet network info")

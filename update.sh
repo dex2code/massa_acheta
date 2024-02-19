@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 echo "MASSA Acheta update service"
-echo
+sudo echo
 
 sudo systemctl stop massa_acheta.service
 if [[ $? -eq 0 ]]
@@ -23,7 +23,8 @@ else
     exit 1
 fi
 
-git pull
+source ./bin/activate
+git pull && ./bin/pip3 install -r ./requirements.txt
 if [[ $? -eq 0 ]]
 then
     echo "✅ Service updated"

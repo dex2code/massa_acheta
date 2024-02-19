@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+echo "MASSA Acheta uninstall service"
+sudo echo
 
 sudo systemctl stop massa_acheta.service &> /dev/null
 sudo systemctl disable massa_acheta.service &> /dev/null

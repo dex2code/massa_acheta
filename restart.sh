@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+sudo echo
 echo -n "Restarting MASSA 🦗 Acheta service... "
 
 sudo systemctl restart massa_acheta.service

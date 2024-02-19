@@ -7,6 +7,7 @@ async-timeout==4.0.3
 asyncio==3.4.3
 attrs==23.2.0
 certifi==2023.11.17
+charset-normalizer==3.3.2
 frozenlist==1.4.1
 idna==3.6
 loguru==0.7.2
@@ -16,5 +17,8 @@ pydantic==2.5.3
 pydantic-settings==2.1.0
 pydantic_core==2.14.6
 python-dotenv==1.0.1
+quickchart-io==2.0.0
+requests==2.31.0
 typing_extensions==4.9.0
+urllib3==2.2.1
 yarl==1.9.4

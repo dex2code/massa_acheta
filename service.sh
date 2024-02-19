@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+echo "MASSA Acheta install service unit"
+sudo echo
+
 echo -n "Generating service file... "
 
 echo "

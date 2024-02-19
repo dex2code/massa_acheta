@@ -30,7 +30,7 @@ from telegram.handlers import cancel
 from telegram.handlers import view_config, view_node, view_wallet, view_address, view_credits, view_earnings, view_id
 from telegram.handlers import add_node, add_wallet
 from telegram.handlers import delete_node, delete_wallet
-from telegram.handlers import massa_info, acheta_release
+from telegram.handlers import massa_info, massa_chart, acheta_release
 from telegram.handlers import reset
 from telegram.handlers import unknown
 
@@ -121,6 +121,7 @@ async def main() -> None:
     app_globals.tg_dp.include_router(delete_wallet.router)
 
     app_globals.tg_dp.include_router(massa_info.router)
+    app_globals.tg_dp.include_router(massa_chart.router)
     app_globals.tg_dp.include_router(acheta_release.router)
 
     app_globals.tg_dp.include_router(reset.router)
