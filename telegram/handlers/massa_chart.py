@@ -121,7 +121,7 @@ async def cmd_massa_chart(message: Message) -> None:
             chart_config['data']['datasets'][2]['data'].append(rewards)
 
             min_stakers = min(chart_config['data']['datasets'][1]['data'])
-            min_stakers = (int(max_stakers * 0.9) // 100) * 100
+            min_stakers = (int(min_stakers * 0.9) // 100) * 100
             max_stakers = max(chart_config['data']['datasets'][1]['data'])
             max_stakers = (int(max_stakers * 1.2) // 100) * 100
             chart_config['options']['scales']['yAxes'][1]['ticks']['min'] = min_stakers
@@ -138,7 +138,7 @@ async def cmd_massa_chart(message: Message) -> None:
         logger.error(f"Cannot prepare MASSA Mainnet chart ({str(E)})")
         t = as_list(
             as_line("🤷 Charts are temporary unavailable. Try later."),
-            as_line("☝ Use help to learn bot commands")
+            as_line("☝ Use /help to learn bot commands")
         )
         try:
             await message.reply(
