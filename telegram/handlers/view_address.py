@@ -109,7 +109,7 @@ async def get_address(wallet_address: str="") -> Text:
             if type(cycle_info.get("nok_count", 0)) == int:
                 wallet_missed_blocks += cycle_info.get("nok_count", 0)
 
-        wallet_computed_rewards = get_rewards(rolls_number=wallet_active_rolls)
+        wallet_computed_rewards = await get_rewards(rolls_number=wallet_active_rolls)
 
         wallet_thread = wallet_result.get("thread", 0)
 
