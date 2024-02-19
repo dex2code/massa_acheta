@@ -21,11 +21,9 @@ async def cmd_massa_chart(message: Message) -> None:
     logger.info(f"-> Got '{message.text}' command from user '{message.from_user.id}' in chat '{message.chat.id}'")
 
     chart_config = {
-
-        "type": "line",
+        "type": "bar",
 
         "options": {
-            "staked": False,
 
             "title": {
                 "display": True,
@@ -36,13 +34,11 @@ async def cmd_massa_chart(message: Message) -> None:
                 "yAxes": [
                     {
                         "id": "rolls",
-                        "type": "linear",
                         "display": True,
                         "position": "left"
                     },
                     {
                         "id": "stakers",
-                        "type": "linear",
                         "display": True,
                         "position": "right",
                         "gridLines": {
@@ -50,11 +46,19 @@ async def cmd_massa_chart(message: Message) -> None:
                         },
                         "ticks": {
                             "min": 0,
-                            "max": 0
+                            "suggestedMax": 0
+                        }
+                    },
+                    {
+                        "id": "rewards",
+                        "display": False,
+                        "ticks": {
+                            "min": 0,
+                            "suggestedMax": 100,
                         }
                     }
                 ]
-            }
+            },
         },
 
         "data": {
@@ -63,19 +67,37 @@ async def cmd_massa_chart(message: Message) -> None:
             "datasets": [
                 {
                     "label": "Rolls staked",
-                    "fill": False,
-                    "borderColor": "blue",
-                    "borderWidth": 2,
-                    "data": [],
-                    "yAxisID": "rolls"
-                },
-                {
-                    "label": "Active stakers",
+                    "yAxisID": "rolls",
+                    "type": "line",
+                    "lineTension": 0.4,
                     "fill": False,
                     "borderColor": "red",
-                    "borderWidth": 2,
+                    "borderWidth": 1,
+                    "data": []
+                },
+
+                {
+                    "label": "Active stakers",
+                    "yAxisID": "stakers",
+                    "type": "line",
+                    "lineTension": 0.4,
+                    "fill": False,
+                    "borderColor": "blue",
+                    "borderWidth": 1,
+                    "data": []
+                },
+
+                {
+                    "label": "Estimated earnings for 100 rolls",
+                    "yAxisID": "rewards",
+                    "type": "bar",
+                    "backgroundColor": "rgb(240, 240, 230)",
+                    "borderWidth": 1,
                     "data": [],
-                    "yAxisID": "stakers"
+                    "datalabels": {
+                      "display": True,
+                      "align": "start"
+                    }
                 }
             ]
         }
@@ -89,17 +111,19 @@ async def cmd_massa_chart(message: Message) -> None:
 
             rolls = measure['rolls']
             stakers = measure['stakers']
+            rewards = measure['rewards']
 
             chart_config['data']['labels'].append(label)
             chart_config['data']['datasets'][0]['data'].append(rolls)
             chart_config['data']['datasets'][1]['data'].append(stakers)
+            chart_config['data']['datasets'][2]['data'].append(rewards)
 
             min_stakers = min(chart_config['data']['datasets'][1]['data'])
-            min_stakers = int(min_stakers * 0.95)
+            min_stakers = int(min_stakers * 0.9)
             max_stakers = max(chart_config['data']['datasets'][1]['data'])
             max_stakers = int(max_stakers * 1.2)
             chart_config['options']['scales']['yAxes'][1]['ticks']['min'] = min_stakers
-            chart_config['options']['scales']['yAxes'][1]['ticks']['max'] = max_stakers
+            chart_config['options']['scales']['yAxes'][1]['ticks']['suggestedMax'] = max_stakers
 
         chart = QuickChart()
         chart.device_pixel_ratio = 2.0
