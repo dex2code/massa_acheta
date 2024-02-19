@@ -13,7 +13,7 @@ from aiogram.enums import ParseMode
 import app_globals
 from telegram.keyboards.kb_nodes import kb_nodes
 from telegram.keyboards.kb_wallets import kb_wallets
-from tools import get_short_address, get_last_seen, check_privacy
+from tools import get_short_address, get_last_seen, check_privacy, get_rewards
 
 
 class WalletViewer(StatesGroup):
@@ -218,17 +218,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
         wallet_candidate_rolls = app_globals.app_results[node_name]['wallets'][wallet_address]['candidate_rolls']
         wallet_active_rolls = app_globals.app_results[node_name]['wallets'][wallet_address]['active_rolls']
         wallet_missed_blocks = app_globals.app_results[node_name]['wallets'][wallet_address]['missed_blocks']
-
-        wallet_computed_rewards = ""
-        if (app_globals.massa_network['values']['total_staked_rolls'] > 0) and (app_globals.massa_network['values']['block_reward'] > 0) and (wallet_active_rolls > 0):
-            my_contribution = app_globals.massa_network['values']['total_staked_rolls'] / wallet_active_rolls
-            my_blocks = 172_800 / my_contribution
-            my_reward = round(
-                my_blocks * app_globals.massa_network['values']['block_reward'],
-                2
-            )
-            wallet_computed_rewards = f"\n🪙 Estimated earnings ≈ {my_reward:,} MAS / day\n"
-
+        wallet_computed_rewards = get_rewards(rolls_number=wallet_active_rolls)
         wallet_thread = app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'].get("thread", 0)
 
         cycles_list = []
@@ -283,8 +273,8 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
             f"👁 Info updated: {wallet_last_seen}", "",
             f"💰 Final balance: {wallet_final_balance:,} MAS",
             f"🗞 Candidate / Active rolls: {wallet_candidate_rolls:,} / {wallet_active_rolls:,}",
-            f"🥊 Missed blocks: {wallet_missed_blocks}",
-            wallet_computed_rewards,
+            f"🥊 Missed blocks: {wallet_missed_blocks}", "",
+            f"🪙 Estimated earnings ≈ {wallet_computed_rewards:,} MAS / day", "",
             "🔎 Detailed info:", "",
             as_line(f"🧵 Thread: {wallet_thread}"),
             *cycles_list, "",

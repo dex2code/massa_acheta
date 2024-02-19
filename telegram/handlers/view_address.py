@@ -12,7 +12,7 @@ from aiogram.fsm.state import State, StatesGroup
 
 
 import app_globals
-from tools import pull_http_api, get_short_address
+from tools import pull_http_api, get_short_address, get_rewards
 
 
 class AddressViewer(StatesGroup):
@@ -109,15 +109,7 @@ async def get_address(wallet_address: str="") -> Text:
             if type(cycle_info.get("nok_count", 0)) == int:
                 wallet_missed_blocks += cycle_info.get("nok_count", 0)
 
-        wallet_computed_rewards = ""
-        if (app_globals.massa_network['values']['total_staked_rolls'] > 0) and (app_globals.massa_network['values']['block_reward'] > 0) and (wallet_active_rolls > 0):
-            my_contribution = app_globals.massa_network['values']['total_staked_rolls'] / wallet_active_rolls
-            my_blocks = 172_800 / my_contribution
-            my_reward = round(
-                my_blocks * app_globals.massa_network['values']['block_reward'],
-                2
-            )
-            wallet_computed_rewards = f"\n🪙 Estimated earnings ≈ {my_reward:,} MAS / day\n"
+        wallet_computed_rewards = get_rewards(rolls_number=wallet_active_rolls)
 
         wallet_thread = wallet_result.get("thread", 0)
 
@@ -168,8 +160,8 @@ async def get_address(wallet_address: str="") -> Text:
             ),
             f"💰 Final balance: {wallet_final_balance:,} MAS",
             f"🗞 Candidate / Active rolls: {wallet_candidate_rolls:,} / {wallet_active_rolls:,}",
-            f"🥊 Missed blocks: {wallet_missed_blocks}",
-            wallet_computed_rewards,
+            f"🥊 Missed blocks: {wallet_missed_blocks}", "",
+            f"🪙 Estimated earnings ≈ {wallet_computed_rewards:,} MAS / day\n", "",
             "🔎 Detailed info:", "",
             f"🧵 Thread: {wallet_thread}", "",
             *cycles_list, "",

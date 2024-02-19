@@ -6,7 +6,7 @@ from time import time as t_now
 
 import app_globals
 
-from tools import pull_http_api
+from tools import pull_http_api, get_rewards
 
 
 @logger.catch
@@ -272,7 +272,8 @@ async def massa() -> None:
                 {
                     "time": time_now,
                     "stakers": app_globals.massa_network['values']['total_stakers'],
-                    'rolls': app_globals.massa_network['values']['total_staked_rolls']
+                    "rolls": app_globals.massa_network['values']['total_staked_rolls'],
+                    "rewards": get_rewards(rolls_number=100)
                 }
             )
             logger.info(f"Successfully collected MASSA mainnet network info")

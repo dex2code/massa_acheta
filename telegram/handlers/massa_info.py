@@ -9,7 +9,7 @@ from time import time as t_now
 
 import app_globals
 
-from tools import get_last_seen
+from tools import get_last_seen, get_rewards
 
 
 router = Router()
@@ -21,15 +21,7 @@ async def cmd_massa_info(message: Message) -> None:
     logger.debug("-> Enter Def")
     logger.info(f"-> Got '{message.text}' command from user '{message.from_user.id}' in chat '{message.chat.id}'")
 
-    computed_rewards = ""
-    if (app_globals.massa_network['values']['total_staked_rolls'] > 0) and (app_globals.massa_network['values']['block_reward'] > 0):
-        my_contribution = app_globals.massa_network['values']['total_staked_rolls'] / 100
-        my_blocks = 172_800 / my_contribution
-        my_reward = round(
-            my_blocks * app_globals.massa_network['values']['block_reward'],
-            2
-        )
-        computed_rewards = f"🪙 Estimated earnings for 100 Rolls ≈ {my_reward:,} MAS / day"
+    wallet_computed_rewards = get_rewards(rolls_number=100)
 
     info_last_update = get_last_seen(
         last_time=app_globals.massa_network['values']['last_updated'],
@@ -44,7 +36,7 @@ async def cmd_massa_info(message: Message) -> None:
         f"💰 Block reward: {app_globals.massa_network['values']['block_reward']} MAS", "",
         f"👥 Total stakers: {app_globals.massa_network['values']['total_stakers']:,}",
         f"🗞 Total staked rolls: {app_globals.massa_network['values']['total_staked_rolls']:,}", "",
-        computed_rewards, "",
+        f"🪙 Estimated earnings for 100 Rolls ≈ {wallet_computed_rewards:,} MAS / day"
         f"👁 Info updated: {info_last_update}", "",
         f"☝ Service checks updates: every {app_globals.app_config['service']['massa_network_update_period_min']} mins"
     )

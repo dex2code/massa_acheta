@@ -11,7 +11,7 @@ from time import time as t_now
 
 import app_globals
 
-from tools import get_last_seen
+from tools import get_last_seen, get_rewards
 
 
 class EarningsViewer(StatesGroup):
@@ -40,14 +40,7 @@ async def get_earnings(rolls_number: int=1) -> Text:
         )
 
     else:
-        my_contribution = app_globals.massa_network['values']['total_staked_rolls'] / rolls_number
-        if my_contribution == 0:
-            my_blocks = 0
-        else:
-            my_blocks = 172_800 / my_contribution
-        my_reward = int(
-            my_blocks * app_globals.massa_network['values']['block_reward']
-        )
+        computed_rewards = get_rewards(rolls_number=rolls_number)
 
         massa_updated = get_last_seen(
             last_time=app_globals.massa_network['values']['last_updated'],
@@ -61,8 +54,8 @@ async def get_earnings(rolls_number: int=1) -> Text:
 
         return as_list(
             f"🏦 Total number of staked Rolls in MASSA Mainnet: {app_globals.massa_network['values']['total_staked_rolls']:,} (updated: {massa_updated})", "",
-            f"🍰 Your contribution is: {rolls_number} Rolls ({my_percentage}%)", "",
-            f"🪙 Your estimated earnings ≈ {my_reward} MAS / day", "",
+            f"🍰 Your contribution is: {rolls_number:,} Rolls ({my_percentage}%)", "",
+            f"🪙 Your estimated earnings ≈ {computed_rewards:,} MAS / day", "",
             as_line(
                 "👉 ",
                 TextLink(
