@@ -76,6 +76,7 @@ async def cmd_massa_chart(message: Message) -> None:
                     "fill": False,
                     "borderColor": "red",
                     "borderWidth": 1,
+                    "pointRadius": 1,
                     "data": []
                 },
 
@@ -87,6 +88,7 @@ async def cmd_massa_chart(message: Message) -> None:
                     "fill": False,
                     "borderColor": "blue",
                     "borderWidth": 1,
+                    "pointRadius": 1,
                     "data": []
                 },
 
