@@ -31,6 +31,7 @@ async def cmd_massa_chart(message: Message) -> None:
             "labels": [],
             "datasets": [
                 {
+                    "label": "Active stakers",
                     "data": [],
                     "fill": False,
                     "borderColor": "blue",
@@ -52,6 +53,7 @@ async def cmd_massa_chart(message: Message) -> None:
             "labels": [],
             "datasets": [
                 {
+                    "label": "Rolls staked",
                     "data": [],
                     "fill": False,
                     "borderColor": "red",
@@ -73,6 +75,7 @@ async def cmd_massa_chart(message: Message) -> None:
             "labels": [],
             "datasets": [
                 {
+                    "label": "MAS earned for 100 staked Rolls",
                     "data": [],
                     "fill": False,
                     "borderColor": "green",
@@ -132,12 +135,14 @@ async def cmd_massa_chart(message: Message) -> None:
 
         await message.answer_photo(
             photo=rolls_chart_url,
+            caption="Rolls staked chart",
             request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
         )
         await asyncio.sleep(delay=0.5)
 
         await message.answer_photo(
             photo=rewards_chart_url,
+            caption="Estimated earnings chart",
             request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
         )
         await asyncio.sleep(delay=0.5)
