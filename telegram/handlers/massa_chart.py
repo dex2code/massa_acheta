@@ -30,7 +30,6 @@ async def cmd_massa_chart(message: Message) -> None:
             "labels": [],
             "datasets": [
                 {
-                    "label": "Active stakers",
                     "data": [],
                     "fill": False,
                     "borderColor": "blue",
@@ -52,7 +51,6 @@ async def cmd_massa_chart(message: Message) -> None:
             "labels": [],
             "datasets": [
                 {
-                    "label": "Staked rolls number",
                     "data": [],
                     "fill": False,
                     "borderColor": "red",
@@ -74,7 +72,6 @@ async def cmd_massa_chart(message: Message) -> None:
             "labels": [],
             "datasets": [
                 {
-                    "label": "MAS rewards",
                     "data": [],
                     "fill": False,
                     "borderColor": "green",
@@ -103,28 +100,35 @@ async def cmd_massa_chart(message: Message) -> None:
         rewards_chart_config['data']['datasets'][0]['data'].append(rewards)
 
     stakers_chart = QuickChart()
+    stakers_chart.device_pixel_ratio = 2.0
+    stakers_chart.width = 600
+    stakers_chart.height = 300
     stakers_chart.config = stakers_chart_config
     stakers_chart_url = stakers_chart.get_url()
 
     rolls_chart = QuickChart()
+    rolls_chart.width = 600
+    rolls_chart.height = 300
     rolls_chart.config = rolls_chart_config
     rolls_chart_url = rolls_chart.get_url()
 
     rewards_chart = QuickChart()
+    rewards_chart.width = 600
+    rewards_chart.height = 300
     rewards_chart.config = rewards_chart_config
     rewards_chart_url = rewards_chart.get_url()
 
 
     try:
-        await message.reply_photo(
+        await message.answer_photo(
             photo=stakers_chart_url,
             request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
         )
-        await message.reply_photo(
+        await message.answer_photo(
             photo=rolls_chart_url,
             request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
         )
-        await message.reply_photo(
+        await message.answer_photo(
             photo=rewards_chart_url,
             request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
         )
