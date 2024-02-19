@@ -1,6 +1,6 @@
 from loguru import logger
 
-import asyncio
+import json
 from aiogram import Router
 from aiogram.filters import Command, StateFilter
 from aiogram.types import Message
@@ -95,6 +95,7 @@ async def cmd_massa_chart(message: Message) -> None:
     chart_url = chart.get_url()
 
     try:
+        logger.warning(json.dumps(obj=chart_config, indent=4))
         await message.answer_photo(
             photo=chart_url,
             caption="MASSA Mainnet chart",
