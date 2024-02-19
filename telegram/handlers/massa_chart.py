@@ -12,40 +12,78 @@ import app_globals
 router = Router()
 
 
-@router.message(StateFilter(None), Command("massa_stat"))
+@router.message(StateFilter(None), Command("massa_chart"))
 @logger.catch
-async def cmd_massa_stat(message: Message) -> None:
+async def cmd_massa_chart(message: Message) -> None:
     logger.debug("-> Enter Def")
     logger.info(f"-> Got '{message.text}' command from user '{message.from_user.id}' in chat '{message.chat.id}'")
 
-    chart_config = {
+    stakers_chart_config = {
         "type": "line",
         "options": {
             "title": {
                 "display": True,
-                "text": "MASSA Mainnet chart"
+                "text": "MASSA Mainnet stakers"
             }
         },
         "data": {
             "labels": [],
             "datasets": [
                 {
-                    "label": "Stakers",
+                    "label": "Active stakers",
                     "data": [],
                     "fill": False,
-                    "borderColor": "green",
-                    "borderWidth": 1
-                },
-                {
-                    "label": "Rolls",
-                    "data": [],
-                    "fill": False,
-                    "borderColor": "red",
-                    "borderWidth": 1
+                    "borderColor": "blue",
+                    "borderWidth": 2
                 }
             ]
         }
     }
+
+    rolls_chart_config = {
+        "type": "line",
+        "options": {
+            "title": {
+                "display": True,
+                "text": "MASSA Mainnet staked Rolls"
+            }
+        },
+        "data": {
+            "labels": [],
+            "datasets": [
+                {
+                    "label": "Staked rolls number",
+                    "data": [],
+                    "fill": False,
+                    "borderColor": "red",
+                    "borderWidth": 2
+                }
+            ]
+        }
+    }
+
+    rewards_chart_config = {
+        "type": "line",
+        "options": {
+            "title": {
+                "display": True,
+                "text": "MASSA Mainnet estimated rewards (100 Rolls staked)"
+            }
+        },
+        "data": {
+            "labels": [],
+            "datasets": [
+                {
+                    "label": "MAS rewards",
+                    "data": [],
+                    "fill": False,
+                    "borderColor": "green",
+                    "borderWidth": 2
+                }
+            ]
+        }
+    }
+
 
     for measure in app_globals.massa_network['stat']:
 
@@ -53,18 +91,41 @@ async def cmd_massa_stat(message: Message) -> None:
         label = datetime.utcfromtimestamp(label).strftime("%b, %-d")
         stakers = measure['stakers']
         rolls = measure['rolls']
+        rewards = measure['rewards']
 
-        chart_config['data']['labels'].append(label)
-        chart_config['data']['datasets'][0]['data'].append(stakers)
-        chart_config['data']['datasets'][1]['data'].append(rolls)
+        stakers_chart_config['data']['labels'].append(label)
+        stakers_chart_config['data']['datasets'][0]['data'].append(stakers)
 
-    chart = QuickChart()
-    chart.config = chart_config
-    chart_url = chart.get_url()
+        rolls_chart_config['data']['labels'].append(label)
+        rolls_chart_config['data']['datasets'][0]['data'].append(rolls)
+
+        rewards_chart_config['data']['labels'].append(label)
+        rewards_chart_config['data']['datasets'][0]['data'].append(rewards)
+
+    stakers_chart = QuickChart()
+    stakers_chart.config = stakers_chart_config
+    stakers_chart_url = stakers_chart.get_url()
+
+    rolls_chart = QuickChart()
+    rolls_chart.config = rolls_chart_config
+    rolls_chart_url = rolls_chart.get_url()
+
+    rewards_chart = QuickChart()
+    rewards_chart.config = rewards_chart_config
+    rewards_chart_url = rewards_chart.get_url()
+
 
     try:
         await message.reply_photo(
-            photo=chart_url,
+            photo=stakers_chart_url,
+            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+        )
+        await message.reply_photo(
+            photo=rolls_chart_url,
+            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+        )
+        await message.reply_photo(
+            photo=rewards_chart_url,
             request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
         )
     except BaseException as E:
