@@ -244,7 +244,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
                 "yAxes": [
                     {
                         "stacked": True,
-                        "ticks": { "max": 0 }
+                        "ticks": { "min": 0 }
                     }
                 ]
             }
@@ -298,14 +298,6 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
             blocks_chart_config['data']['datasets'][0]['data'].append(wallet_composed_cycles[cycle]['ok_blocks'])
             blocks_chart_config['data']['datasets'][1]['data'].append(wallet_composed_cycles[cycle]['nok_blocks'])
 
-        max_blocks = max(blocks_chart_config['data']['datasets'][0]['data']) + max(blocks_chart_config['data']['datasets'][1]['data'])
-        blocks_gap = int(max_blocks / 3)
-        if blocks_gap == 0:
-            max_blocks += 1
-        else:
-            max_blocks += blocks_gap
-        blocks_chart_config['options']['scales']['yAxes'][0]['ticks']['max'] = max_blocks
-    
         staking_chart = QuickChart()
         staking_chart.device_pixel_ratio = 2.0
         staking_chart.width = 600
