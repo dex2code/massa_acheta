@@ -32,12 +32,12 @@ async def cmd_add_node(message: Message, state: FSMContext) -> None:
         "❓ Please enter a short name for the new node (nickname) or /cancel to quit the scenario:",
     )
     try:
+        await state.set_state(NodeAdder.waiting_node_name)
         await message.reply(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
             request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
         )
-        await state.set_state(NodeAdder.waiting_node_name)
     except BaseException as E:
         logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
         await state.clear()
@@ -54,7 +54,6 @@ async def input_nodename_to_add(message: Message, state: FSMContext) -> None:
     if not await check_privacy(message=message): return
 
     node_name = message.text
-    await state.set_data(data={"node_name": node_name})
 
     if node_name in app_globals.app_results:
         t = as_list(
@@ -79,12 +78,13 @@ async def input_nodename_to_add(message: Message, state: FSMContext) -> None:
         "☝ Typically API URL looks like: http://ip.ad.dre.ss:33035/api/v2"
     )
     try:
+        await state.set_state(NodeAdder.waiting_node_url)
+        await state.set_data(data={"node_name": node_name})
         await message.reply(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
             request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
         )
-        await state.set_state(NodeAdder.waiting_node_url)
     except BaseException as E:
         logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
         await state.clear()
@@ -100,10 +100,14 @@ async def add_node(message: Message, state: FSMContext) -> None:
     logger.info(f"-> Got '{message.text}' command from user '{message.from_user.id}' in chat '{message.chat.id}'")
     if not await check_privacy(message=message): return
 
-    user_state = await state.get_data()
-    node_name = user_state['node_name']
-    node_url = message.text
-    await state.set_data(data={"node_url": node_url})
+    try:
+        user_state = await state.get_data()
+        node_name = user_state['node_name']
+        node_url = message.text
+    except BaseException as E:
+        logger.error(f"Cannot read state for user '{message.from_user.id}' from chat '{message.chat.id}' ({str(E)})")
+        await state.clear()
+        return
 
     try:
         async with app_globals.results_lock:

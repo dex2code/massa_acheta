@@ -8,6 +8,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.utils.formatting import as_list, as_line, TextLink, Code
 from aiogram.enums import ParseMode
+from collections import deque
 
 import app_globals
 from remotes.wallet import check_wallet
@@ -51,13 +52,13 @@ async def cmd_add_wallet(message: Message, state: FSMContext) -> None:
         "❓ Tap the node to select or /cancel to quit the scenario:",
     )
     try:
+        await state.set_state(WalletAdder.waiting_node_name)
         await message.reply(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
             reply_markup=kb_nodes(),
             request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
         )
-        await state.set_state(WalletAdder.waiting_node_name)
     except BaseException as E:
         logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
         await state.clear()
@@ -74,8 +75,6 @@ async def input_wallet_to_add(message: Message, state: FSMContext) -> None:
     if not await check_privacy(message=message): return
 
     node_name = message.text
-    await state.set_data(data={"node_name": node_name})
-
     if node_name not in app_globals.app_results:
         t = as_list(
             f"‼ Error: Unknown node \"{node_name}\"", "",
@@ -98,13 +97,14 @@ async def input_wallet_to_add(message: Message, state: FSMContext) -> None:
         "❓ Please enter MASSA wallet address with leading \"AU...\" prefix or /cancel to quit the scenario:"
     )
     try:
+        await state.set_state(WalletAdder.waiting_wallet_address)
+        await state.set_data(data={"node_name": node_name})
         await message.reply(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
             reply_markup=ReplyKeyboardRemove(),
             request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
         )
-        await state.set_state(WalletAdder.waiting_wallet_address)
     except BaseException as E:
         logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
         await state.clear()
@@ -120,9 +120,14 @@ async def add_wallet(message: Message, state: FSMContext) -> None:
     logger.info(f"-> Got '{message.text}' command from user '{message.from_user.id}' in chat '{message.chat.id}'")
     if not await check_privacy(message=message): return
 
-    user_state = await state.get_data()
-    node_name = user_state['node_name']
-    wallet_address = message.text
+    try:
+        user_state = await state.get_data()
+        node_name = user_state['node_name']
+        wallet_address = message.text
+    except BaseException as E:
+        logger.error(f"Cannot read state for user '{message.from_user.id}' from chat '{message.chat.id}' ({str(E)})")
+        await state.clear()
+        return
 
     if wallet_address in app_globals.app_results[node_name]['wallets']:
         t = as_list(
@@ -158,6 +163,9 @@ async def add_wallet(message: Message, state: FSMContext) -> None:
             app_globals.app_results[node_name]['wallets'][wallet_address]['last_status'] = "unknown"
             app_globals.app_results[node_name]['wallets'][wallet_address]['last_update'] = 0
             app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'] = {"unknown": "Never updated before"}
+            app_globals.app_results[node_name]['wallets'][wallet_address]['stat'] = deque(
+                maxlen=app_globals.app_config['service']['wallet_stat_keep_days'] * 24 * 60 / app_globals.app_config['service']['main_loop_period_min']
+            )
             await save_app_results()
 
     except BaseException as E:

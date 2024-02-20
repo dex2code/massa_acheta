@@ -50,13 +50,13 @@ async def cmd_delete_wallet(message: Message, state: FSMContext) -> None:
         "❓ Tap the node to select or /cancel to quit the scenario:",
     )
     try:
+        await state.set_state(WalletRemover.waiting_node_name)
         await message.reply(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
             reply_markup=kb_nodes(),
             request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
         )
-        await state.set_state(WalletRemover.waiting_node_name)
     except BaseException as E:
         logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
         await state.clear()
@@ -73,8 +73,6 @@ async def select_wallet_to_delete(message: Message, state: FSMContext) -> None:
     if not await check_privacy(message=message): return
 
     node_name = message.text
-    await state.set_data(data={"node_name": node_name})
-
     if node_name not in app_globals.app_results:
         t = as_list(
             f"‼ Error: Unknown node \"{node_name}\"", "",
@@ -115,13 +113,14 @@ async def select_wallet_to_delete(message: Message, state: FSMContext) -> None:
         "❓ Tap the wallet to select or /cancel to quit the scenario:",
     )
     try:
+        await state.set_state(WalletRemover.waiting_wallet_address)
+        await state.set_data(data={"node_name": node_name})
         await message.reply(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
             reply_markup=kb_wallets(node_name=node_name),
             request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
         )
-        await state.set_state(WalletRemover.waiting_wallet_address)
     except BaseException as E:
         logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
         await state.clear()
@@ -137,9 +136,14 @@ async def delete_wallet(message: Message, state: FSMContext) -> None:
     logger.info(f"-> Got '{message.text}' command from user '{message.from_user.id}' in chat '{message.chat.id}'")
     if not await check_privacy(message=message): return
 
-    user_state = await state.get_data()
-    node_name = user_state['node_name']
-    wallet_address = message.text
+    try:
+        user_state = await state.get_data()
+        node_name = user_state['node_name']
+        wallet_address = message.text
+    except BaseException as E:
+        logger.error(f"Cannot read state for user '{message.from_user.id}' from chat '{message.chat.id}' ({str(E)})")
+        await state.clear()
+        return
 
     if wallet_address not in app_globals.app_results[node_name]['wallets']:
         t = as_list(

@@ -13,6 +13,7 @@ app_config['service']['results_path'] = "app_results.json"
 app_config['service']['deferred_credits_path'] = "deferred_credits.json"
 
 app_config['service']['main_loop_period_min'] = 10
+app_config['service']['wallet_stat_keep_days'] = 1
 
 app_config['service']['http_session_timeout_sec'] = 300
 app_config['service']['http_probe_timeout_sec'] = 120

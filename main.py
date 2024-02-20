@@ -27,7 +27,7 @@ from telegram.queue import queue_telegram_message, operate_telegram_queue
 
 from telegram.handlers import start
 from telegram.handlers import cancel
-from telegram.handlers import view_config, view_node, view_wallet, view_address, view_credits, view_earnings, view_id
+from telegram.handlers import view_config, view_node, view_wallet, view_address, view_credits, view_earnings, view_id, chart_wallet
 from telegram.handlers import add_node, add_wallet
 from telegram.handlers import delete_node, delete_wallet
 from telegram.handlers import massa_info, massa_chart, acheta_release
@@ -47,6 +47,7 @@ async def main() -> None:
             BotCommand(command="/view_config", description="View service config"),
             BotCommand(command="/view_node", description="View node status"),
             BotCommand(command="/view_wallet", description="View wallet info"),
+            BotCommand(command="/chart_wallet", description="View wallet chart"),
             BotCommand(command="/view_address", description="View any wallet info"),
             BotCommand(command="/view_credits", description="View any wallet credits"),
             BotCommand(command="/view_earnings", description="View rewards for staking"),
@@ -55,6 +56,7 @@ async def main() -> None:
             BotCommand(command="/delete_node", description="Delete node from bot"),
             BotCommand(command="/delete_wallet", description="Delete wallet from bot"),
             BotCommand(command="/massa_info", description="Show MASSA network info"),
+            BotCommand(command="/massa_chart", description="Show MASSA network chart"),
             BotCommand(command="/acheta_release", description="Actual Acheta release"),
             BotCommand(command="/view_id", description="Show your TG ID"),
             BotCommand(command="/cancel", description="Cancel ongoing scenario"),
@@ -69,6 +71,7 @@ async def main() -> None:
             BotCommand(command="/view_credits", description="View any wallet credits"),
             BotCommand(command="/view_earnings", description="View rewards for staking"),
             BotCommand(command="/massa_info", description="Show MASSA network info"),
+            BotCommand(command="/massa_chart", description="Show MASSA network chart"),
             BotCommand(command="/view_id", description="Show your TG ID"),
             BotCommand(command="/cancel", description="Cancel ongoing scenario")
         ]
@@ -109,6 +112,7 @@ async def main() -> None:
     app_globals.tg_dp.include_router(view_config.router)
     app_globals.tg_dp.include_router(view_node.router)
     app_globals.tg_dp.include_router(view_wallet.router)
+    app_globals.tg_dp.include_router(chart_wallet.router)
     app_globals.tg_dp.include_router(view_address.router)
     app_globals.tg_dp.include_router(view_credits.router)
     app_globals.tg_dp.include_router(view_earnings.router)

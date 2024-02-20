@@ -183,8 +183,10 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
                 )
                 await queue_telegram_message(message_text=t.as_html())
 
+        time_now = t_now()
+
         app_globals.app_results[node_name]['wallets'][wallet_address]['last_status'] = True
-        app_globals.app_results[node_name]['wallets'][wallet_address]['last_update'] = t_now()
+        app_globals.app_results[node_name]['wallets'][wallet_address]['last_update'] = time_now
 
         app_globals.app_results[node_name]['wallets'][wallet_address]['final_balance'] = wallet_final_balance
         app_globals.app_results[node_name]['wallets'][wallet_address]['candidate_rolls'] = wallet_candidate_rolls
@@ -192,6 +194,16 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
         app_globals.app_results[node_name]['wallets'][wallet_address]['missed_blocks'] = wallet_missed_blocks
 
         app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'] = wallet_result
+
+        app_globals.app_results[node_name]['wallets'][wallet_address]['stat'].append(
+            {
+                "time": time_now,
+                "balance": wallet_final_balance,
+                "rolls": wallet_active_rolls
+            }
+        )
+
+        logger.info(f"Successfully stored stat for wallet '{wallet_address}' on node '{node_name}' ({len(app_globals.app_results[node_name]['wallets'][wallet_address]['stat'])} measures)")
 
     finally:
         logger.debug(f"API result for wallet '{wallet_address}' on node '{node_name}':\n{json.dumps(obj=app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'], indent=4)}")

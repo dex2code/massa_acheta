@@ -1,14 +1,14 @@
 from loguru import logger
 
-from time import time as t_now
 from datetime import datetime
 from aiogram import Router, F
 from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram.filters import Command, StateFilter
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
-from aiogram.utils.formatting import as_list, as_line, TextLink, Code
+from aiogram.utils.formatting import as_list, as_line, TextLink
 from aiogram.enums import ParseMode
+from quickchart import QuickChart
 
 import app_globals
 from telegram.keyboards.kb_nodes import kb_nodes
@@ -16,16 +16,16 @@ from telegram.keyboards.kb_wallets import kb_wallets
 from tools import get_short_address, get_last_seen, check_privacy, get_rewards
 
 
-class WalletViewer(StatesGroup):
+class ChartWalletViewer(StatesGroup):
     waiting_node_name = State()
     waiting_wallet_address = State()
 
 router = Router()
 
 
-@router.message(StateFilter(None), Command("view_wallet"))
+@router.message(StateFilter(None), Command("chart_wallet"))
 @logger.catch
-async def cmd_view_wallet(message: Message, state: FSMContext) -> None:
+async def cmd_chart_wallet(message: Message, state: FSMContext) -> None:
     logger.debug("->Enter Def")
     logger.info(f"-> Got '{message.text}' command from user '{message.from_user.id}' in chat '{message.chat.id}'")
     if not await check_privacy(message=message): return
@@ -52,7 +52,7 @@ async def cmd_view_wallet(message: Message, state: FSMContext) -> None:
         "❓ Tap the node to select or /cancel to quit the scenario",
     )
     try:
-        await state.set_state(WalletViewer.waiting_node_name)
+        await state.set_state(ChartWalletViewer.waiting_node_name)
         await message.reply(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
@@ -67,7 +67,7 @@ async def cmd_view_wallet(message: Message, state: FSMContext) -> None:
 
 
 
-@router.message(WalletViewer.waiting_node_name, F.text)
+@router.message(ChartWalletViewer.waiting_node_name, F.text)
 @logger.catch
 async def select_wallet_to_show(message: Message, state: FSMContext) -> None:
     logger.debug("-> Enter Def")
@@ -115,7 +115,7 @@ async def select_wallet_to_show(message: Message, state: FSMContext) -> None:
         "❓ Tap the wallet to select or /cancel to quit the scenario:",
     )
     try:
-        await state.set_state(WalletViewer.waiting_wallet_address)
+        await state.set_state(ChartWalletViewer.waiting_wallet_address)
         await state.set_data(data={"node_name": node_name})
         await message.reply(
             text=t.as_html(),
@@ -131,7 +131,7 @@ async def select_wallet_to_show(message: Message, state: FSMContext) -> None:
 
 
 
-@router.message(WalletViewer.waiting_wallet_address, F.text.startswith("AU"))
+@router.message(ChartWalletViewer.waiting_wallet_address, F.text.startswith("AU"))
 @logger.catch
 async def show_wallet(message: Message, state: FSMContext) -> None:
     logger.debug("-> Enter Def")
@@ -171,130 +171,108 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
         await state.clear()
         return
 
-    current_time = t_now()
+    chart_config = {
+        "type": "line",
 
-    wallet_last_seen = get_last_seen(
-        last_time=app_globals.app_results[node_name]['wallets'][wallet_address]['last_update'],
-        current_time=current_time
-    )
-    
-    node_last_seen = get_last_seen(
-        last_time=app_globals.app_results[node_name]['last_update'],
-        current_time=current_time
-    )
-    
-    if app_globals.app_results[node_name]['last_status'] == True:
-        node_status = f"🌿 Status: Online (last seen: {node_last_seen})"
-    else:
-        node_status = f"☠️ Status: Offline (last seen: {node_last_seen})"
+        "options": {
 
-    if app_globals.app_results[node_name]['wallets'][wallet_address]['last_status'] != True:
-        wallet_status = as_list(
-            as_line(
-                f"⁉ No actual data for wallet: ",
-                TextLink(
-                    get_short_address(address=wallet_address),
-                    url=f"{app_globals.app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
-                ),
-                end=""
-            ),
-            as_line(
-                "👁 Last successful info update: ",
-                wallet_last_seen
-            ),
-            as_line(
-                "💻 Result: ",
-                Code(app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'])
-            ),
-            as_line("⚠️ Check wallet address or node settings!"),
-            f"☝ Service checks updates: every {app_globals.app_config['service']['main_loop_period_min']} minutes"
-        )
+            "title": {
+                "display": True,
+                "text": f"Wallet {get_short_address(address=wallet_address)} chart"
+            },
 
-        t = as_list(
-            f"🏠 Node: \"{node_name}\"",
-            f"📍 {app_globals.app_results[node_name]['url']}",
-            node_status, "",
-            wallet_status
-        )
+            "scales": {
+                "yAxes": [
+                    {
+                        "id": "balance",
+                        "display": True,
+                        "position": "left",
+                        "ticks": { "fontColor": "blue" },
+                        "gridLines": { "drawOnChartArea": False }
+                    },
+                    {
+                        "id": "rolls",
+                        "display": True,
+                        "position": "right",
+                        "ticks": { "fontColor": "red" },
+                        "gridLines": { "drawOnChartArea": False }
+                    }
+                ]
+            }
+        },
 
-    else:
-        wallet_final_balance = app_globals.app_results[node_name]['wallets'][wallet_address]['final_balance']
-        wallet_candidate_rolls = app_globals.app_results[node_name]['wallets'][wallet_address]['candidate_rolls']
-        wallet_active_rolls = app_globals.app_results[node_name]['wallets'][wallet_address]['active_rolls']
-        wallet_missed_blocks = app_globals.app_results[node_name]['wallets'][wallet_address]['missed_blocks']
-        wallet_computed_rewards = await get_rewards(rolls_number=wallet_active_rolls)
-        wallet_thread = app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'].get("thread", 0)
+        "data": {
+            "labels": [],
 
-        cycles_list = []
-        wallet_cycles = app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'].get("cycle_infos", [])
-
-        if len(wallet_cycles) == 0:
-            cycles_list.append("🌀 Cycles info: No data")
-        else:
-            cycles_list.append("🌀 Cycles info ( Produced / Missed):")
-            for wallet_cycle in wallet_cycles:
-                cycle_num = wallet_cycle.get("cycle", 0)
-                ok_count = wallet_cycle.get("ok_count", 0)
-                nok_count = wallet_cycle.get("nok_count", 0)
-                cycles_list.append(f" ⋅ Cycle {cycle_num}: ( {ok_count} / {nok_count} )")
-        
-
-        credit_list = []
-        wallet_credits = app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'].get("deferred_credits", [])
-
-        if len(wallet_credits) == 0:
-            credit_list.append("💳 Deferred credits: No data")
-
-        else:
-            credit_list.append("💳 Deferred credits: ")
-
-            for wallet_credit in wallet_credits:
-                credit_amount = round(
-                    float(wallet_credit['amount']),
-                    4
-                )
-
-                credit_period = int(wallet_credit['slot']['period'])
-                credit_unix = 1705312800 + (credit_period * 16)
-                credit_date = datetime.utcfromtimestamp(credit_unix).strftime("%b %d, %Y")
-
-                credit_list.append(
-                    f" ⋅ {credit_date}: {credit_amount:,} MAS"
-                )
-
-        t = as_list(
-            f"🏠 Node: \"{node_name}\"",
-            f"📍 {app_globals.app_results[node_name]['url']}",
-            f"{node_status}", "",
-            as_line(
-                "👛 Wallet: ",
-                TextLink(
-                    get_short_address(address=wallet_address),
-                    url=f"{app_globals.app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
-                ),
-                end=""
-            ),
-            f"👁 Info updated: {wallet_last_seen}", "",
-            f"💰 Final balance: {wallet_final_balance:,} MAS",
-            f"🗞 Candidate / Active rolls: {wallet_candidate_rolls:,} / {wallet_active_rolls:,}",
-            f"🥊 Missed blocks: {wallet_missed_blocks}", "",
-            f"🪙 Estimated earnings ≈ {wallet_computed_rewards:,} MAS / day", "",
-            "🔎 Detailed info:", "",
-            as_line(f"🧵 Thread: {wallet_thread}"),
-            *cycles_list, "",
-            *credit_list, "",
-            f"☝ Service checks updates: every {app_globals.app_config['service']['main_loop_period_min']} minutes"
-        )
+            "datasets": [
+                {
+                    "label": "Final balance",
+                    "yAxisID": "balance",
+                    "lineTension": 0.4,
+                    "fill": False,
+                    "borderColor": "blue",
+                    "borderWidth": 1,
+                    "pointRadius": 0,
+                    "data": []
+                },
+                {
+                    "label": "Rolls staked",
+                    "yAxisID": "rolls",
+                    "lineTension": 0.4,
+                    "fill": False,
+                    "borderColor": "red",
+                    "borderWidth": 1,
+                    "pointRadius": 0,
+                    "data": []
+                }
+            ]
+        }
+    }
 
     try:
-        await message.reply(
-            text=t.as_html(),
-            parse_mode=ParseMode.HTML,
-            reply_markup=ReplyKeyboardRemove(),
-            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
-        )
+        for measure in app_globals.app_results[node_name]['wallets'][wallet_address]['stat']:
+
+            label = measure['time']
+            label = datetime.utcfromtimestamp(label).strftime("%b, %-d")
+
+            rolls = measure['rolls']
+            balance = measure['balance']
+
+            chart_config['data']['labels'].append(label)
+            chart_config['data']['datasets'][0]['data'].append(balance)
+            chart_config['data']['datasets'][1]['data'].append(rolls)
+
+        chart = QuickChart()
+        chart.device_pixel_ratio = 2.0
+        chart.width = 600
+        chart.height = 300
+        chart.config = chart_config
+        chart_url = chart.get_url()
+
     except BaseException as E:
-        logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
+        logger.error(f"Cannot prepare wallet chart ({str(E)})")
+        t = as_list(
+            as_line("🤷 Charts are temporary unavailable. Try later."),
+            as_line("☝ Use /help to learn bot commands")
+        )
+        try:
+            await message.reply(
+                text=t.as_html(),
+                parse_mode=ParseMode.HTML,
+                request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+            )
+        except BaseException as E:
+            logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
+
+    else:
+        try:
+            await message.reply_photo(
+                photo=chart_url,
+                parse_mode=ParseMode.HTML,
+                request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+            )
+        except BaseException as E:
+            logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
 
     await state.clear()
     return
