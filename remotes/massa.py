@@ -264,18 +264,25 @@ async def massa() -> None:
                 logger.warning(f"Error pulling /info from massexplo.io")
 
         if success_flag:
+            logger.info(f"Successfully collected MASSA mainnet network info")
+
             time_now = t_now()
 
-            app_globals.massa_network['values']['last_updated'] = time_now
-            app_globals.massa_network['stat'].append(
-                {
-                    "time": time_now,
-                    "stakers": app_globals.massa_network['values']['total_stakers'],
-                    "rolls": app_globals.massa_network['values']['total_staked_rolls']
-                }
-            )
-            logger.info(f"Successfully collected MASSA mainnet network info")
-            logger.info(f"Successfully stored MASSA stat ({len(app_globals.massa_network['stat'])} measures)")
+            try:
+                app_globals.massa_network['values']['last_updated'] = time_now
+                app_globals.massa_network['stat'].append(
+                    {
+                        "time": time_now,
+                        "stakers": app_globals.massa_network['values']['total_stakers'],
+                        "rolls": app_globals.massa_network['values']['total_staked_rolls']
+                    }
+                )
+            
+            except BaseException as E:
+                logger.warning(f"Cannot store MASSA stat ({str(E)})")
+
+            else:
+                logger.info(f"Successfully stored MASSA stat ({len(app_globals.massa_network['stat'])} measures)")
 
         else:
             logger.warning(f"Could not collect MASSA mainnet network info")

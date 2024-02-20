@@ -198,30 +198,35 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
 
         time_now = t_now()
 
-        app_globals.app_results[node_name]['wallets'][wallet_address]['last_status'] = True
-        app_globals.app_results[node_name]['wallets'][wallet_address]['last_update'] = time_now
+        try:
+            app_globals.app_results[node_name]['wallets'][wallet_address]['last_status'] = True
+            app_globals.app_results[node_name]['wallets'][wallet_address]['last_update'] = time_now
 
-        app_globals.app_results[node_name]['wallets'][wallet_address]['final_balance'] = wallet_final_balance
-        app_globals.app_results[node_name]['wallets'][wallet_address]['candidate_rolls'] = wallet_candidate_rolls
-        app_globals.app_results[node_name]['wallets'][wallet_address]['active_rolls'] = wallet_active_rolls
-        app_globals.app_results[node_name]['wallets'][wallet_address]['missed_blocks'] = wallet_missed_blocks
+            app_globals.app_results[node_name]['wallets'][wallet_address]['final_balance'] = wallet_final_balance
+            app_globals.app_results[node_name]['wallets'][wallet_address]['candidate_rolls'] = wallet_candidate_rolls
+            app_globals.app_results[node_name]['wallets'][wallet_address]['active_rolls'] = wallet_active_rolls
+            app_globals.app_results[node_name]['wallets'][wallet_address]['missed_blocks'] = wallet_missed_blocks
 
-        app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'] = wallet_result
+            app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'] = wallet_result
 
-        app_globals.app_results[node_name]['wallets'][wallet_address]['stat'].append(
-            {
-                "time": time_now,
-                "balance": wallet_final_balance,
-                "rolls": wallet_active_rolls,
-                "cycle": {
-                    "id": wallet_last_cycle,
-                    "ok_block": wallet_last_cycle_operated_blocks,
-                    "nok_block": wallet_last_cycle_missed_blocks
+            app_globals.app_results[node_name]['wallets'][wallet_address]['stat'].append(
+                {
+                    "time": time_now,
+                    "balance": wallet_final_balance,
+                    "rolls": wallet_active_rolls,
+                    "cycle": {
+                        "id": wallet_last_cycle,
+                        "ok_block": wallet_last_cycle_operated_blocks,
+                        "nok_block": wallet_last_cycle_missed_blocks
+                    }
                 }
-            }
-        )
+            )
 
-        logger.info(f"Successfully stored stat for wallet '{wallet_address}' on node '{node_name}' ({len(app_globals.app_results[node_name]['wallets'][wallet_address]['stat'])} measures)")
+        except BaseException as E:
+            logger.warning(f"Cannot store stat for wallet '{wallet_address}' on node '{node_name}' ({str(E)})")
+
+        else:
+            logger.info(f"Successfully stored stat for wallet '{wallet_address}' on node '{node_name}' ({len(app_globals.app_results[node_name]['wallets'][wallet_address]['stat'])} measures)")
 
     return
 
