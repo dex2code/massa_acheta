@@ -247,10 +247,6 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
                         "ticks": { "max": 0 }
                     }
                 ]
-            },
-
-            "plugins": {
-                "datalabels": { "align": "top" }
             }
         },
 
@@ -260,12 +256,12 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
             "datasets": [
                 {
                     "label": "Operated blocks",
-                    "backgroundColor": "rgb(75, 192, 192)",
+                    "backgroundColor": "green",
                     "data": []
                 },
                 {
                     "label": "Missed blocks",
-                    "backgroundColor": "rgb(255, 99, 132)",
+                    "backgroundColor": "red",
                     "data": []
                 }
             ]
