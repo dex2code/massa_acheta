@@ -259,6 +259,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
             await message.reply(
                 text=t.as_html(),
                 parse_mode=ParseMode.HTML,
+                reply_markup=ReplyKeyboardRemove(),
                 request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
             )
         except BaseException as E:
@@ -269,6 +270,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
             await message.reply_photo(
                 photo=chart_url,
                 parse_mode=ParseMode.HTML,
+                reply_markup=ReplyKeyboardRemove(),
                 request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
             )
         except BaseException as E:
