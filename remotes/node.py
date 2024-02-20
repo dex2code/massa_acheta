@@ -89,10 +89,6 @@ async def check_node(node_name: str="") -> None:
         app_globals.app_results[node_name]['last_chain_id'] = node_chain_id
         app_globals.app_results[node_name]['last_cycle'] = node_current_cycle
         app_globals.app_results[node_name]['last_result'] = node_result
-
-
-    finally:
-        logger.debug(f"API result for node '{node_name}' ({app_globals.app_results[node_name]['url']}):\n{json.dumps(obj=app_globals.app_results[node_name]['last_result'], indent=4)}")
     
     return
 

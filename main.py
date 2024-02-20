@@ -11,7 +11,6 @@ logger.add(
 )
 
 import asyncio
-import json
 from aiogram.utils.formatting import as_list
 from aiogram.types import BotCommand
 from pathlib import Path

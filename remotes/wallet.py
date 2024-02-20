@@ -205,9 +205,6 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
 
         logger.info(f"Successfully stored stat for wallet '{wallet_address}' on node '{node_name}' ({len(app_globals.app_results[node_name]['wallets'][wallet_address]['stat'])} measures)")
 
-    finally:
-        logger.debug(f"API result for wallet '{wallet_address}' on node '{node_name}':\n{json.dumps(obj=app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'], indent=4)}")
-
     return
 
 

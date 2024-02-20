@@ -1,7 +1,6 @@
 from loguru import logger
 
 import asyncio
-import json
 
 import app_globals
 from remotes.node import check_node
@@ -32,8 +31,6 @@ async def monitor() -> None:
             await asyncio.sleep(delay=0.1)
 
         await asyncio.gather(check_releases())
-
-        logger.debug(f"Current app_results:\n{json.dumps(obj=app_globals.app_results, indent=4)}")
 
         logger.info(f"Sleeping for {app_globals.app_config['service']['main_loop_period_min']} minutes...")
         await asyncio.sleep(
