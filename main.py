@@ -141,7 +141,4 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
-    logger.debug(f"Config:\n{json.dumps(obj=app_globals.app_config, indent=4)}")
-    logger.debug(f"Results:\n{json.dumps(obj=app_globals.app_results, indent=4)}")
-
     asyncio.run(main())
