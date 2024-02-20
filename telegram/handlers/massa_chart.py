@@ -21,7 +21,7 @@ async def cmd_massa_chart(message: Message) -> None:
     logger.info(f"-> Got '{message.text}' command from user '{message.from_user.id}' in chat '{message.chat.id}'")
 
     chart_config = {
-        "type": "bar",
+        "type": "line",
 
         "options": {
 
@@ -51,14 +51,6 @@ async def cmd_massa_chart(message: Message) -> None:
                         "ticks": {
                             "fontColor": "blue"
                         }
-                    },
-
-                    {
-                        "id": "rewards",
-                        "display": False,
-                        "ticks": {
-                            "min": 0
-                        }
                     }
                 ]
             },
@@ -71,40 +63,24 @@ async def cmd_massa_chart(message: Message) -> None:
                 {
                     "label": "Rolls staked",
                     "yAxisID": "rolls",
-                    "type": "line",
                     "lineTension": 0.4,
                     "fill": False,
                     "borderColor": "red",
                     "borderWidth": 1,
-                    "pointRadius": 1,
+                    "pointRadius": 0,
                     "data": []
                 },
 
                 {
                     "label": "Active stakers",
                     "yAxisID": "stakers",
-                    "type": "line",
                     "lineTension": 0.4,
                     "fill": False,
                     "borderColor": "blue",
                     "borderWidth": 1,
-                    "pointRadius": 1,
+                    "pointRadius": 0,
                     "data": []
-                },
-
-                {
-                    "label": "Estimated earnings for 100 rolls",
-                    "yAxisID": "rewards",
-                    "type": "bar",
-                    "backgroundColor": "rgb(240, 240, 230)",
-                    "borderWidth": 1,
-                    "data": [],
-                    "datalabels": {
-                      "display": True,
-                      "align": 135
-                    }
                 }
-
             ]
         }
     }
@@ -122,14 +98,6 @@ async def cmd_massa_chart(message: Message) -> None:
             chart_config['data']['labels'].append(label)
             chart_config['data']['datasets'][0]['data'].append(rolls)
             chart_config['data']['datasets'][1]['data'].append(stakers)
-            chart_config['data']['datasets'][2]['data'].append(rewards)
-
-            min_stakers = min(chart_config['data']['datasets'][1]['data'])
-            min_stakers = (int(min_stakers * 0.9) // 100) * 100
-            max_stakers = max(chart_config['data']['datasets'][1]['data'])
-            max_stakers = (int(max_stakers * 1.2) // 100) * 100
-            chart_config['options']['scales']['yAxes'][1]['ticks']['min'] = min_stakers
-            chart_config['options']['scales']['yAxes'][1]['ticks']['max'] = max_stakers
 
         chart = QuickChart()
         chart.device_pixel_ratio = 2.0
