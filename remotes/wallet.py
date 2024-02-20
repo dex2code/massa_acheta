@@ -63,6 +63,19 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
         if type(wallet_result['cycle_infos'][-1].get("active_rolls", 0)) == int:
             wallet_active_rolls = wallet_result['cycle_infos'][-1].get("active_rolls", 0)
 
+        wallet_last_cycle = 0
+        if type(wallet_result['cycle_infos'][-1].get("cycle", 0)) == int:
+            wallet_last_cycle = wallet_result['cycle_infos'][-1].get("cycle", 0)
+
+        wallet_operated_blocks = 0
+        for cycle_info in wallet_result.get("cycle_infos", []):
+            if type(cycle_info.get("ok_count", 0)) == int:
+                wallet_operated_blocks += cycle_info.get("ok_count", 0)
+
+        wallet_last_cycle_operated_blocks = 0
+        if type(wallet_result['cycle_infos'][-1].get("ok_count", 0)) == int:
+            wallet_last_cycle_operated_blocks = wallet_result['cycle_infos'][-1].get("ok_count", 0)
+
         wallet_missed_blocks = 0
         for cycle_info in wallet_result.get("cycle_infos", []):
             if type(cycle_info.get("nok_count", 0)) == int:
@@ -199,7 +212,12 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
             {
                 "time": time_now,
                 "balance": wallet_final_balance,
-                "rolls": wallet_active_rolls
+                "rolls": wallet_active_rolls,
+                "cycle": {
+                    "id": wallet_last_cycle,
+                    "ok_block": wallet_last_cycle_operated_blocks,
+                    "nok_block": wallet_last_cycle_missed_blocks
+                }
             }
         )
 

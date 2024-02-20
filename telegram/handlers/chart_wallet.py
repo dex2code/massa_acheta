@@ -171,7 +171,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
         await state.clear()
         return
 
-    chart_config = {
+    staking_chart_config = {
         "type": "line",
 
         "options": {
@@ -229,25 +229,28 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
         }
     }
 
+    blocks_chart_config = {
+    }
+
     try:
         for measure in app_globals.app_results[node_name]['wallets'][wallet_address]['stat']:
 
             label = measure['time']
-            label = datetime.utcfromtimestamp(label).strftime("%b, %-d")
+            label = datetime.utcfromtimestamp(label).strftime("%I%p")
 
             rolls = measure['rolls']
             balance = measure['balance']
 
-            chart_config['data']['labels'].append(label)
-            chart_config['data']['datasets'][0]['data'].append(balance)
-            chart_config['data']['datasets'][1]['data'].append(rolls)
+            staking_chart_config['data']['labels'].append(label)
+            staking_chart_config['data']['datasets'][0]['data'].append(balance)
+            staking_chart_config['data']['datasets'][1]['data'].append(rolls)
 
-        chart = QuickChart()
-        chart.device_pixel_ratio = 2.0
-        chart.width = 600
-        chart.height = 300
-        chart.config = chart_config
-        chart_url = chart.get_url()
+        staking_chart = QuickChart()
+        staking_chart.device_pixel_ratio = 2.0
+        staking_chart.width = 600
+        staking_chart.height = 300
+        staking_chart.config = staking_chart_config
+        staking_chart_url = staking_chart.get_url()
 
     except BaseException as E:
         logger.error(f"Cannot prepare wallet chart ({str(E)})")
@@ -267,8 +270,9 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
 
     else:
         try:
-            await message.reply_photo(
-                photo=chart_url,
+            await message.answer_photo(
+                photo=staking_chart_url,
+                caption="Staking chart",
                 parse_mode=ParseMode.HTML,
                 reply_markup=ReplyKeyboardRemove(),
                 request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
