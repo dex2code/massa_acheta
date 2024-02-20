@@ -70,7 +70,9 @@ for node_name in app_results:
         app_results[node_name]['wallets'][wallet_address]['last_update'] = 0
         app_results[node_name]['wallets'][wallet_address]['last_result'] = {"unknown": "Never updated before"}
         app_results[node_name]['wallets'][wallet_address]['stat'] = deque(
-            maxlen=app_config['service']['wallet_stat_keep_days'] * 24 * 60 / app_config['service']['main_loop_period_min']
+            maxlen=int(
+                app_config['service']['wallet_stat_keep_days'] * 24 * 60 / app_config['service']['main_loop_period_min']
+            )
         )
 
 
