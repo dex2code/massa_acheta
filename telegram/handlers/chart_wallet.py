@@ -230,10 +230,47 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
     }
 
     blocks_chart_config = {
+        "type": "bar",
+
+        "options": {
+
+            "title": {
+                "display": True,
+                "text": f"Wallet {get_short_address(address=wallet_address)} chart"
+            },
+
+            "scales": {
+                "xAxes": [ { "stacked": True } ],
+                "yAxes": [ { "stacked": True } ]
+            },
+
+            "plugins": {
+                "datalabels": { "align": "top" }
+            }
+        },
+
+        "data": {
+            "labels": [],
+
+            "datasets": [
+                {
+                    "label": "Operated blocks",
+                    "backgroundColor": "rgb(75, 192, 192)",
+                    "data": []
+                },
+                {
+                    "label": "Missed blocks",
+                    "backgroundColor": "rgb(255, 99, 132)",
+                    "data": []
+                }
+            ]
+        }
     }
 
     try:
+        wallet_stat_cycles = []
         for measure in app_globals.app_results[node_name]['wallets'][wallet_address]['stat']:
+            wallet_stat_cycles.append(measure['cycle'])
 
             label = measure['time']
             label = datetime.utcfromtimestamp(label).strftime("%I%p")
@@ -245,12 +282,34 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
             staking_chart_config['data']['datasets'][0]['data'].append(balance)
             staking_chart_config['data']['datasets'][1]['data'].append(rolls)
 
+        wallet_composed_cycles = {}
+        for wallet_cycle in wallet_stat_cycles:
+            cycle_id = wallet_cycle['id']
+            ok_blocks = wallet_cycle['ok_blocks']
+            nok_blocks = wallet_cycle['nok_blocks']
+            wallet_composed_cycles[cycle_id] = {
+                "ok_blocks": ok_blocks,
+                "nok_blocks": nok_blocks
+            }
+        wallet_composed_cycles = dict(sorted(wallet_composed_cycles.items()))
+        for cycle in wallet_composed_cycles:
+            blocks_chart_config['data']['labels'].append(cycle)
+            blocks_chart_config['data']['datasets'][0]['data'].append(wallet_composed_cycles[cycle]['ok_blocks'])
+            blocks_chart_config['data']['datasets'][1]['data'].append(wallet_composed_cycles[cycle]['nok_blocks'])
+
         staking_chart = QuickChart()
         staking_chart.device_pixel_ratio = 2.0
         staking_chart.width = 600
         staking_chart.height = 300
         staking_chart.config = staking_chart_config
         staking_chart_url = staking_chart.get_url()
+
+        blocks_chart = QuickChart()
+        blocks_chart.device_pixel_ratio = 2.0
+        blocks_chart.width = 600
+        blocks_chart.height = 300
+        blocks_chart.config = blocks_chart_config
+        blocks_chart_url = blocks_chart.get_url()
 
     except BaseException as E:
         logger.error(f"Cannot prepare wallet chart ({str(E)})")
@@ -273,6 +332,13 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
             await message.answer_photo(
                 photo=staking_chart_url,
                 caption="Staking chart",
+                parse_mode=ParseMode.HTML,
+                reply_markup=ReplyKeyboardRemove(),
+                request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+            )
+            await message.answer_photo(
+                photo=blocks_chart_url,
+                caption="Blocks chart",
                 parse_mode=ParseMode.HTML,
                 reply_markup=ReplyKeyboardRemove(),
                 request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']

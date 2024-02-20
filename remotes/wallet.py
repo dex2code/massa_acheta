@@ -216,8 +216,8 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
                     "rolls": wallet_active_rolls,
                     "cycle": {
                         "id": wallet_last_cycle,
-                        "ok_block": wallet_last_cycle_operated_blocks,
-                        "nok_block": wallet_last_cycle_missed_blocks
+                        "ok_blocks": wallet_last_cycle_operated_blocks,
+                        "nok_blocks": wallet_last_cycle_missed_blocks
                     }
                 }
             )
