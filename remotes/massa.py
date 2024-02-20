@@ -280,6 +280,5 @@ async def massa() -> None:
         else:
             logger.warning(f"Could not collect MASSA mainnet network info")
 
-        logger.debug(f"Current MASSA network values:\n{json.dumps(obj=app_globals.massa_network['values'], indent=4)}")
         logger.info(f"Sleeping for {app_globals.app_config['service']['massa_network_update_period_min'] * 60} seconds...")
         await asyncio.sleep(delay=app_globals.app_config['service']['massa_network_update_period_min'] * 60)
