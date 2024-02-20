@@ -33,27 +33,21 @@ async def cmd_massa_chart(message: Message) -> None:
             "scales": {
                 "yAxes": [
                     {
-                        "id": "rolls",
-                        "display": True,
-                        "position": "left",
-                        "ticks": {
-                            "fontColor": "red"
-                        }
-                    },
-
-                    {
                         "id": "stakers",
                         "display": True,
+                        "position": "left",
+                        "ticks": { "fontColor": "blue" },
+                        "gridLines": { "drawOnChartArea": False }
+                    },
+                    {
+                        "id": "rolls",
+                        "display": True,
                         "position": "right",
-                        "gridLines": {
-                            "drawOnChartArea": False
-                        },
-                        "ticks": {
-                            "fontColor": "blue"
-                        }
+                        "ticks": { "fontColor": "red" },
+                        "gridLines": { "drawOnChartArea": False }
                     }
                 ]
-            },
+            }
         },
 
         "data": {
@@ -61,22 +55,21 @@ async def cmd_massa_chart(message: Message) -> None:
 
             "datasets": [
                 {
-                    "label": "Rolls staked",
-                    "yAxisID": "rolls",
-                    "lineTension": 0.4,
-                    "fill": False,
-                    "borderColor": "red",
-                    "borderWidth": 1,
-                    "pointRadius": 0,
-                    "data": []
-                },
-
-                {
                     "label": "Active stakers",
                     "yAxisID": "stakers",
                     "lineTension": 0.4,
                     "fill": False,
                     "borderColor": "blue",
+                    "borderWidth": 1,
+                    "pointRadius": 0,
+                    "data": []
+                },
+                {
+                    "label": "Rolls staked",
+                    "yAxisID": "rolls",
+                    "lineTension": 0.4,
+                    "fill": False,
+                    "borderColor": "red",
                     "borderWidth": 1,
                     "pointRadius": 0,
                     "data": []
@@ -93,11 +86,10 @@ async def cmd_massa_chart(message: Message) -> None:
 
             rolls = measure['rolls']
             stakers = measure['stakers']
-            rewards = measure['rewards']
 
             chart_config['data']['labels'].append(label)
-            chart_config['data']['datasets'][0]['data'].append(rolls)
-            chart_config['data']['datasets'][1]['data'].append(stakers)
+            chart_config['data']['datasets'][0]['data'].append(stakers)
+            chart_config['data']['datasets'][1]['data'].append(rolls)
 
         chart = QuickChart()
         chart.device_pixel_ratio = 2.0
