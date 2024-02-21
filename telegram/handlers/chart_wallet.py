@@ -270,7 +270,8 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
     try:
         wallet_stat_cycles = {}
         for measure in app_globals.app_results[node_name]['wallets'][wallet_address]['stat']:
-            wallet_stat_cycles[measure['cycle']] = {
+            label = measure['cycle']
+            wallet_stat_cycles[label] = {
                 "balance": measure['balance'],
                 "rolls": measure['rolls'],
                 "ok_blocks": measure['ok_blocks'],
