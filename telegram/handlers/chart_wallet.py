@@ -267,31 +267,31 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
         }
     }
 
-    wallet_stat_cycles = {}
-    for measure in app_globals.app_results[node_name]['wallets'][wallet_address]['stat']:
-        wallet_stat_cycles[measure['cycle']] = {
-            "balance": measure['balance'],
-            "rolls": measure['rolls'],
-            "ok_blocks": measure['ok_blocks'],
-            "nok_blocks": measure['nok_blocks']
-        }
-
-    wallet_stat_cycles = dict(sorted(wallet_stat_cycles.items()))
-    for cycle in wallet_stat_cycles:
-        balance = wallet_stat_cycles[cycle]['balance']
-        rolls = wallet_stat_cycles[cycle]['rolls']
-        ok_blocks = wallet_stat_cycles[cycle]['ok_blocks']
-        nok_blocks = wallet_stat_cycles[cycle]['nok_blocks']
-
-        staking_chart_config['data']['labels'].append(cycle)
-        staking_chart_config['data']['datasets'][0]['data'].append(rolls)
-        staking_chart_config['data']['datasets'][1]['data'].append(balance)
-
-        blocks_chart_config['data']['labels'].append(cycle)
-        blocks_chart_config['data']['datasets'][0]['data'].append(ok_blocks)
-        blocks_chart_config['data']['datasets'][1]['data'].append(nok_blocks)
-
     try:
+        wallet_stat_cycles = {}
+        for measure in app_globals.app_results[node_name]['wallets'][wallet_address]['stat']:
+            wallet_stat_cycles[measure['cycle']] = {
+                "balance": measure['balance'],
+                "rolls": measure['rolls'],
+                "ok_blocks": measure['ok_blocks'],
+                "nok_blocks": measure['nok_blocks']
+            }
+
+        wallet_stat_cycles = dict(sorted(wallet_stat_cycles.items()))
+        for cycle in wallet_stat_cycles:
+            balance = wallet_stat_cycles[cycle]['balance']
+            rolls = wallet_stat_cycles[cycle]['rolls']
+            ok_blocks = wallet_stat_cycles[cycle]['ok_blocks']
+            nok_blocks = wallet_stat_cycles[cycle]['nok_blocks']
+
+            staking_chart_config['data']['labels'].append(cycle)
+            staking_chart_config['data']['datasets'][0]['data'].append(rolls)
+            staking_chart_config['data']['datasets'][1]['data'].append(balance)
+
+            blocks_chart_config['data']['labels'].append(cycle)
+            blocks_chart_config['data']['datasets'][0]['data'].append(ok_blocks)
+            blocks_chart_config['data']['datasets'][1]['data'].append(nok_blocks)
+
         staking_chart = QuickChart()
         staking_chart.device_pixel_ratio = 2.0
         staking_chart.width = 600
