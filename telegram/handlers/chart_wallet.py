@@ -13,7 +13,7 @@ from quickchart import QuickChart
 import app_globals
 from telegram.keyboards.kb_nodes import kb_nodes
 from telegram.keyboards.kb_wallets import kb_wallets
-from tools import get_short_address, get_last_seen, check_privacy, get_rewards
+from tools import get_short_address, check_privacy
 
 
 class ChartWalletViewer(StatesGroup):
@@ -178,20 +178,20 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
 
             "title": {
                 "display": True,
-                "text": f"Wallet {get_short_address(address=wallet_address)} chart"
+                "text": f"Wallet: {get_short_address(address=wallet_address)}"
             },
 
             "scales": {
                 "yAxes": [
                     {
-                        "id": "balance",
+                        "id": "rolls",
                         "display": True,
                         "position": "left",
-                        "ticks": { "fontColor": "blue" },
+                        "ticks": { "fontColor": "green" },
                         "gridLines": { "drawOnChartArea": False }
                     },
                     {
-                        "id": "rolls",
+                        "id": "balance",
                         "display": True,
                         "position": "right",
                         "ticks": { "fontColor": "red" },
@@ -206,22 +206,22 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
 
             "datasets": [
                 {
-                    "label": "Final balance",
-                    "yAxisID": "balance",
+                    "label": "Rolls staked",
+                    "yAxisID": "rolls",
                     "lineTension": 0.4,
                     "fill": False,
-                    "borderColor": "blue",
+                    "borderColor": "green",
                     "borderWidth": 1,
                     "pointRadius": 0,
                     "data": []
                 },
                 {
-                    "label": "Rolls staked",
-                    "yAxisID": "rolls",
+                    "label": "Final balance",
+                    "yAxisID": "balance",
                     "lineTension": 0.4,
                     "fill": False,
                     "borderColor": "red",
-                    "borderWidth": 1,
+                    "borderWidth": 2,
                     "pointRadius": 0,
                     "data": []
                 }
@@ -236,7 +236,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
 
             "title": {
                 "display": True,
-                "text": f"Wallet {get_short_address(address=wallet_address)} chart"
+                "text": f"Wallet: {get_short_address(address=wallet_address)}"
             },
 
             "scales": {
@@ -252,7 +252,6 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
 
         "data": {
             "labels": [],
-
             "datasets": [
                 {
                     "label": "Operated blocks",
@@ -269,34 +268,30 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
     }
 
     try:
-        wallet_stat_cycles = []
+        wallet_stat_cycles = {}
         for measure in app_globals.app_results[node_name]['wallets'][wallet_address]['stat']:
-            wallet_stat_cycles.append(measure['cycle'])
-
-            label = measure['time']
-            label = datetime.utcfromtimestamp(label).strftime("%I%p")
-
-            rolls = measure['rolls']
-            balance = measure['balance']
-
-            staking_chart_config['data']['labels'].append(label)
-            staking_chart_config['data']['datasets'][0]['data'].append(balance)
-            staking_chart_config['data']['datasets'][1]['data'].append(rolls)
-
-        wallet_composed_cycles = {}
-        for wallet_cycle in wallet_stat_cycles:
-            cycle_id = wallet_cycle['id']
-            ok_blocks = wallet_cycle['ok_blocks']
-            nok_blocks = wallet_cycle['nok_blocks']
-            wallet_composed_cycles[cycle_id] = {
-                "ok_blocks": ok_blocks,
-                "nok_blocks": nok_blocks
+            wallet_stat_cycles[measure['cycle']] = {
+                "balance": measure['balance'],
+                "rolls": measure['rolls'],
+                "ok_blocks": measure['ok_blocks'],
+                "nok_blocks": measure['nok_blocks']
             }
-        wallet_composed_cycles = dict(sorted(wallet_composed_cycles.items()))
-        for cycle in wallet_composed_cycles:
-            blocks_chart_config['data']['labels'].append(cycle)
-            blocks_chart_config['data']['datasets'][0]['data'].append(wallet_composed_cycles[cycle]['ok_blocks'])
-            blocks_chart_config['data']['datasets'][1]['data'].append(wallet_composed_cycles[cycle]['nok_blocks'])
+
+        wallet_stat_cycles = dict(sorted(wallet_stat_cycles.items()))
+        for cycle in wallet_stat_cycles:
+            label = cycle
+            balance = cycle['balance']
+            rolls = cycle['rolls']
+            ok_blocks = cycle['ok_blocks']
+            nok_blocks = cycle['nok_blocks']
+
+            staking_chart_config['data']['labels'].append(f"Cycle {label}")
+            staking_chart_config['data']['datasets'][0]['data'].append(rolls)
+            staking_chart_config['data']['datasets'][1]['data'].append(balance)
+
+            blocks_chart_config['data']['labels'].append(f"Cycle {label}")
+            blocks_chart_config['data']['datasets'][0]['data'].append(ok_blocks)
+            blocks_chart_config['data']['datasets'][1]['data'].append(nok_blocks)
 
         staking_chart = QuickChart()
         staking_chart.device_pixel_ratio = 2.0

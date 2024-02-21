@@ -212,13 +212,11 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
             app_globals.app_results[node_name]['wallets'][wallet_address]['stat'].append(
                 {
                     "time": time_now,
+                    "cycle": wallet_last_cycle,
                     "balance": wallet_final_balance,
                     "rolls": wallet_active_rolls,
-                    "cycle": {
-                        "id": wallet_last_cycle,
-                        "ok_blocks": wallet_last_cycle_operated_blocks,
-                        "nok_blocks": wallet_last_cycle_missed_blocks
-                    }
+                    "ok_blocks": wallet_last_cycle_operated_blocks,
+                    "nok_blocks": wallet_last_cycle_missed_blocks
                 }
             )
 

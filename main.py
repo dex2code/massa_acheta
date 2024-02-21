@@ -14,7 +14,7 @@ import asyncio
 from aiogram.utils.formatting import as_list
 from aiogram.types import BotCommand
 from pathlib import Path
-
+from sys import exit as sys_exit
 
 import app_globals
 
@@ -97,47 +97,61 @@ async def main() -> None:
     )
     await queue_telegram_message(message_text=t.as_html())
 
-    aio_loop = asyncio.get_event_loop()
-    aio_loop.create_task(operate_telegram_queue())
-    aio_loop.create_task(remote_monitor())
-    aio_loop.create_task(remote_massa())
-    aio_loop.create_task(remote_heartbeat())
+    try:
+        aio_loop = asyncio.get_event_loop()
+        aio_loop.create_task(operate_telegram_queue())
+        aio_loop.create_task(remote_monitor())
+        aio_loop.create_task(remote_massa())
+        aio_loop.create_task(remote_heartbeat())
 
 
-    app_globals.tg_dp.include_router(start.router)
+        app_globals.tg_dp.include_router(start.router)
 
-    app_globals.tg_dp.include_router(cancel.router)
+        app_globals.tg_dp.include_router(cancel.router)
 
-    app_globals.tg_dp.include_router(view_config.router)
-    app_globals.tg_dp.include_router(view_node.router)
-    app_globals.tg_dp.include_router(view_wallet.router)
-    app_globals.tg_dp.include_router(chart_wallet.router)
-    app_globals.tg_dp.include_router(view_address.router)
-    app_globals.tg_dp.include_router(view_credits.router)
-    app_globals.tg_dp.include_router(view_earnings.router)
-    app_globals.tg_dp.include_router(view_id.router)
+        app_globals.tg_dp.include_router(view_config.router)
+        app_globals.tg_dp.include_router(view_node.router)
+        app_globals.tg_dp.include_router(view_wallet.router)
+        app_globals.tg_dp.include_router(chart_wallet.router)
+        app_globals.tg_dp.include_router(view_address.router)
+        app_globals.tg_dp.include_router(view_credits.router)
+        app_globals.tg_dp.include_router(view_earnings.router)
+        app_globals.tg_dp.include_router(view_id.router)
 
-    app_globals.tg_dp.include_router(add_node.router)
-    app_globals.tg_dp.include_router(add_wallet.router)
+        app_globals.tg_dp.include_router(add_node.router)
+        app_globals.tg_dp.include_router(add_wallet.router)
 
-    app_globals.tg_dp.include_router(delete_node.router)
-    app_globals.tg_dp.include_router(delete_wallet.router)
+        app_globals.tg_dp.include_router(delete_node.router)
+        app_globals.tg_dp.include_router(delete_wallet.router)
 
-    app_globals.tg_dp.include_router(massa_info.router)
-    app_globals.tg_dp.include_router(massa_chart.router)
-    app_globals.tg_dp.include_router(acheta_release.router)
+        app_globals.tg_dp.include_router(massa_info.router)
+        app_globals.tg_dp.include_router(massa_chart.router)
+        app_globals.tg_dp.include_router(acheta_release.router)
 
-    app_globals.tg_dp.include_router(reset.router)
+        app_globals.tg_dp.include_router(reset.router)
 
-    app_globals.tg_dp.include_router(unknown.router)
+        app_globals.tg_dp.include_router(unknown.router)
 
-    await app_globals.tg_bot.delete_webhook(drop_pending_updates=True)
-    await app_globals.tg_dp.start_polling(app_globals.tg_bot)
+        await app_globals.tg_bot.delete_webhook(drop_pending_updates=True)
+        await app_globals.tg_dp.start_polling(app_globals.tg_bot)
 
+    except BaseException as E:
+        logger.error(f"Service error ({str(E)})")
+        aio_loop.stop()
+        aio_loop.close()
+        
     return
 
 
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+
+    try:
+        asyncio.run(main())
+    
+    except BaseException as E:
+        logger.error(f"Service error ({str(E)})")
+
+    finally:
+        sys_exit()

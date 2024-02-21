@@ -36,7 +36,7 @@ async def cmd_massa_chart(message: Message) -> None:
                         "id": "stakers",
                         "display": True,
                         "position": "left",
-                        "ticks": { "fontColor": "blue" },
+                        "ticks": { "fontColor": "green" },
                         "gridLines": { "drawOnChartArea": False }
                     },
                     {
@@ -59,7 +59,7 @@ async def cmd_massa_chart(message: Message) -> None:
                     "yAxisID": "stakers",
                     "lineTension": 0.4,
                     "fill": False,
-                    "borderColor": "blue",
+                    "borderColor": "green",
                     "borderWidth": 1,
                     "pointRadius": 0,
                     "data": []
@@ -70,7 +70,7 @@ async def cmd_massa_chart(message: Message) -> None:
                     "lineTension": 0.4,
                     "fill": False,
                     "borderColor": "red",
-                    "borderWidth": 1,
+                    "borderWidth": 2,
                     "pointRadius": 0,
                     "data": []
                 }
