@@ -86,7 +86,6 @@ async def cmd_massa_chart(message: Message) -> None:
                 "rolls": measure['rolls']
             }
 
-        massa_stat_cycles = dict(sorted(massa_stat_cycles.items()))
         for cycle in massa_stat_cycles:
             stakers = massa_stat_cycles[cycle]['stakers']
             rolls = massa_stat_cycles[cycle]['rolls']

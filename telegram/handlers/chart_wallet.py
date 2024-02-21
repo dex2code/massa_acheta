@@ -277,7 +277,6 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
                 "nok_blocks": measure['nok_blocks']
             }
 
-        wallet_stat_cycles = dict(sorted(wallet_stat_cycles.items()))
         for cycle in wallet_stat_cycles:
             balance = wallet_stat_cycles[cycle]['balance']
             rolls = wallet_stat_cycles[cycle]['rolls']
