@@ -79,15 +79,19 @@ async def cmd_massa_chart(message: Message) -> None:
     }
 
     try:
+        massa_stat_cycles = {}
         for measure in app_globals.massa_network['stat']:
+            massa_stat_cycles[measure['cycle']] = {
+                "stakers": measure['stakers'],
+                "rolls": measure['rolls']
+            }
 
-            label = measure['time']
-            label = datetime.utcfromtimestamp(label).strftime("%b, %-d")
+        massa_stat_cycles = dict(sorted(massa_stat_cycles.items()))
+        for cycle in massa_stat_cycles:
+            stakers = massa_stat_cycles[cycle]['stakers']
+            rolls = massa_stat_cycles[cycle]['rolls']
 
-            rolls = measure['rolls']
-            stakers = measure['stakers']
-
-            chart_config['data']['labels'].append(label)
+            chart_config['data']['labels'].append(cycle)
             chart_config['data']['datasets'][0]['data'].append(stakers)
             chart_config['data']['datasets'][1]['data'].append(rolls)
 

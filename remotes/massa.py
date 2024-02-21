@@ -6,7 +6,7 @@ from time import time as t_now
 
 import app_globals
 
-from tools import pull_http_api, get_rewards
+from tools import pull_http_api
 
 
 @logger.catch
@@ -192,6 +192,11 @@ async def massexplo_get_data() -> bool:
             logger.warning(f"No stakers in massexplo.io /info answer ({str(massexplo_data_answer)})")
             return False
 
+        massa_current_cycle = massexplo_data_result.get("current_cycle", None)
+        if not massa_current_cycle:
+            logger.warning(f"No current_cycle in massexplo.io /info answer ({str(massexplo_data_answer)})")
+            return False
+
         massa_block_reward = massexplo_data_result.get("block_reward", None)
         if not massa_block_reward:
             logger.warning(f"No block_reward in massexplo.io /info answer ({str(massexplo_data_answer)})")
@@ -222,6 +227,7 @@ async def massexplo_get_data() -> bool:
     else:
         app_globals.massa_network['values']['current_release'] = massa_mainnet_release
         app_globals.massa_network['values']['total_stakers'] = massa_total_stakers
+        app_globals.massa_network['values']['current_cycle'] = massa_current_cycle
         app_globals.massa_network['values']['block_reward'] = massa_block_reward
         app_globals.massa_network['values']['roll_price'] = massa_roll_price
         app_globals.massa_network['values']['total_staked_rolls'] = massa_total_rolls
@@ -273,6 +279,7 @@ async def massa() -> None:
                 app_globals.massa_network['stat'].append(
                     {
                         "time": time_now,
+                        "cycle": app_globals.massa_network['values']['current_cycle'],
                         "stakers": app_globals.massa_network['values']['total_stakers'],
                         "rolls": app_globals.massa_network['values']['total_staked_rolls']
                     }
