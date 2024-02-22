@@ -12,7 +12,7 @@ from app_config import app_config
 import app_globals
 
 from telegram.keyboards.kb_nodes import kb_nodes
-from tools import get_last_seen, get_short_address, check_privacy, t_now
+from tools import get_last_seen, get_short_address, check_privacy
 
 
 class NodeViewer(StatesGroup):
@@ -91,16 +91,13 @@ async def show_node(message: Message, state: FSMContext) -> None:
         await state.clear()
         return
 
-    current_time = t_now()
-
     if len(app_globals.app_results[node_name]['wallets']) == 0:
         wallets_attached = "⭕ No wallets attached"
     else:
         wallets_attached = f"👛 Wallets attached: {len(app_globals.app_results[node_name]['wallets'])}"
 
     last_seen = get_last_seen(
-        last_time=app_globals.app_results[node_name]['last_update'],
-        current_time=current_time
+        last_time=app_globals.app_results[node_name]['last_update']
     )
 
     if app_globals.app_results[node_name]['last_status'] != True:

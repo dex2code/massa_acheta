@@ -35,6 +35,8 @@ from telegram.handlers import massa_info, massa_chart, acheta_release
 from telegram.handlers import reset
 from telegram.handlers import unknown
 
+from tools import t_now
+
 
 @logger.catch
 async def main() -> None:
@@ -148,7 +150,7 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
-
+    app_globals.acheta_start_time = t_now()
     try:
         asyncio.run(main())
 

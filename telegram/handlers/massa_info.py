@@ -9,7 +9,7 @@ from aiogram.utils.formatting import as_list
 from app_config import app_config
 import app_globals
 
-from tools import get_last_seen, get_rewards, t_now
+from tools import get_last_seen, get_rewards
 
 
 router = Router()
@@ -24,8 +24,7 @@ async def cmd_massa_info(message: Message) -> None:
     wallet_computed_rewards = await get_rewards(rolls_number=100)
 
     info_last_update = get_last_seen(
-        last_time=app_globals.massa_network['values']['last_updated'],
-        current_time=t_now()
+        last_time=app_globals.massa_network['values']['last_updated']
     )
     t = as_list(
         f"💾 Latest released MASSA version: \"{app_globals.massa_network['values']['latest_release']}\"",

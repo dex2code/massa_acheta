@@ -15,6 +15,7 @@ from collections import deque
 
 from app_config import app_config
 
+acheta_start_time = 0
 
 '''
 Init results

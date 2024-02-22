@@ -11,7 +11,7 @@ from aiogram.utils.formatting import as_list, as_line, Underline, TextLink, Text
 from app_config import app_config
 import app_globals
 
-from tools import get_last_seen, get_rewards, t_now
+from tools import get_last_seen, get_rewards
 
 
 class EarningsViewer(StatesGroup):
@@ -43,8 +43,7 @@ async def get_earnings(rolls_number: int=1) -> Text:
         computed_rewards = await get_rewards(rolls_number=rolls_number)
 
         massa_updated = get_last_seen(
-            last_time=app_globals.massa_network['values']['last_updated'],
-            current_time=t_now()
+            last_time=app_globals.massa_network['values']['last_updated']
         )
 
         my_percentage = round(

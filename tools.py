@@ -153,17 +153,33 @@ def get_all_wallets() -> list:
 
 
 @logger.catch
-def get_last_seen(last_time: int=0, current_time: int=0) -> str:
+def t_now() -> int:
+    return int(
+        time()
+    )
+
+
+
+@logger.catch
+def get_last_seen(last_time: int=0, current_time: int=t_now(), show_days: bool=False) -> str:
     logger.debug("-> Enter Def")
 
     if last_time == 0:
         return "Never"
     
-    diff_time = current_time - last_time
-    diff_hours = diff_time // 3600
-    diff_mins = (diff_time - (diff_hours * 3600)) // 60
+    diff_seconds = current_time - last_time
 
-    return f"{diff_hours}h {diff_mins}m ago"
+    if show_days:
+        diff_days = diff_seconds // (24 * 60 * 60)
+        diff_hours = (diff_seconds - (diff_days * 24 * 60 * 60)) // (60 * 60)
+        diff_mins = (diff_seconds - (diff_days * 24 * 60 * 60) - (diff_hours * 60 * 60)) // 60
+        result = f"{diff_days}d {diff_hours}h {diff_mins}m"
+    else:
+        diff_hours = diff_seconds // (60 * 60)
+        diff_mins = (diff_seconds - (diff_hours * 60 * 60)) // 60
+        result = f"{diff_hours}h {diff_mins}m"
+
+    return f"{result} ago"
 
 
 
@@ -222,14 +238,6 @@ async def get_rewards(rolls_number: int=0) -> int:
         my_reward = int(my_reward)
 
     return my_reward
-
-
-
-@logger.catch
-def t_now() -> int:
-    return int(
-        time()
-    )
 
 
 

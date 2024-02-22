@@ -7,7 +7,7 @@ from app_config import app_config
 import app_globals
 
 from telegram.queue import queue_telegram_message
-from tools import get_last_seen, get_short_address, get_rewards, t_now
+from tools import get_last_seen, get_short_address, get_rewards
 
 
 async def heartbeat() -> None:
@@ -20,8 +20,6 @@ async def heartbeat() -> None:
             await asyncio.sleep(delay=(app_config['service']['heartbeat_period_hours'] * 60 * 60))
             logger.info(f"Heartbeat planner shedule time")
 
-            current_time = t_now()
-
             computed_rewards = await get_rewards(rolls_number=100)
 
             heartbeat_list = []
@@ -31,7 +29,7 @@ async def heartbeat() -> None:
                     f" 👥 Total stakers: {app_globals.massa_network['values']['total_stakers']:,}",
                     f" 🗞 Total staked rolls: {app_globals.massa_network['values']['total_staked_rolls']:,}",
                     f"🪙 Estimated rewards for 100 Rolls ≈ {computed_rewards:,} MAS / day",
-                    f"👁 Info updated: {get_last_seen(last_time=app_globals.massa_network['values']['last_updated'], current_time=current_time)}", ""
+                    f"👁 Info updated: {get_last_seen(last_time=app_globals.massa_network['values']['last_updated'])}", ""
                 )
             )
 
@@ -45,8 +43,7 @@ async def heartbeat() -> None:
                     heartbeat_list.append(f"📍 {app_globals.app_results[node_name]['url']}")
 
                     last_seen = get_last_seen(
-                        last_time=app_globals.app_results[node_name]['last_update'],
-                        current_time=current_time
+                        last_time=app_globals.app_results[node_name]['last_update']
                     )
 
                     if app_globals.app_results[node_name]['last_status'] == True:

@@ -14,7 +14,7 @@ import app_globals
 
 from telegram.keyboards.kb_nodes import kb_nodes
 from telegram.keyboards.kb_wallets import kb_wallets
-from tools import get_short_address, get_last_seen, check_privacy, get_rewards, t_now
+from tools import get_short_address, get_last_seen, check_privacy, get_rewards
 
 
 class WalletViewer(StatesGroup):
@@ -172,16 +172,12 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
         await state.clear()
         return
 
-    current_time = t_now()
-
     wallet_last_seen = get_last_seen(
-        last_time=app_globals.app_results[node_name]['wallets'][wallet_address]['last_update'],
-        current_time=current_time
+        last_time=app_globals.app_results[node_name]['wallets'][wallet_address]['last_update']
     )
     
     node_last_seen = get_last_seen(
-        last_time=app_globals.app_results[node_name]['last_update'],
-        current_time=current_time
+        last_time=app_globals.app_results[node_name]['last_update']
     )
     
     if app_globals.app_results[node_name]['last_status'] == True:

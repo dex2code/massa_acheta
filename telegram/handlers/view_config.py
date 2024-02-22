@@ -9,7 +9,7 @@ from aiogram.utils.formatting import as_list, as_line, TextLink, as_numbered_lis
 from app_config import app_config
 import app_globals
 
-from tools import get_short_address, check_privacy
+from tools import get_short_address, check_privacy, get_last_seen
 
 
 router = Router()
@@ -56,7 +56,8 @@ async def cmd_view_config(message: Message) -> None:
 
     t = as_list(
         "📋 Current service configuration:", "",
-        *config_list, 
+        *config_list,
+        f"🏃 Uptime: {get_last_seen(last_time=app_globals.acheta_start_time, show_days=True)}", "",
         "👉 Try /help to learn how to manage settings"
     )
     try:
