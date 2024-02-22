@@ -126,7 +126,7 @@ if massa_state_obj.exists():
         logger.error(f"Cannot load '{massa_state_obj}' file ({str(E)}) Loading empty MASSA state...")
     
     else:
-        logger.info(f"MASSA state loaded from '{massa_state_obj}' file successfully!")
+        logger.info(f"MASSA state loaded from '{massa_state_obj}' file successfully (found {len(massa_network['stat'])} measures)")
         massa_network_state = True
 
 if not massa_network_state:
