@@ -4,9 +4,10 @@ lib64/
 lib64
 include/
 pyvenv.cfg
-dev_config.py
-dev_results.json
 app_results.json
+app_results.json.bin
+massa_network.json
+massa_network.json.bin
 
 
 # Byte-compiled / optimized / DLL files
