@@ -6,8 +6,8 @@ from aiogram.types import Message
 from aiogram.utils.formatting import as_list, as_line
 from aiogram.enums import ParseMode
 from quickchart import QuickChart
-from datetime import datetime
 
+from app_config import app_config
 import app_globals
 
 
@@ -79,16 +79,45 @@ async def cmd_massa_chart(message: Message) -> None:
     }
 
     try:
-        massa_stat_cycles = {}
+        massa_stat_keytime_unsorted = {}
         for measure in app_globals.massa_network['stat']:
-            massa_stat_cycles[measure['cycle']] = {
-                "stakers": measure['stakers'],
-                "rolls": measure['rolls']
+            measure_time = measure['time']
+            measure_cycle = measure['cycle']
+            measure_stakers = measure['stakers']
+            measure_rolls = measure['rolls']
+
+            massa_stat_keytime_unsorted[measure_time] = {
+                "cycle": measure_cycle,
+                "stakers": measure_stakers,
+                "rolls": measure_rolls
             }
 
-        for cycle in massa_stat_cycles:
-            stakers = massa_stat_cycles[cycle]['stakers']
-            rolls = massa_stat_cycles[cycle]['rolls']
+        massa_stat_keytime_sorted = dict(
+            sorted(
+                massa_stat_keytime_unsorted.items()
+            )
+        )
+
+        massa_stat_keycycle_unsorted = {}
+        for measure in massa_stat_keytime_sorted:
+            measure_cycle = massa_stat_keytime_sorted[measure]['cycle']
+            measure_stakers = massa_stat_keytime_sorted[measure]['stakers']
+            measure_rolls = massa_stat_keytime_sorted[measure]['rolls']
+
+            massa_stat_keycycle_unsorted[measure_cycle] = {
+                "stakers": measure_stakers,
+                "rolls": measure_rolls
+            }
+
+        massa_stat_keycycle_sorted = dict(
+            sorted(
+                massa_stat_keycycle_unsorted.items()
+            )
+        )
+
+        for cycle in massa_stat_keycycle_sorted:
+            stakers = massa_stat_keycycle_sorted[cycle]['stakers']
+            rolls = massa_stat_keycycle_sorted[cycle]['rolls']
 
             chart_config['data']['labels'].append(cycle)
             chart_config['data']['datasets'][0]['data'].append(stakers)
@@ -111,7 +140,7 @@ async def cmd_massa_chart(message: Message) -> None:
             await message.reply(
                 text=t.as_html(),
                 parse_mode=ParseMode.HTML,
-                request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+                request_timeout=app_config['telegram']['sending_timeout_sec']
             )
         except BaseException as E:
             logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
@@ -121,7 +150,7 @@ async def cmd_massa_chart(message: Message) -> None:
             await message.reply_photo(
                 photo=chart_url,
                 parse_mode=ParseMode.HTML,
-                request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+                request_timeout=app_config['telegram']['sending_timeout_sec']
             )
         except BaseException as E:
             logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")

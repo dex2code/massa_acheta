@@ -1,6 +1,5 @@
 from loguru import logger
 
-from time import time as t_now
 from aiogram import Router, F
 from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram.filters import Command, StateFilter
@@ -9,9 +8,11 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.utils.formatting import as_list, as_line, Code
 from aiogram.enums import ParseMode
 
+from app_config import app_config
 import app_globals
+
 from telegram.keyboards.kb_nodes import kb_nodes
-from tools import get_last_seen, get_short_address, check_privacy
+from tools import get_last_seen, get_short_address, check_privacy, t_now
 
 
 class NodeViewer(StatesGroup):
@@ -36,7 +37,7 @@ async def cmd_view_node(message: Message, state: FSMContext) -> None:
             await message.reply(
                 text=t.as_html(),
                 parse_mode=ParseMode.HTML,
-                request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+                request_timeout=app_config['telegram']['sending_timeout_sec']
             )
         except BaseException as E:
             logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
@@ -52,7 +53,7 @@ async def cmd_view_node(message: Message, state: FSMContext) -> None:
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
             reply_markup=kb_nodes(),
-            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+            request_timeout=app_config['telegram']['sending_timeout_sec']
         )
         await state.set_state(NodeViewer.waiting_node_name)
     except BaseException as E:
@@ -82,7 +83,7 @@ async def show_node(message: Message, state: FSMContext) -> None:
                 text=t.as_html(),
                 parse_mode=ParseMode.HTML,
                 reply_markup=ReplyKeyboardRemove(),
-                request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+                request_timeout=app_config['telegram']['sending_timeout_sec']
             )
         except BaseException as E:
             logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
@@ -114,7 +115,7 @@ async def show_node(message: Message, state: FSMContext) -> None:
                 "💻 Result: ",
                 Code(app_globals.app_results[node_name]['last_result'])
             ),
-            f"☝ Service checks updates: every {app_globals.app_config['service']['main_loop_period_min']} minutes"
+            f"☝ Service checks updates: every {app_config['service']['main_loop_period_min']} minutes"
         )
     else:
         node_status = f"🌿 Status: Online (last seen: {last_seen})"
@@ -148,7 +149,7 @@ async def show_node(message: Message, state: FSMContext) -> None:
             f"↔ In / Out connections: {in_connection_count} / {out_connection_count}", "",
             f"🙋 Known / Banned peers: {known_peer_count} / {banned_peer_count}", "",
             f"🔗 Chain ID: {chain_id}", "",
-            f"☝ Service checks updates: every {app_globals.app_config['service']['main_loop_period_min']} minutes"
+            f"☝ Service checks updates: every {app_config['service']['main_loop_period_min']} minutes"
         )
 
     try:
@@ -156,7 +157,7 @@ async def show_node(message: Message, state: FSMContext) -> None:
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
             reply_markup=ReplyKeyboardRemove(),
-            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+            request_timeout=app_config['telegram']['sending_timeout_sec']
         )
     except BaseException as E:
         logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")

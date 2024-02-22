@@ -6,7 +6,9 @@ from aiogram.types import Message
 from aiogram.enums import ParseMode
 from aiogram.utils.formatting import as_list, as_line, TextLink, as_numbered_list
 
+from app_config import app_config
 import app_globals
+
 from tools import get_short_address, check_privacy
 
 
@@ -42,7 +44,7 @@ async def cmd_view_config(message: Message) -> None:
                         as_line(
                             TextLink(
                                 get_short_address(address=wallet_address),
-                                url=f"{app_globals.app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
+                                url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                             )
                         )
                     )
@@ -61,7 +63,7 @@ async def cmd_view_config(message: Message) -> None:
         await message.reply(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
-            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+            request_timeout=app_config['telegram']['sending_timeout_sec']
         )
     except BaseException as E:
         logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")

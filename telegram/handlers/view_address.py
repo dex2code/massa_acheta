@@ -10,8 +10,8 @@ from aiogram.enums import ParseMode
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 
+from app_config import app_config
 
-import app_globals
 from tools import pull_http_api, get_short_address, get_rewards
 
 
@@ -45,7 +45,7 @@ async def get_address(wallet_address: str="") -> Text:
     )
 
     try:
-        wallet_answer = await pull_http_api(api_url=app_globals.app_config['service']['mainnet_rpc_url'],
+        wallet_answer = await pull_http_api(api_url=app_config['service']['mainnet_rpc_url'],
                                             api_method="POST",
                                             api_payload=payload,
                                             api_root_element="result")
@@ -71,14 +71,14 @@ async def get_address(wallet_address: str="") -> Text:
                 "👛 Wallet: ",
                 TextLink(
                     get_short_address(wallet_address),
-                    url=f"{app_globals.app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
+                    url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                 )
             ),
             as_line(
                 "⁉ Error getting address info for wallet: ",
                 TextLink(
                     get_short_address(wallet_address),
-                    url=f"{app_globals.app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
+                    url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                 )
             ),
             as_line(
@@ -155,7 +155,7 @@ async def get_address(wallet_address: str="") -> Text:
                 "👛 Wallet: ",
                 TextLink(
                     get_short_address(wallet_address),
-                    url=f"{app_globals.app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
+                    url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                 )
             ),
             f"💰 Final balance: {wallet_final_balance:,} MAS",
@@ -193,7 +193,7 @@ async def cmd_view_address(message: Message, state: FSMContext) -> None:
             await message.reply(
                 text=t.as_html(),
                 parse_mode=ParseMode.HTML,
-                request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+                request_timeout=app_config['telegram']['sending_timeout_sec']
             )
             await state.set_state(AddressViewer.waiting_wallet_address)
         except BaseException as E:
@@ -208,7 +208,7 @@ async def cmd_view_address(message: Message, state: FSMContext) -> None:
         await message.reply(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
-            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+            request_timeout=app_config['telegram']['sending_timeout_sec']
         )
     except BaseException as E:
         logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
@@ -236,7 +236,7 @@ async def show_address(message: Message, state: FSMContext) -> None:
         await message.reply(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
-            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+            request_timeout=app_config['telegram']['sending_timeout_sec']
         )
     except BaseException as E:
         logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
@@ -259,7 +259,7 @@ async def cmd_default(message: Message) -> None:
         await message.reply(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
-            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+            request_timeout=app_config['telegram']['sending_timeout_sec']
         )
     except BaseException as E:
         logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")

@@ -11,11 +11,13 @@ logger.add(
 )
 
 import asyncio
+import pickle
 from aiogram.utils.formatting import as_list
 from aiogram.types import BotCommand
 from pathlib import Path
 from sys import exit as sys_exit
 
+from app_config import app_config
 import app_globals
 
 from remotes.monitor import monitor as remote_monitor
@@ -92,17 +94,16 @@ async def main() -> None:
         "🔆 Service successfully started to watch the following nodes:",
         *nodes_list, "",
         "👉 Try /help to learn bot commands", "",
-        f"⏳ Main loop period: {app_globals.app_config['service']['main_loop_period_min']} minutes",
-        f"⚡ Probe timeout: {app_globals.app_config['service']['http_probe_timeout_sec']} seconds"
+        f"⏳ Main loop period: {app_config['service']['main_loop_period_min']} minutes",
+        f"⚡ Probe timeout: {app_config['service']['http_probe_timeout_sec']} seconds"
     )
     await queue_telegram_message(message_text=t.as_html())
 
     try:
-        aio_loop = asyncio.get_event_loop()
-        aio_loop.create_task(operate_telegram_queue())
-        aio_loop.create_task(remote_monitor())
-        aio_loop.create_task(remote_massa())
-        aio_loop.create_task(remote_heartbeat())
+        asyncio.create_task(operate_telegram_queue())
+        asyncio.create_task(remote_monitor())
+        asyncio.create_task(remote_massa())
+        asyncio.create_task(remote_heartbeat())
 
 
         app_globals.tg_dp.include_router(start.router)
@@ -136,12 +137,13 @@ async def main() -> None:
         await app_globals.tg_dp.start_polling(app_globals.tg_bot)
 
     except BaseException as E:
-        logger.error(f"Service error ({str(E)})")
-        aio_loop.stop()
-        aio_loop.close()
-        
-    return
+        logger.error(f"Exception {str(E)} ({E})")
+    
+    finally:
+        logger.error(f"<- Quit Def")
 
+    return
+    
 
 
 
@@ -149,9 +151,22 @@ if __name__ == "__main__":
 
     try:
         asyncio.run(main())
-    
-    except BaseException as E:
-        logger.error(f"Service error ({str(E)})")
 
+    except BaseException as E:
+        logger.error(f"Exception {str(E)} ({E})")
+    
     finally:
+
+        try:
+            massa_state_obj = Path(f"{app_config['service']['massa_network_path']}.bin")
+            with open(file=massa_state_obj, mode="wb") as massa_state:
+                pickle.dump(obj=app_globals.massa_network, file=massa_state)
+        
+        except BaseException as E:
+            logger.error(f"Cannot save MASSA state in '{massa_state_obj}' ({str(E)})")
+        
+        else:
+            logger.info(f"Successfully saved MASSA state in '{massa_state_obj}'")
+
+        logger.critical("Service terminated")
         sys_exit()

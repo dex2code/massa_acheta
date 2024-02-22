@@ -6,7 +6,9 @@ from aiofiles import open as aiof_open
 from aiogram.types import Message
 from aiogram.utils.formatting import as_list, as_line, TextLink
 from aiogram.enums import ParseMode
+from time import time
 
+from app_config import app_config
 import app_globals
 
 
@@ -17,8 +19,8 @@ async def pull_http_api(api_url: str=None,
                         api_payload: object={},
                         api_content_type: str="application/json",
                         api_root_element: str=None,
-                        api_session_timeout: int=app_globals.app_config['service']['http_session_timeout_sec'],
-                        api_probe_timeout: int=app_globals.app_config['service']['http_probe_timeout_sec']) -> object:
+                        api_session_timeout: int=app_config['service']['http_session_timeout_sec'],
+                        api_probe_timeout: int=app_config['service']['http_probe_timeout_sec']) -> object:
 
     logger.debug(f"-> Enter Def")
 
@@ -151,13 +153,13 @@ def get_all_wallets() -> list:
 
 
 @logger.catch
-def get_last_seen(last_time: float=0.0, current_time: float=0.0) -> str:
+def get_last_seen(last_time: int=0, current_time: int=0) -> str:
     logger.debug("-> Enter Def")
 
     if last_time == 0:
         return "Never"
     
-    diff_time = int(current_time - last_time)
+    diff_time = current_time - last_time
     diff_hours = diff_time // 3600
     diff_mins = (diff_time - (diff_hours * 3600)) // 60
 
@@ -199,7 +201,7 @@ async def check_privacy(message: Message) -> bool:
         await message.answer(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
-            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+            request_timeout=app_config['telegram']['sending_timeout_sec']
         )
 
         return False
@@ -221,6 +223,13 @@ async def get_rewards(rolls_number: int=0) -> int:
 
     return my_reward
 
+
+
+@logger.catch
+def t_now() -> int:
+    return int(
+        time()
+    )
 
 
 

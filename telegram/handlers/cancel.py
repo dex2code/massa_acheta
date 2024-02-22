@@ -7,7 +7,7 @@ from aiogram.enums import ParseMode
 from aiogram.fsm.context import FSMContext
 from aiogram.utils.formatting import as_list
 
-import app_globals
+from app_config import app_config
 
 
 router = Router()
@@ -27,7 +27,7 @@ async def cmd_cancel(message: Message, state: FSMContext) -> None:
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
             reply_markup=ReplyKeyboardRemove(),
-            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+            request_timeout=app_config['telegram']['sending_timeout_sec']
         )
     except BaseException as E:
         logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")

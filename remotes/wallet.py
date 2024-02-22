@@ -1,12 +1,13 @@
 from loguru import logger
 
 import json
-from time import time as t_now
 from aiogram.utils.formatting import as_list, as_line, Code, TextLink
 
+from app_config import app_config
 import app_globals
+
 from telegram.queue import queue_telegram_message
-from tools import pull_http_api, get_short_address
+from tools import pull_http_api, get_short_address, t_now
 
 
 @logger.catch
@@ -96,7 +97,7 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
                     "🚨 Cannot get info for wallet: ",
                     TextLink(
                         get_short_address(address=wallet_address),
-                        url=f"{app_globals.app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
+                        url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                     )
                 ),
                 as_line(
@@ -121,7 +122,7 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
                     "👛 Successfully got info for wallet: ",
                     TextLink(
                         get_short_address(address=wallet_address),
-                        url=f"{app_globals.app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
+                        url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                     )
                 ),
                 f"💰 Final balance: {wallet_final_balance:,} MAS",
@@ -141,7 +142,7 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
                         "💸 Decreased balance on wallet: ",
                         TextLink(
                             get_short_address(address=wallet_address),
-                            url=f"{app_globals.app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
+                            url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                         )
                     ),
                     f"👁 New final balance: {app_globals.app_results[node_name]['wallets'][wallet_address]['final_balance']:,} → {wallet_final_balance:,} MAS",
@@ -157,7 +158,7 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
                         "🗞 Candidate rolls changed on wallet: ",
                         TextLink(
                             get_short_address(address=wallet_address),
-                            url=f"{app_globals.app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
+                            url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                         )
                     ),
                     f"👁 New candidate rolls number: {app_globals.app_results[node_name]['wallets'][wallet_address]['candidate_rolls']:,} → {wallet_candidate_rolls:,}"
@@ -173,7 +174,7 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
                         "🗞 Active rolls changed on wallet: ",
                         TextLink(
                             get_short_address(address=wallet_address),
-                            url=f"{app_globals.app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
+                            url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                         )
                     ),
                     f"👁 New active rolls number: {app_globals.app_results[node_name]['wallets'][wallet_address]['active_rolls']:,} → {wallet_active_rolls:,}"
@@ -189,7 +190,7 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
                         "🥊 New missed blocks on wallet: ",
                         TextLink(
                             get_short_address(address=wallet_address),
-                            url=f"{app_globals.app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
+                            url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                         )
                     ),
                     f"👁 Blocks missed in last cycle: {wallet_last_cycle_missed_blocks}"

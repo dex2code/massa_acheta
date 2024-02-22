@@ -2,7 +2,9 @@ from loguru import logger
 
 from aiogram.utils.formatting import as_list, as_line, TextLink
 
+from app_config import app_config
 import app_globals
+
 from telegram.queue import queue_telegram_message
 from tools import pull_http_api
 
@@ -13,13 +15,13 @@ async def massa_release() -> None:
 
     massa_release_answer = {"error": "No response from remote HTTP API"}
     try:
-        massa_release_answer = await pull_http_api(api_url=app_globals.app_config['service']['massa_release_url'],
+        massa_release_answer = await pull_http_api(api_url=app_config['service']['massa_release_url'],
                                                    api_method="GET",
                                                    api_root_element="name")
 
         massa_release_result = massa_release_answer.get("result", None)
         if not massa_release_result:
-            raise Exception(f"Wrong answer from '{app_globals.app_config['service']['massa_release_url']}' ({str(massa_release_answer)})")
+            raise Exception(f"Wrong answer from '{app_config['service']['massa_release_url']}' ({str(massa_release_answer)})")
 
     except BaseException as E:
         logger.warning(f"Cannot get latest MASSA release version: ({str(E)}). Result: {massa_release_answer}")
@@ -48,7 +50,7 @@ async def acheta_release() -> None:
     logger.debug(f"-> Enter Def")
 
     try:
-        acheta_release_answer = await pull_http_api(api_url=app_globals.app_config['service']['acheta_release_url'],
+        acheta_release_answer = await pull_http_api(api_url=app_config['service']['acheta_release_url'],
                                                    api_method="GET",
                                                    api_root_element="name")
 

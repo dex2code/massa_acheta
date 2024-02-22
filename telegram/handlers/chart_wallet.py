@@ -10,7 +10,9 @@ from aiogram.utils.formatting import as_list, as_line, TextLink
 from aiogram.enums import ParseMode
 from quickchart import QuickChart
 
+from app_config import app_config
 import app_globals
+
 from telegram.keyboards.kb_nodes import kb_nodes
 from telegram.keyboards.kb_wallets import kb_wallets
 from tools import get_short_address, check_privacy
@@ -39,7 +41,7 @@ async def cmd_chart_wallet(message: Message, state: FSMContext) -> None:
             await message.reply(
                 text=t.as_html(),
                 parse_mode=ParseMode.HTML,
-                request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+                request_timeout=app_config['telegram']['sending_timeout_sec']
             )
         except BaseException as E:
             logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
@@ -57,7 +59,7 @@ async def cmd_chart_wallet(message: Message, state: FSMContext) -> None:
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
             reply_markup=kb_nodes(),
-            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+            request_timeout=app_config['telegram']['sending_timeout_sec']
         )
     except BaseException as E:
         logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
@@ -85,7 +87,7 @@ async def select_wallet_to_show(message: Message, state: FSMContext) -> None:
                 text=t.as_html(),
                 parse_mode=ParseMode.HTML,
                 reply_markup=ReplyKeyboardRemove(),
-                request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+                request_timeout=app_config['telegram']['sending_timeout_sec']
             )
         except BaseException as E:
             logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
@@ -103,7 +105,7 @@ async def select_wallet_to_show(message: Message, state: FSMContext) -> None:
                 text=t.as_html(),
                 parse_mode=ParseMode.HTML,
                 reply_markup=ReplyKeyboardRemove(),
-                request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+                request_timeout=app_config['telegram']['sending_timeout_sec']
             )
         except BaseException as E:
             logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
@@ -121,7 +123,7 @@ async def select_wallet_to_show(message: Message, state: FSMContext) -> None:
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
             reply_markup=kb_wallets(node_name=node_name),
-            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+            request_timeout=app_config['telegram']['sending_timeout_sec']
         )
     except BaseException as E:
         logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
@@ -153,7 +155,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
                 "‼ Error: Wallet ",
                 TextLink(
                     get_short_address(address=wallet_address),
-                    url=f"{app_globals.app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
+                    url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                 ),
                 f" is not attached to node \"{node_name}\""
             ),
@@ -163,7 +165,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
             await message.reply(
                 text=t.as_html(),
                 parse_mode=ParseMode.HTML,
-                request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+                request_timeout=app_config['telegram']['sending_timeout_sec']
             )
         except BaseException as E:
             logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
@@ -277,6 +279,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
                 "nok_blocks": measure['nok_blocks']
             }
 
+        wallet_stat_cycles = dict(sorted(wallet_stat_cycles.items()))
         for cycle in wallet_stat_cycles:
             balance = wallet_stat_cycles[cycle]['balance']
             rolls = wallet_stat_cycles[cycle]['rolls']
@@ -316,7 +319,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
                 text=t.as_html(),
                 parse_mode=ParseMode.HTML,
                 reply_markup=ReplyKeyboardRemove(),
-                request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+                request_timeout=app_config['telegram']['sending_timeout_sec']
             )
         except BaseException as E:
             logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
@@ -328,14 +331,14 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
                 caption="Staking chart",
                 parse_mode=ParseMode.HTML,
                 reply_markup=ReplyKeyboardRemove(),
-                request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+                request_timeout=app_config['telegram']['sending_timeout_sec']
             )
             await message.answer_photo(
                 photo=blocks_chart_url,
                 caption="Blocks chart",
                 parse_mode=ParseMode.HTML,
                 reply_markup=ReplyKeyboardRemove(),
-                request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+                request_timeout=app_config['telegram']['sending_timeout_sec']
             )
         except BaseException as E:
             logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")

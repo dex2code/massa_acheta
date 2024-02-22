@@ -2,6 +2,7 @@ from loguru import logger
 
 import json
 import asyncio
+import pickle
 from pathlib import Path
 from sys import exit as sys_exit
 from aiogram import Dispatcher, Bot
@@ -112,22 +113,39 @@ results_lock = asyncio.Lock()
 '''
 MASSA network values
 '''
-massa_network = {}
-massa_network['values'] =  {
-    "latest_release": "",
-    "current_release": "",
-    "current_cycle": 0,
-    "roll_price": 0,
-    "block_reward": 0,
-    "total_stakers": 0,
-    "total_staked_rolls": 0,
-    "last_updated": 0
-}
-massa_network['stat'] = deque(
-    maxlen=int(
-        app_config['service']['massa_network_stat_keep_days'] * 24 * 60 / app_config['service']['massa_network_update_period_min']
+massa_network_state = False
+massa_state_obj = Path(f"{app_config['service']['massa_network_path']}.bin")
+if massa_state_obj.exists():
+    logger.info(f"Found '{massa_state_obj}' file. Trying to load MASSA state...")
+
+    try:
+        with open(file=massa_state_obj, mode="rb") as massa_state:
+            massa_network = pickle.load(file=massa_state)
+    
+    except BaseException as E:
+        logger.error(f"Cannot load '{massa_state_obj}' file ({str(E)}) Loading empty MASSA state...")
+    
+    else:
+        logger.info(f"MASSA state loaded from '{massa_state_obj}' file successfully!")
+        massa_network_state = True
+
+if not massa_network_state:
+    massa_network = {}
+    massa_network['values'] =  {
+        "latest_release": "",
+        "current_release": "",
+        "current_cycle": 0,
+        "roll_price": 0,
+        "block_reward": 0,
+        "total_stakers": 0,
+        "total_staked_rolls": 0,
+        "last_updated": 0
+    }
+    massa_network['stat'] = deque(
+        maxlen=int(
+            app_config['service']['massa_network_stat_keep_days'] * 24 * 60 / app_config['service']['massa_network_update_period_min']
+        )
     )
-)
 
 
 '''

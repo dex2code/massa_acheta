@@ -1,12 +1,12 @@
 from loguru import logger
 
 import json
-from time import time as t_now
 from aiogram.utils.formatting import as_list, as_line, Code
 
 import app_globals
+
 from telegram.queue import queue_telegram_message
-from tools import pull_http_api
+from tools import pull_http_api, t_now
 
 
 @logger.catch

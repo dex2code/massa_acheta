@@ -8,7 +8,9 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.utils.formatting import as_list, as_line, TextLink, Code
 from aiogram.enums import ParseMode
 
+from app_config import app_config
 import app_globals
+
 from tools import save_app_results, check_privacy
 
 
@@ -38,7 +40,7 @@ async def cmd_reset(message: Message, state: FSMContext) -> None:
         await message.reply(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
-            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+            request_timeout=app_config['telegram']['sending_timeout_sec']
         )
         await state.set_state(ResetState.reset_sure)
     except BaseException as E:
@@ -65,7 +67,7 @@ async def do_reset(message: Message, state: FSMContext) -> None:
             await message.reply(
                 text=t.as_html(),
                 parse_mode=ParseMode.HTML,
-                request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+                request_timeout=app_config['telegram']['sending_timeout_sec']
             )
         except BaseException as E:
             logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
@@ -104,7 +106,7 @@ async def do_reset(message: Message, state: FSMContext) -> None:
         await message.reply(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
-            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+            request_timeout=app_config['telegram']['sending_timeout_sec']
         )
     except BaseException as E:
         logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")

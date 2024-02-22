@@ -3,6 +3,7 @@ from loguru import logger
 import asyncio
 from aiogram.enums import ParseMode
 
+from app_config import app_config
 import app_globals
 
 
@@ -32,32 +33,41 @@ async def queue_telegram_message(chat_id: str=app_globals.bot.ACHETA_CHAT, messa
 async def operate_telegram_queue() -> None:
     logger.debug("-> Enter Def")
 
-    while True:
-        await asyncio.sleep(delay=app_globals.app_config['telegram']['sending_delay_sec'])
+    try:
+        while True:
+            await asyncio.sleep(delay=app_config['telegram']['sending_delay_sec'])
 
-        number_unsent_messages = len(app_globals.telegram_queue)
-        logger.debug(f"Telegram: {number_unsent_messages} unsent message(s) in queue")
-        
-        if number_unsent_messages == 0:
-            continue
+            number_unsent_messages = len(app_globals.telegram_queue)
+            logger.debug(f"Telegram: {number_unsent_messages} unsent message(s) in queue")
+            
+            if number_unsent_messages == 0:
+                continue
 
-        try:
-            chat_id = app_globals.telegram_queue[0]['chat_id']
-            message_text = app_globals.telegram_queue[0]['message_text']
+            try:
+                chat_id = app_globals.telegram_queue[0]['chat_id']
+                message_text = app_globals.telegram_queue[0]['message_text']
 
-            await app_globals.tg_bot.send_message(
-                chat_id=chat_id,
-                text=message_text,
-                parse_mode=ParseMode.HTML,
-                request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
-            )
+                await app_globals.tg_bot.send_message(
+                    chat_id=chat_id,
+                    text=message_text,
+                    parse_mode=ParseMode.HTML,
+                    request_timeout=app_config['telegram']['sending_timeout_sec']
+                )
 
-        except BaseException as E:
-            logger.error(f"Could not send telegram message to chat_id '{app_globals.bot.ACHETA_CHAT}': ({str(E)})")
+            except BaseException as E:
+                logger.error(f"Could not send telegram message to chat_id '{app_globals.bot.ACHETA_CHAT}': ({str(E)})")
 
-        else:
-            logger.info(f"Successfully sent message to chat_id '{app_globals.bot.ACHETA_CHAT}' ({number_unsent_messages - 1} unsent message(s) in queue)")
-            app_globals.telegram_queue.popleft()
+            else:
+                logger.info(f"Successfully sent message to chat_id '{app_globals.bot.ACHETA_CHAT}' ({number_unsent_messages - 1} unsent message(s) in queue)")
+                app_globals.telegram_queue.popleft()
+
+    except BaseException as E:
+        logger.error(f"Exception {str(E)} ({E})")
+    
+    finally:
+        logger.error(f"<- Quit Def")
+
+    return
 
 
 

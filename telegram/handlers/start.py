@@ -6,6 +6,7 @@ from aiogram.types import Message
 from aiogram.utils.formatting import as_list, as_line, TextLink
 from aiogram.enums import ParseMode
 
+from app_config import app_config
 import app_globals
 
 
@@ -22,21 +23,21 @@ async def cmd_start(message: Message) -> None:
         t = as_list(
             "📖 Commands:",
             "⦙",
-            "⦙… /start or /help 🢒 This message",
+            "⦙… /start or /help : This message",
             "⦙",
-            "⦙… /view_address 🢒 View any wallet info",
+            "⦙… /view_address : View any wallet info",
             "⦙",
-            "⦙… /view_credits 🢒 View any wallet credits",
+            "⦙… /view_credits : View any wallet credits",
             "⦙",
-            "⦙… /view_earnings 🢒 View earnings for Rolls number",
+            "⦙… /view_earnings : View earnings for Rolls number",
             "⦙",
-            "⦙… /massa_info 🢒 Show MASSA network info",
+            "⦙… /massa_info : Show MASSA network info",
             "⦙",
-            "⦙… /massa_chart 🢒 Show MASSA network chart",
+            "⦙… /massa_chart : Show MASSA network chart",
             "⦙",
-            "⦙… /view_id 🢒 Show your TG ID",
+            "⦙… /view_id : Show your TG ID",
             "⦙",
-            "⦙… /cancel 🢒 Cancel ongoing scenario", "",
+            "⦙… /cancel : Cancel ongoing scenario", "",
             as_line(
                 "👉 ",
                 TextLink(
@@ -57,41 +58,41 @@ async def cmd_start(message: Message) -> None:
         t = as_list(
             "📖 Commands:",
             "⦙",
-            "⦙… /start or /help 🢒 This message",
+            "⦙… /start or /help : This message",
             "⦙",
-            "⦙… /view_config 🢒 View service config",
+            "⦙… /view_config : View service config",
             "⦙",
-            "⦙… /view_node 🢒 View node status",
+            "⦙… /view_node : View node status",
             "⦙",
-            "⦙… /view_wallet 🢒 View wallet info",
+            "⦙… /view_wallet : View wallet info",
             "⦙",
-            "⦙… /chart_wallet 🢒 View wallet chart",
+            "⦙… /chart_wallet : View wallet chart",
             "⦙",
-            "⦙… /view_address 🢒 View any wallet info",
+            "⦙… /view_address : View any wallet info",
             "⦙",
-            "⦙… /view_credits 🢒 View any wallet credits",
+            "⦙… /view_credits : View any wallet credits",
             "⦙",
-            "⦙… /view_earnings 🢒 View earnings for Rolls number",
+            "⦙… /view_earnings : View earnings for Rolls number",
             "⦙",
-            "⦙… /add_node 🢒 Add node to bot",
+            "⦙… /add_node : Add node to bot",
             "⦙",
-            "⦙… /add_wallet 🢒 Add wallet to bot",
+            "⦙… /add_wallet : Add wallet to bot",
             "⦙",
-            "⦙… /delete_node 🢒 Delete node from bot",
+            "⦙… /delete_node : Delete node from bot",
             "⦙",
-            "⦙… /delete_wallet 🢒 Delete wallet from bot",
+            "⦙… /delete_wallet : Delete wallet from bot",
             "⦙",
-            "⦙… /massa_info 🢒 MASSA network info",
+            "⦙… /massa_info : MASSA network info",
             "⦙",
-            "⦙… /massa_chart 🢒 Show MASSA network chart",
+            "⦙… /massa_chart : Show MASSA network chart",
             "⦙",
-            "⦙… /acheta_release 🢒 Actual Acheta release",
+            "⦙… /acheta_release : Actual Acheta release",
             "⦙",
-            "⦙… /view_id 🢒 Show your TG ID",
+            "⦙… /view_id : Show your TG ID",
             "⦙",
-            "⦙… /cancel 🢒 Cancel ongoing scenario",
+            "⦙… /cancel : Cancel ongoing scenario",
             "⦙",
-            "⦙… /reset 🢒 Reset configuration", "",
+            "⦙… /reset : Reset configuration", "",
             as_line(
                 "👉 ",
                 TextLink(
@@ -112,7 +113,7 @@ async def cmd_start(message: Message) -> None:
         await message.reply(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
-            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+            request_timeout=app_config['telegram']['sending_timeout_sec']
         )
     except BaseException as E:
         logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")

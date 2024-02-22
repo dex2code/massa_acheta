@@ -1,6 +1,5 @@
 from loguru import logger
 
-from time import time as t_now
 from datetime import datetime
 from aiogram import Router, F
 from aiogram.types import Message, ReplyKeyboardRemove
@@ -10,10 +9,12 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.utils.formatting import as_list, as_line, TextLink, Code
 from aiogram.enums import ParseMode
 
+from app_config import app_config
 import app_globals
+
 from telegram.keyboards.kb_nodes import kb_nodes
 from telegram.keyboards.kb_wallets import kb_wallets
-from tools import get_short_address, get_last_seen, check_privacy, get_rewards
+from tools import get_short_address, get_last_seen, check_privacy, get_rewards, t_now
 
 
 class WalletViewer(StatesGroup):
@@ -39,7 +40,7 @@ async def cmd_view_wallet(message: Message, state: FSMContext) -> None:
             await message.reply(
                 text=t.as_html(),
                 parse_mode=ParseMode.HTML,
-                request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+                request_timeout=app_config['telegram']['sending_timeout_sec']
             )
         except BaseException as E:
             logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
@@ -57,7 +58,7 @@ async def cmd_view_wallet(message: Message, state: FSMContext) -> None:
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
             reply_markup=kb_nodes(),
-            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+            request_timeout=app_config['telegram']['sending_timeout_sec']
         )
     except BaseException as E:
         logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
@@ -85,7 +86,7 @@ async def select_wallet_to_show(message: Message, state: FSMContext) -> None:
                 text=t.as_html(),
                 parse_mode=ParseMode.HTML,
                 reply_markup=ReplyKeyboardRemove(),
-                request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+                request_timeout=app_config['telegram']['sending_timeout_sec']
             )
         except BaseException as E:
             logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
@@ -103,7 +104,7 @@ async def select_wallet_to_show(message: Message, state: FSMContext) -> None:
                 text=t.as_html(),
                 parse_mode=ParseMode.HTML,
                 reply_markup=ReplyKeyboardRemove(),
-                request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+                request_timeout=app_config['telegram']['sending_timeout_sec']
             )
         except BaseException as E:
             logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
@@ -121,7 +122,7 @@ async def select_wallet_to_show(message: Message, state: FSMContext) -> None:
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
             reply_markup=kb_wallets(node_name=node_name),
-            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+            request_timeout=app_config['telegram']['sending_timeout_sec']
         )
     except BaseException as E:
         logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
@@ -153,7 +154,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
                 "‼ Error: Wallet ",
                 TextLink(
                     get_short_address(address=wallet_address),
-                    url=f"{app_globals.app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
+                    url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                 ),
                 f" is not attached to node \"{node_name}\""
             ),
@@ -163,7 +164,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
             await message.reply(
                 text=t.as_html(),
                 parse_mode=ParseMode.HTML,
-                request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+                request_timeout=app_config['telegram']['sending_timeout_sec']
             )
         except BaseException as E:
             logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
@@ -194,7 +195,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
                 f"⁉ No actual data for wallet: ",
                 TextLink(
                     get_short_address(address=wallet_address),
-                    url=f"{app_globals.app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
+                    url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                 ),
                 end=""
             ),
@@ -207,7 +208,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
                 Code(app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'])
             ),
             as_line("⚠️ Check wallet address or node settings!"),
-            f"☝ Service checks updates: every {app_globals.app_config['service']['main_loop_period_min']} minutes"
+            f"☝ Service checks updates: every {app_config['service']['main_loop_period_min']} minutes"
         )
 
         t = as_list(
@@ -270,7 +271,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
                 "👛 Wallet: ",
                 TextLink(
                     get_short_address(address=wallet_address),
-                    url=f"{app_globals.app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
+                    url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                 ),
                 end=""
             ),
@@ -283,7 +284,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
             as_line(f"🧵 Thread: {wallet_thread}"),
             *cycles_list, "",
             *credit_list, "",
-            f"☝ Service checks updates: every {app_globals.app_config['service']['main_loop_period_min']} minutes"
+            f"☝ Service checks updates: every {app_config['service']['main_loop_period_min']} minutes"
         )
 
     try:
@@ -291,7 +292,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
             reply_markup=ReplyKeyboardRemove(),
-            request_timeout=app_globals.app_config['telegram']['sending_timeout_sec']
+            request_timeout=app_config['telegram']['sending_timeout_sec']
         )
     except BaseException as E:
         logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
