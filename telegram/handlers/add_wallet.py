@@ -6,7 +6,7 @@ from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram.filters import Command, StateFilter
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
-from aiogram.utils.formatting import as_list, as_line, TextLink, Code
+from aiogram.utils.formatting import as_list, as_line, Underline, TextLink, Code
 from aiogram.enums import ParseMode
 from collections import deque
 
@@ -96,7 +96,11 @@ async def input_wallet_to_add(message: Message, state: FSMContext) -> None:
         return
 
     t = as_list(
-        "❓ Please enter MASSA wallet address with leading \"AU...\" prefix or /cancel to quit the scenario:"
+        as_line(
+            "❓ Please enter MASSA wallet address with leading ",
+            Underline("AU"),
+            " prefix or /cancel to quit the scenario:"
+        )
     )
     try:
         await state.set_state(WalletAdder.waiting_wallet_address)
