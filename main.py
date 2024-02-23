@@ -150,8 +150,9 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
-    logger.info(f"MASSA Acheta started at {t_now()}")
     app_globals.acheta_start_time = t_now()
+    logger.info(f"MASSA Acheta started at {app_globals.acheta_start_time}")
+
     try:
         asyncio.run(main())
 
@@ -163,6 +164,7 @@ if __name__ == "__main__":
             results_state_obj = Path(f"{app_config['service']['results_path']}.bin")
             with open(file=results_state_obj, mode="wb") as results_state:
                 pickle.dump(obj=app_globals.app_results, file=results_state)
+                results_state.flush()
         
         except BaseException as E:
             logger.error(f"Cannot save app_results state in '{results_state_obj}' ({str(E)})")
@@ -174,6 +176,7 @@ if __name__ == "__main__":
             massa_state_obj = Path(f"{app_config['service']['massa_network_path']}.bin")
             with open(file=massa_state_obj, mode="wb") as massa_state:
                 pickle.dump(obj=app_globals.massa_network, file=massa_state)
+                massa_state.flush()
         
         except BaseException as E:
             logger.error(f"Cannot save MASSA state in '{massa_state_obj}' ({str(E)})")
