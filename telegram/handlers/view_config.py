@@ -57,7 +57,7 @@ async def cmd_view_config(message: Message) -> None:
     t = as_list(
         "📋 Current service configuration:", "",
         *config_list,
-        f"🏃 Uptime: {get_last_seen(last_time=app_globals.acheta_start_time, show_days=True)}", "",
+        f"🏃 Bot started: {get_last_seen(last_time=app_globals.acheta_start_time, show_days=True)}", "",
         "👉 Try /help to learn how to manage settings"
     )
     try:
