@@ -168,7 +168,7 @@ async def add_wallet(message: Message, state: FSMContext) -> None:
             app_globals.app_results[node_name]['wallets'][wallet_address]['stat'] = deque(
                 maxlen=app_config['service']['wallet_stat_keep_days'] * 24 * 60 / app_config['service']['main_loop_period_min']
             )
-            await save_app_results()
+            save_app_results()
 
     except BaseException as E:
         logger.error(f"Cannot add wallet '{wallet_address}' to node '{node_name}': ({str(E)})")

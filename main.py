@@ -158,6 +158,16 @@ if __name__ == "__main__":
         logger.error(f"Exception {str(E)} ({E})")
     
     finally:
+        try:
+            results_state_obj = Path(f"{app_config['service']['results_path']}.bin")
+            with open(file=results_state_obj, mode="wb") as results_state:
+                pickle.dump(obj=app_globals.app_results, file=results_state)
+        
+        except BaseException as E:
+            logger.error(f"Cannot save app_results state in '{results_state_obj}' ({str(E)})")
+        
+        else:
+            logger.info(f"Successfully saved app_results state in '{results_state_obj}'")
 
         try:
             massa_state_obj = Path(f"{app_config['service']['massa_network_path']}.bin")

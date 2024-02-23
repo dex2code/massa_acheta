@@ -119,7 +119,7 @@ async def add_node(message: Message, state: FSMContext) -> None:
             app_globals.app_results[node_name]['last_update'] = 0
             app_globals.app_results[node_name]['last_result'] = {"unknown": "Never updated before"}
             app_globals.app_results[node_name]['wallets'] = {}
-            await save_app_results()
+            save_app_results()
 
     except BaseException as E:
         logger.error(f"Cannot add node '{node_name}' with URL '{node_url}': ({str(E)})")

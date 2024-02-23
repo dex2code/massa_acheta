@@ -15,67 +15,86 @@ from collections import deque
 
 from app_config import app_config
 
+from tools import save_app_results
+
 acheta_start_time = 0
 
 '''
 Init results
 '''
-app_results = {}
+app_results_pickle = False
+app_results_obj = Path(f"{app_config['service']['results_path']}.bin")
 
-results_obj = Path(app_config['service']['results_path'])
-
-if not results_obj.exists():
-    logger.warning(f"No results file '{results_obj}' exists. Trying to create...")
+if app_results_obj.exists():
+    logger.info(f"Found '{app_results_obj}' file. Trying to load app_results state...")
 
     try:
-        with open(results_obj, "w") as new_results:
-            new_results.write(json.dumps(app_results))
-            new_results.flush()
+        with open(file=app_results_obj, mode="rb") as app_results_source_pickle:
+            app_results_source_pickle.seek(0)
+            app_results = pickle.load(file=app_results_source_pickle)
     
     except BaseException as E:
-        logger.critical(f"Cannot create '{results_obj}' file. Exiting...")
-        sys_exit(1)
+        logger.error(f"Cannot load '{app_results_obj}' file ({str(E)}). Loading app_results from JSON...")
+    
+    else:
+        logger.info(f"app_results state loaded from '{app_results_obj}' file successfully")
+        app_results_pickle = True
+
+if not app_results_pickle:
+    app_results = {}
+
+    app_results_obj = Path(app_config['service']['results_path'])
+
+    if not app_results_obj.exists():
+        logger.warning(f"No results file '{app_results_obj}' exists. Trying to create...")
+
+        try:
+            if not save_app_results():
+                raise Exception
+
+        except BaseException as E:
+            logger.critical(f"Cannot create '{app_results_obj}' file. Exiting...")
+            sys_exit(1)
+
+        else:
+            logger.info(f"Successfully created empty '{app_results_obj}' file")
 
     else:
-        logger.info(f"Successfully created '{results_obj}' file")
+        logger.info(f"Loading results from '{app_results_obj}' file...")
 
-else:
-    logger.info(f"Loading results from '{results_obj}' file...")
+        with open(file=app_results_obj, mode="rt") as input_results:
+            try:
+                app_results = json.load(fp=input_results)
 
+            except BaseException as E:
+                logger.critical(f"Cannot load results from '{app_results_obj}': ({str(E)})")
+                sys_exit(1)
 
-with open(file=results_obj, mode="r") as input_results:
-    try:
-        app_results = json.load(fp=input_results)
-
-    except BaseException as E:
-        logger.critical(f"Cannot load results from '{results_obj}': ({str(E)})")
-        sys_exit(1)
-
-    else:
-        logger.info(f"Successfully loaded results from '{results_obj}' file!")
+            else:
+                logger.info(f"Successfully loaded results from '{app_results_obj}' file!")
 
 
-for node_name in app_results:
-    app_results[node_name]['last_status'] = "unknown"
-    app_results[node_name]['last_chain_id'] = 0
-    app_results[node_name]['last_cycle'] = 0
-    app_results[node_name]['last_update'] = 0
-    app_results[node_name]['last_result'] = {"unknown": "Never updated before"}
+    for node_name in app_results:
+        app_results[node_name]['last_status'] = "unknown"
+        app_results[node_name]['last_update'] = 0
+        app_results[node_name]['last_chain_id'] = 0
+        app_results[node_name]['last_cycle'] = 0
+        app_results[node_name]['last_result'] = {"unknown": "Never updated before"}
 
-    for wallet_address in app_results[node_name]['wallets']:
-        app_results[node_name]['wallets'][wallet_address] = {}
-        app_results[node_name]['wallets'][wallet_address]['final_balance'] = 0
-        app_results[node_name]['wallets'][wallet_address]['candidate_rolls'] = 0
-        app_results[node_name]['wallets'][wallet_address]['active_rolls'] = 0
-        app_results[node_name]['wallets'][wallet_address]['missed_blocks'] = 0
-        app_results[node_name]['wallets'][wallet_address]['last_status'] = "unknown"
-        app_results[node_name]['wallets'][wallet_address]['last_update'] = 0
-        app_results[node_name]['wallets'][wallet_address]['last_result'] = {"unknown": "Never updated before"}
-        app_results[node_name]['wallets'][wallet_address]['stat'] = deque(
-            maxlen=int(
-                app_config['service']['wallet_stat_keep_days'] * 24 * 60 / app_config['service']['main_loop_period_min']
+        for wallet_address in app_results[node_name]['wallets']:
+            app_results[node_name]['wallets'][wallet_address] = {}
+            app_results[node_name]['wallets'][wallet_address]['last_status'] = "unknown"
+            app_results[node_name]['wallets'][wallet_address]['last_update'] = 0
+            app_results[node_name]['wallets'][wallet_address]['final_balance'] = 0
+            app_results[node_name]['wallets'][wallet_address]['candidate_rolls'] = 0
+            app_results[node_name]['wallets'][wallet_address]['active_rolls'] = 0
+            app_results[node_name]['wallets'][wallet_address]['missed_blocks'] = 0
+            app_results[node_name]['wallets'][wallet_address]['last_result'] = {"unknown": "Never updated before"}
+            app_results[node_name]['wallets'][wallet_address]['stat'] = deque(
+                maxlen=int(
+                    app_config['service']['wallet_stat_keep_days'] * 24 * 60 / app_config['service']['main_loop_period_min']
+                )
             )
-        )
 
 
 '''
@@ -114,23 +133,24 @@ results_lock = asyncio.Lock()
 '''
 MASSA network values
 '''
-massa_network_state = False
-massa_state_obj = Path(f"{app_config['service']['massa_network_path']}.bin")
-if massa_state_obj.exists():
-    logger.info(f"Found '{massa_state_obj}' file. Trying to load MASSA state...")
+massa_network_pickle = False
+massa_network_obj = Path(f"{app_config['service']['massa_network_path']}.bin")
+if massa_network_obj.exists():
+    logger.info(f"Found '{massa_network_obj}' file. Trying to load MASSA state...")
 
     try:
-        with open(file=massa_state_obj, mode="rb") as massa_state:
-            massa_network = pickle.load(file=massa_state)
+        with open(file=massa_network_obj, mode="rb") as massa_network_source_pickle:
+            massa_network_source_pickle.seek(0)
+            massa_network = pickle.load(file=massa_network_source_pickle)
     
     except BaseException as E:
-        logger.error(f"Cannot load '{massa_state_obj}' file ({str(E)}) Loading empty MASSA state...")
+        logger.error(f"Cannot load '{massa_network_obj}' file ({str(E)}) Loading empty MASSA state...")
     
     else:
-        logger.info(f"MASSA state loaded from '{massa_state_obj}' file successfully (found {len(massa_network['stat'])} measures)")
-        massa_network_state = True
+        logger.info(f"MASSA state loaded from '{massa_network_obj}' file successfully (found {len(massa_network['stat'])} measures)")
+        massa_network_pickle = True
 
-if not massa_network_state:
+if not massa_network_pickle:
     massa_network = {}
     massa_network['values'] =  {
         "latest_release": "",

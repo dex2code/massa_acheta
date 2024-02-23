@@ -78,7 +78,7 @@ async def do_reset(message: Message, state: FSMContext) -> None:
     try:
         async with app_globals.results_lock:
             app_globals.app_results = {}
-            await save_app_results()
+            save_app_results()
 
     except BaseException as E:
         t = as_list(

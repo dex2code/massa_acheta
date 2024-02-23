@@ -2,11 +2,11 @@ from loguru import logger
 
 import aiohttp
 import json
-from aiofiles import open as aiof_open
 from aiogram.types import Message
 from aiogram.utils.formatting import as_list, as_line, TextLink
 from aiogram.enums import ParseMode
 from time import time
+from pathlib import Path
 
 from app_config import app_config
 import app_globals
@@ -80,7 +80,7 @@ async def pull_http_api(api_url: str=None,
 
 
 @logger.catch
-async def save_app_results() -> bool:
+def save_app_results() -> bool:
     logger.debug(f"-> Enter Def")
 
     composed_results = {}
@@ -94,16 +94,17 @@ async def save_app_results() -> bool:
             composed_results[node_name]['wallets'][wallet_address] = {}
 
     try:
-        async with aiof_open(app_globals.results_obj, "w") as output_results:
-            await output_results.write(json.dumps(obj=composed_results, indent=4))
-            await output_results.flush()
+        app_results_obj = Path(app_config['service']['results_path'])
+        with open(file=app_results_obj, mode="wt") as output_results:
+            output_results.write(json.dumps(obj=composed_results, indent=4))
+            output_results.flush()
                     
     except BaseException as E:
-        logger.critical(f"Cannot save app_results into '{app_globals.results_obj}' file: ({str(E)})")
+        logger.critical(f"Cannot save app_results into '{app_results_obj}' file: ({str(E)})")
         return False
         
     else:
-        logger.info(f"Successfully saved app_results into '{app_globals.results_obj}' file!")
+        logger.info(f"Successfully saved app_results into '{app_results_obj}' file!")
         return True
 
 
