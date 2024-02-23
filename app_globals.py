@@ -15,9 +15,9 @@ from collections import deque
 
 from app_config import app_config
 
-from tools import save_app_results
+from tools import save_app_results, t_now
 
-acheta_start_time = 0
+acheta_start_time = t_now()
 
 '''
 Init results
