@@ -150,6 +150,7 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
+    logger.info(f"MASSA Acheta started at {t_now()}")
     app_globals.acheta_start_time = t_now()
     try:
         asyncio.run(main())
