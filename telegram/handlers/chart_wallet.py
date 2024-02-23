@@ -355,7 +355,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
             staking_chart_config['data']['datasets'][1]['data'].append(balance)
 
             blocks_chart_config['data']['labels'].append(cycle)
-            blocks_chart_config['data']['datasets'][0]['data'].append(get_rewards(rolls_number=rolls))
+            blocks_chart_config['data']['datasets'][0]['data'].append(await get_rewards(rolls_number=rolls))
             blocks_chart_config['data']['datasets'][1]['data'].append(ok_blocks)
             blocks_chart_config['data']['datasets'][2]['data'].append(nok_blocks)
 
