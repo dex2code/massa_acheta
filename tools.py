@@ -155,6 +155,8 @@ def get_all_wallets() -> list:
 
 @logger.catch
 def t_now() -> int:
+    logger.debug("-> Enter Def")
+
     return int(
         time()
     )
@@ -162,15 +164,14 @@ def t_now() -> int:
 
 
 @logger.catch
-def get_last_seen(last_time: int=0, current_time: int=t_now(), show_days: bool=False) -> str:
+def get_last_seen(last_time: int=0, show_days: bool=False) -> str:
     logger.debug("-> Enter Def")
-    logger.warning(f"{last_time=} {current_time=}")
 
     if last_time == 0:
         return "Never"
     
+    current_time = t_now()
     diff_seconds = current_time - last_time
-    logger.warning(f"{diff_seconds=}")
 
     if show_days:
         diff_days = diff_seconds // (24 * 60 * 60)
