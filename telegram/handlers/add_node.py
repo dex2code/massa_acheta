@@ -150,9 +150,9 @@ async def add_node(message: Message, state: FSMContext) -> None:
                 Code(get_short_address(node_name)),
                 f" with API URL: {node_url}"
             ),
-            "👁 You can check new settings using /view_config command", "",
-            "☝ Please note that bot will update info for this node a bit later", "",
-            "⚠ Please also check if you opened a firewall on the MASSA host:",
+            "👁 Please note that bot will update info for this node a bit later", "",
+            "☝ You can add wallet to node using /add_wallet command", "",
+            "⚠ Please also check if you opened a firewall on the MASSA node host:",
             as_line(
                 "Use ",
                 Code("sudo ufw allow 33035/tcp"),
