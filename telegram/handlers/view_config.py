@@ -47,7 +47,8 @@ async def cmd_view_config(message: Message) -> None:
                             TextLink(
                                 get_short_address(address=wallet_address),
                                 url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
-                            )
+                            ),
+                            end=""
                         )
                     )
 

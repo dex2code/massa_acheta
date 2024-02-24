@@ -68,7 +68,8 @@ async def heartbeat() -> None:
                                                 get_short_address(address=wallet_address),
                                                 url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                                             ),
-                                            f" ( {app_globals.app_results[node_name]['wallets'][wallet_address]['final_balance']:,} MAS )"
+                                            f" ( {app_globals.app_results[node_name]['wallets'][wallet_address]['final_balance']:,} MAS )",
+                                            end=""
                                         )
                                     )
                                 else:
@@ -80,7 +81,8 @@ async def heartbeat() -> None:
                                                 get_short_address(address=wallet_address),
                                                 url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                                             ),
-                                            " ( ? MAS )"
+                                            " ( ? MAS )",
+                                            end=""
                                         )
                                     )
                             
