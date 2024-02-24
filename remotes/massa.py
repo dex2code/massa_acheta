@@ -6,7 +6,7 @@ import json
 from app_config import app_config
 import app_globals
 
-from tools import pull_http_api, t_now
+from tools import pull_http_api, t_now, save_app_stat
 
 
 @logger.catch
@@ -296,6 +296,7 @@ async def massa() -> None:
                 logger.warning(f"Could not collect MASSA mainnet network info")
 
             logger.info(f"Sleeping for {app_config['service']['massa_network_update_period_min'] * 60} seconds...")
+            save_app_stat()
             await asyncio.sleep(delay=app_config['service']['massa_network_update_period_min'] * 60)
 
     except BaseException as E:
