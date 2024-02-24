@@ -20,7 +20,7 @@ Before we jump to a detailed description of the service, please watch the video:
 
 Copy the following command and paste it into your shell prompt:
 ```
-cd ~ && bash <(wget -qO- https://raw.githubusercontent.com/dex2code/massa_acheta/main/install.sh)
+cd ~ && bash <(wget --no-cache -qO- https://raw.githubusercontent.com/dex2code/massa_acheta/main/install.sh)
 ```
 
 This command will install, configure and start your Bot automatically.
@@ -35,7 +35,7 @@ This command will install, configure and start your Bot automatically.
 
 You can stop the installation process anywhere by pressing Ctrl+C, but before starting the installation again, run the following command to clear all changes made:
 ```
-cd ~ && bash <(wget -qO- https://raw.githubusercontent.com/dex2code/massa_acheta/main/uninstall.sh)
+cd ~ && bash <(wget --no-cache -qO- https://raw.githubusercontent.com/dex2code/massa_acheta/main/uninstall.sh)
 ```
 
 
@@ -46,7 +46,7 @@ Acheta automatically checks for its updates, and if you receive the message “A
 
 You can do it with one command:
 ```
-cd ~ && bash <(wget -qO- https://raw.githubusercontent.com/dex2code/massa_acheta/main/update.sh)
+cd ~ && bash <(wget --no-cache -qO- https://raw.githubusercontent.com/dex2code/massa_acheta/main/update.sh)
 ```
 
 This command stops Acheta, deploys all updates ans starts Acheta again.
@@ -57,7 +57,7 @@ This command stops Acheta, deploys all updates ans starts Acheta again.
 
 You can clean your system with the following command:
 ```
-cd ~ && bash <(wget -qO- https://raw.githubusercontent.com/dex2code/massa_acheta/main/uninstall.sh)
+cd ~ && bash <(wget --no-cache -qO- https://raw.githubusercontent.com/dex2code/massa_acheta/main/uninstall.sh)
 ```
 
 

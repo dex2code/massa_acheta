@@ -5,9 +5,7 @@ lib64
 include/
 pyvenv.cfg
 app_results.json
-app_results.json.bin
-massa_network.json
-massa_network.json.bin
+app_stat.json
 public
 
 
