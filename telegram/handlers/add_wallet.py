@@ -171,7 +171,7 @@ async def add_wallet(message: Message, state: FSMContext) -> None:
             app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'] = {"unknown": "Never updated before"}
             app_globals.app_results[node_name]['wallets'][wallet_address]['stat'] = deque(
                 maxlen=int(
-                    app_config['service']['wallet_stat_keep_days'] * 24 * 60 / app_config['service']['main_loop_period_min']
+                    24 * 60 / app_config['service']['main_loop_period_min']
                 )
             )
             save_app_results()
