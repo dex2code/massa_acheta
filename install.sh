@@ -198,7 +198,9 @@ else
     exit 1
 fi
 
-echo -n "✅ Installation done! Press Enter to continue... "
+echo "✅ Installation done!"
+echo
+echo -n "Press Enter to continue... "
 read _
 
 
