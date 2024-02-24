@@ -15,7 +15,7 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
     logger.debug(f"-> Enter Def")
 
     if app_globals.app_results[node_name]['last_status'] != True:
-        logger.warning(f"Will not watch wallet '{wallet_address}' on node '{node_name}' because of its offline")
+        logger.warning(f"Will not watch wallet '{wallet_address}'@'{node_name}' because of its offline")
 
         app_globals.app_results[node_name]['wallets'][wallet_address]['last_status'] = False
         app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'] = {"error": "Host node is offline"}
@@ -112,7 +112,7 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
         app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'] = wallet_answer
 
     else:
-        logger.info(f"Got wallet '{wallet_address}' on node '{node_name}' info successfully!")
+        logger.info(f"Got wallet '{wallet_address}'@'{node_name}' info successfully!")
 
         if app_globals.app_results[node_name]['wallets'][wallet_address]['last_status'] != True:
             t = as_list(
@@ -222,10 +222,10 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
             )
 
         except BaseException as E:
-            logger.warning(f"Cannot store stat for wallet '{wallet_address}' on node '{node_name}' ({str(E)})")
+            logger.warning(f"Cannot store stat for wallet '{wallet_address}'@'{node_name}' ({str(E)})")
 
         else:
-            logger.info(f"Successfully stored stat for wallet '{wallet_address}' on node '{node_name}' ({len(app_globals.app_results[node_name]['wallets'][wallet_address]['stat'])} measures)")
+            logger.info(f"Successfully stored stat for wallet '{wallet_address}'@'{node_name}' ({len(app_globals.app_results[node_name]['wallets'][wallet_address]['stat'])} measures)")
 
     return
 
