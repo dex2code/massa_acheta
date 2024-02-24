@@ -1,7 +1,7 @@
 from loguru import logger
 
 import asyncio
-from aiogram.utils.formatting import as_list, as_line, TextLink, as_numbered_list
+from aiogram.utils.formatting import as_list, as_line, TextLink
 
 from app_config import app_config
 import app_globals
@@ -61,7 +61,9 @@ async def heartbeat() -> None:
 
                                 if app_globals.app_results[node_name]['wallets'][wallet_address]['last_status'] == True:
                                     wallet_list.append(
+                                        as_line("⦙"),
                                         as_line(
+                                            "⦙… ",
                                             TextLink(
                                                 get_short_address(address=wallet_address),
                                                 url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
@@ -71,16 +73,18 @@ async def heartbeat() -> None:
                                     )
                                 else:
                                     wallet_list.append(
+                                        as_line("⦙"),
                                         as_line(
+                                            "⦙… ",
                                             TextLink(
                                                 get_short_address(address=wallet_address),
                                                 url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                                             ),
-                                            " ( Unknown MAS )"
+                                            " ( ? MAS )"
                                         )
                                     )
                             
-                            heartbeat_list.append(as_numbered_list(*wallet_list))
+                            heartbeat_list.append(as_list(*wallet_list))
 
                     else:
                         heartbeat_list.append(f"☠️ Status: Offline ({last_seen})")
