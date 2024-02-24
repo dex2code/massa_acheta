@@ -296,8 +296,8 @@ async def massa() -> None:
                 logger.warning(f"Could not collect MASSA mainnet network info")
 
             logger.info(f"Sleeping for {app_config['service']['massa_network_update_period_min'] * 60} seconds...")
-            save_app_stat()
             await asyncio.sleep(delay=app_config['service']['massa_network_update_period_min'] * 60)
+            save_app_stat()
 
     except BaseException as E:
         logger.error(f"Exception {str(E)} ({E})")
