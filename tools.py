@@ -124,12 +124,12 @@ def save_app_stat() -> bool:
         composed_results['app_results'][node_name] = {}
 
         for wallet_address in app_globals.app_results[node_name]['wallets']:
-            composed_results[node_name][wallet_address] = {
+            composed_results['app_results'][node_name][wallet_address] = {
                 "stat": []
             }
 
             for measure in app_globals.app_results[node_name]['wallets'][wallet_address]['stat']:
-                composed_results[node_name][wallet_address]['stat'].append(measure)
+                composed_results['app_results'][node_name][wallet_address]['stat'].append(measure)
 
     for measure in app_globals.massa_network['stat']:
         composed_results['massa_network']['stat'].append(measure)
