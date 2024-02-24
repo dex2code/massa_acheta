@@ -26,12 +26,8 @@ async def monitor() -> None:
                     wallet_coros.add(check_wallet(node_name=node_name, wallet_address=wallet_address))
 
             async with app_globals.results_lock:
-
                 await asyncio.gather(*node_coros)
-                await asyncio.sleep(delay=0.1)
-
                 await asyncio.gather(*wallet_coros)
-                await asyncio.sleep(delay=0.1)
 
             await asyncio.gather(check_releases())
 

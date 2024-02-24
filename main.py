@@ -11,7 +11,6 @@ logger.add(
 )
 
 import asyncio
-import pickle
 from aiogram.utils.formatting import as_list
 from aiogram.types import BotCommand
 from pathlib import Path
@@ -35,7 +34,7 @@ from telegram.handlers import massa_info, massa_chart, acheta_release
 from telegram.handlers import reset
 from telegram.handlers import unknown
 
-from tools import t_now
+from tools import t_now, save_app_results, save_app_stat
 
 
 @logger.catch
@@ -160,29 +159,8 @@ if __name__ == "__main__":
         logger.error(f"Exception {str(E)} ({E})")
     
     finally:
-        try:
-            results_state_obj = Path(f"{app_config['service']['results_path']}.bin")
-            with open(file=results_state_obj, mode="wb") as results_state:
-                pickle.dump(obj=app_globals.app_results, file=results_state)
-                results_state.flush()
-        
-        except BaseException as E:
-            logger.error(f"Cannot save app_results state in '{results_state_obj}' ({str(E)})")
-        
-        else:
-            logger.info(f"Successfully saved app_results state in '{results_state_obj}'")
-
-        try:
-            massa_state_obj = Path(f"{app_config['service']['massa_network_path']}.bin")
-            with open(file=massa_state_obj, mode="wb") as massa_state:
-                pickle.dump(obj=app_globals.massa_network, file=massa_state)
-                massa_state.flush()
-        
-        except BaseException as E:
-            logger.error(f"Cannot save MASSA state in '{massa_state_obj}' ({str(E)})")
-        
-        else:
-            logger.info(f"Successfully saved MASSA state in '{massa_state_obj}'")
+        save_app_results()
+        save_app_stat()
 
         logger.critical("Service terminated")
         sys_exit()

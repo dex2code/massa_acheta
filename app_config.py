@@ -11,17 +11,14 @@ app_config['telegram']['sending_timeout_sec'] = 5
 # Service settings
 app_config['service']['results_path'] = "app_results.json"
 app_config['service']['deferred_credits_path'] = "deferred_credits.json"
-app_config['service']['massa_network_path'] = "massa_network.json"
+app_config['service']['stat_path'] = "app_stat.json"
 
 app_config['service']['main_loop_period_min'] = 10
-app_config['service']['wallet_stat_keep_days'] = 1
+app_config['service']['heartbeat_period_hours'] = 6
+app_config['service']['massa_network_update_period_min'] = 30
 
 app_config['service']['http_session_timeout_sec'] = 300
 app_config['service']['http_probe_timeout_sec'] = 120
-
-app_config['service']['heartbeat_period_hours'] = 6
-app_config['service']['massa_network_update_period_min'] = 30
-app_config['service']['massa_network_stat_keep_days'] = 3
 
 app_config['service']['massa_release_url'] = "https://api.github.com/repos/massalabs/massa/releases/latest"
 app_config['service']['acheta_release_url'] = "https://api.github.com/repos/dex2code/massa_acheta/releases/latest"

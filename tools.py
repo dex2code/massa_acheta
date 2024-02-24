@@ -85,15 +85,15 @@ def save_app_results() -> bool:
 
     composed_results = {}
 
-    for node_name in app_globals.app_results:
-        composed_results[node_name] = {}
-        composed_results[node_name]['url'] = app_globals.app_results[node_name]['url']
-        composed_results[node_name]['wallets'] = {}
-
-        for wallet_address in app_globals.app_results[node_name]['wallets']:
-            composed_results[node_name]['wallets'][wallet_address] = {}
-
     try:
+        for node_name in app_globals.app_results:
+            composed_results[node_name] = {}
+            composed_results[node_name]['url'] = app_globals.app_results[node_name]['url']
+            composed_results[node_name]['wallets'] = {}
+
+            for wallet_address in app_globals.app_results[node_name]['wallets']:
+                composed_results[node_name]['wallets'][wallet_address] = {}
+
         app_results_obj = Path(app_config['service']['results_path'])
         with open(file=app_results_obj, mode="wt") as output_results:
             output_results.write(json.dumps(obj=composed_results, indent=4))
@@ -105,6 +105,47 @@ def save_app_results() -> bool:
         
     else:
         logger.info(f"Successfully saved app_results into '{app_results_obj}' file!")
+        return True
+
+
+
+@logger.catch
+def save_app_stat() -> bool:
+    logger.debug(f"-> Enter Def")
+
+    composed_results = {
+        "app_results": {},
+        "massa_network": {
+            "stat": []
+        }
+    }
+
+    for node_name in app_globals.app_results:
+        composed_results['app_results'][node_name] = {}
+
+        for wallet_address in app_globals.app_results[node_name]['wallets']:
+            composed_results[node_name][wallet_address] = {
+                "stat": []
+            }
+
+            for measure in app_globals.app_results[node_name]['wallets'][wallet_address]['stat']:
+                composed_results[node_name][wallet_address]['stat'].append(measure)
+
+    for measure in app_globals.massa_network['stat']:
+        composed_results['massa_network']['stat'].append(measure)
+
+    try:
+        app_stat_obj = Path(app_config['service']['stat_path'])
+        with open(file=app_stat_obj, mode="wt") as output_stat:
+            output_stat.write(json.dumps(obj=composed_results, indent=4))
+            output_stat.flush()
+                    
+    except BaseException as E:
+        logger.critical(f"Cannot save app_stat into '{app_stat_obj}' file: ({str(E)})")
+        return False
+        
+    else:
+        logger.info(f"Successfully saved app_stat into '{app_stat_obj}' file!")
         return True
 
 
