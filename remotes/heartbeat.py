@@ -61,8 +61,8 @@ async def heartbeat() -> None:
 
                                 if app_globals.app_results[node_name]['wallets'][wallet_address]['last_status'] == True:
                                     wallet_list.append(
-                                        as_line("⦙"),
                                         as_line(
+                                            "⦙\n",
                                             "⦙… ",
                                             TextLink(
                                                 get_short_address(address=wallet_address),
@@ -73,8 +73,8 @@ async def heartbeat() -> None:
                                     )
                                 else:
                                     wallet_list.append(
-                                        as_line("⦙"),
                                         as_line(
+                                            "⦙\n",
                                             "⦙… ",
                                             TextLink(
                                                 get_short_address(address=wallet_address),

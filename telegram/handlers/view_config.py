@@ -41,8 +41,8 @@ async def cmd_view_config(message: Message) -> None:
 
                 for wallet_address in app_globals.app_results[node_name]['wallets']:
                     wallet_list.append(
-                        as_line("⦙"),
                         as_line(
+                            "⦙\n",
                             "⦙… ",
                             TextLink(
                                 get_short_address(address=wallet_address),
