@@ -17,7 +17,7 @@ router = Router()
 @logger.catch
 async def cmd_start(message: Message) -> None:
     logger.debug("-> Enter Def")
-    logger.info(f"-> Got '{message.text}' command from user '{message.from_user.id}' in chat '{message.chat.id}'")
+    logger.info(f"-> Got '{message.text}' command from '{message.from_user.id}'@'{message.chat.id}'")
 
     if message.chat.id != app_globals.bot.ACHETA_CHAT:
         t = as_list(

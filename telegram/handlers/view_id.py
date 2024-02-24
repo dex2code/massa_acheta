@@ -7,7 +7,6 @@ from aiogram.enums import ParseMode
 from aiogram.utils.formatting import as_list, as_line, Code
 
 from app_config import app_config
-import app_globals
 
 
 router = Router()
@@ -17,7 +16,7 @@ router = Router()
 @logger.catch
 async def cmd_view_id(message: Message) -> None:
     logger.debug("-> Enter Def")
-    logger.info(f"-> Got '{message.text}' command from user '{message.from_user.id}' in chat '{message.chat.id}'")
+    logger.info(f"-> Got '{message.text}' command from '{message.from_user.id}'@'{message.chat.id}'")
 
     t = as_list(
         as_line(

@@ -24,7 +24,7 @@ router = Router()
 @logger.catch
 async def cmd_reset(message: Message, state: FSMContext) -> None:
     logger.debug("->Enter Def")
-    logger.info(f"-> Got '{message.text}' command from user '{message.from_user.id}' in chat '{message.chat.id}'")
+    logger.info(f"-> Got '{message.text}' command from '{message.from_user.id}'@'{message.chat.id}'")
     if not await check_privacy(message=message): return
 
     t = as_list(
@@ -55,7 +55,7 @@ async def cmd_reset(message: Message, state: FSMContext) -> None:
 @logger.catch
 async def do_reset(message: Message, state: FSMContext) -> None:
     logger.debug("-> Enter Def")
-    logger.info(f"-> Got '{message.text}' command from user '{message.from_user.id}' in chat '{message.chat.id}'")
+    logger.info(f"-> Got '{message.text}' command from '{message.from_user.id}'@'{message.chat.id}'")
     if not await check_privacy(message=message): return
 
     if message.text.upper() != "I REALLY WANT TO RESET ALL SETTINGS":

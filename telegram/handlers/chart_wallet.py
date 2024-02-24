@@ -29,7 +29,7 @@ router = Router()
 @logger.catch
 async def cmd_chart_wallet(message: Message, state: FSMContext) -> None:
     logger.debug("->Enter Def")
-    logger.info(f"-> Got '{message.text}' command from user '{message.from_user.id}' in chat '{message.chat.id}'")
+    logger.info(f"-> Got '{message.text}' command from '{message.from_user.id}'@'{message.chat.id}'")
     if not await check_privacy(message=message): return
     
     if len(app_globals.app_results) == 0:
@@ -73,7 +73,7 @@ async def cmd_chart_wallet(message: Message, state: FSMContext) -> None:
 @logger.catch
 async def select_wallet_to_show(message: Message, state: FSMContext) -> None:
     logger.debug("-> Enter Def")
-    logger.info(f"-> Got '{message.text}' command from user '{message.from_user.id}' in chat '{message.chat.id}'")
+    logger.info(f"-> Got '{message.text}' command from '{message.from_user.id}'@'{message.chat.id}'")
     if not await check_privacy(message=message): return
 
     node_name = message.text
@@ -137,7 +137,7 @@ async def select_wallet_to_show(message: Message, state: FSMContext) -> None:
 @logger.catch
 async def show_wallet(message: Message, state: FSMContext) -> None:
     logger.debug("-> Enter Def")
-    logger.info(f"-> Got '{message.text}' command from user '{message.from_user.id}' in chat '{message.chat.id}'")
+    logger.info(f"-> Got '{message.text}' command from '{message.from_user.id}'@'{message.chat.id}'")
     if not await check_privacy(message=message): return
 
     try:

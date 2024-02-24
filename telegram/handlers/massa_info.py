@@ -19,7 +19,7 @@ router = Router()
 @logger.catch
 async def cmd_massa_info(message: Message) -> None:
     logger.debug("-> Enter Def")
-    logger.info(f"-> Got '{message.text}' command from user '{message.from_user.id}' in chat '{message.chat.id}'")
+    logger.info(f"-> Got '{message.text}' command from '{message.from_user.id}'@'{message.chat.id}'")
 
     wallet_computed_rewards = await get_rewards(rolls_number=100)
 

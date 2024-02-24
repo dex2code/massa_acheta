@@ -120,7 +120,7 @@ async def get_credits(wallet_address: str="") -> Text:
 @logger.catch
 async def cmd_view_credits(message: Message, state: FSMContext) -> None:
     logger.debug("->Enter Def")
-    logger.info(f"-> Got '{message.text}' command from user '{message.from_user.id}' in chat '{message.chat.id}'")
+    logger.info(f"-> Got '{message.text}' command from '{message.from_user.id}'@'{message.chat.id}'")
 
     message_list = message.text.split()
     if len(message_list) < 2:
@@ -167,7 +167,7 @@ async def cmd_view_credits(message: Message, state: FSMContext) -> None:
 @logger.catch
 async def show_credits(message: Message, state: FSMContext) -> None:
     logger.debug("-> Enter Def")
-    logger.info(f"-> Got '{message.text}' command from user '{message.from_user.id}' in chat '{message.chat.id}'")
+    logger.info(f"-> Got '{message.text}' command from '{message.from_user.id}'@'{message.chat.id}'")
 
     wallet_address = ""
     command_list = message.text.split()

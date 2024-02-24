@@ -19,7 +19,7 @@ router = Router()
 @logger.catch
 async def cmd_view_config(message: Message) -> None:
     logger.debug("-> Enter Def")
-    logger.info(f"-> Got '{message.text}' command from user '{message.from_user.id}' in chat '{message.chat.id}'")
+    logger.info(f"-> Got '{message.text}' command from '{message.from_user.id}'@'{message.chat.id}'")
     if not await check_privacy(message=message): return
 
     config_list = []

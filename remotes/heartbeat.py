@@ -16,7 +16,8 @@ async def heartbeat() -> None:
     try:
         while True:
             logger.info(f"Sleeping for {app_config['service']['heartbeat_period_hours'] * 60 * 60} seconds...")
-            await asyncio.sleep(delay=(app_config['service']['heartbeat_period_hours'] * 60 * 60))
+            #await asyncio.sleep(delay=(app_config['service']['heartbeat_period_hours'] * 60 * 60))
+            await asyncio.sleep(delay=30)
             logger.info(f"Heartbeat planner shedule time")
 
             computed_rewards = await get_rewards(rolls_number=100)
@@ -51,7 +52,7 @@ async def heartbeat() -> None:
                         if num_wallets == 0:
                             heartbeat_list.append("⭕ No wallets attached\n")
                         else:
-                            heartbeat_list.append(f"👛 {num_wallets} wallet(s) attached:\n")
+                            heartbeat_list.append(f"👛 {num_wallets} wallet(s) attached:")
 
                             wallet_list = []
 
