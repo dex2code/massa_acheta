@@ -51,7 +51,7 @@ async def cmd_view_config(message: Message) -> None:
                             end=""
                         )
                     )
-
+                wallet_list.append("")
                 config_list.append(
                     as_list(*wallet_list)
                 )
