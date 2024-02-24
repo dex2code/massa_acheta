@@ -128,7 +128,7 @@ if app_stat_obj.exists():
                     if wallet_stat and type(wallet_stat) == list and len(wallet_stat) > 0:
                         for measure in wallet_stat:
                             app_results[node_name]['wallets'][wallet_address]['stat'].append(measure)
-                    logger.info(f"Restored {len(app_results[node_name][wallet_address]['stat'])} measures for wallet '{wallet_address}'@'{node_name}'")
+                    logger.info(f"Restored {len(app_results[node_name]['wallets'][wallet_address]['stat'])} measures for wallet '{wallet_address}'@'{node_name}'")
         
         except BaseException as E:
             logger.error(f"Cannot restore app_result stat ({str(E)})")

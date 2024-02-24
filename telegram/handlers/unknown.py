@@ -19,7 +19,7 @@ async def cmd_unknown(message: Message, state: FSMContext) -> None:
     logger.info(f"-> Got '{message.text}' command from user '{message.from_user.id}' in chat '{message.chat.id}'")
 
     t = as_list(
-        f"⁉ Error: Unknown command \"{message.text}\"", "",
+        f"⁉ Error: Unknown command", "",
         "👉 Try /help to learn bot commands"
     )
     try:
