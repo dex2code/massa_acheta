@@ -119,11 +119,11 @@ if app_stat_obj.exists():
         logger.error(f"Cannot load stat from '{app_stat_obj}': ({str(E)})")
 
     else:
-        logger.info(f"Restored app_stat from '{app_stat_obj}' successfully")
+        logger.info(f"Loaded app_stat from '{app_stat_obj}' successfully")
 
         try:
             for node_name in app_results:
-                for wallet_address in app_results[node_name]:
+                for wallet_address in app_results[node_name]['wallets']:
                     wallet_stat = app_stat['app_results'][node_name][wallet_address].get("stat", None)
                     if wallet_stat and type(wallet_stat) == list and len(wallet_stat) > 0:
                         for measure in wallet_stat:
