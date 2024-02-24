@@ -225,7 +225,7 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
             logger.warning(f"Cannot store stat for wallet '{wallet_address}'@'{node_name}' ({str(E)})")
 
         else:
-            logger.info(f"Successfully stored stat for wallet '{wallet_address}'@'{node_name}' ({len(app_globals.app_results[node_name]['wallets'][wallet_address]['stat'])} measures)")
+            logger.info(f"Stored stat for wallet '{wallet_address}'@'{node_name}' ({len(app_globals.app_results[node_name]['wallets'][wallet_address]['stat'])} measures)")
 
     return
 
