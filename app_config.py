@@ -28,4 +28,3 @@ app_config['service']['mainnet_explorer_url'] = "https://explorer.massa.net/main
 app_config['service']['massexplo_api_url'] = "https://api.massexplo.io/info?network=MainNet"
 
 app_config['service']['mainnet_stakers_bundle'] = 1000
-

@@ -189,15 +189,15 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
                         "id": "rolls",
                         "display": True,
                         "position": "left",
-                        "ticks": { "fontColor": "green" },
+                        "ticks": { "fontColor": "Teal" },
                         "gridLines": { "drawOnChartArea": False }
                     },
                     {
                         "id": "balance",
                         "display": True,
                         "position": "right",
-                        "ticks": { "fontColor": "red" },
-                        "gridLines": { "drawOnChartArea": False }
+                        "ticks": { "fontColor": "FireBrick" },
+                        "gridLines": { "drawOnChartArea": True }
                     }
                 ]
             }
@@ -212,9 +212,9 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
                     "yAxisID": "rolls",
                     "lineTension": 0.4,
                     "fill": False,
-                    "borderColor": "green",
-                    "borderWidth": 1,
-                    "pointRadius": 0,
+                    "borderColor": "Teal",
+                    "borderWidth": 2,
+                    "pointRadius": 2,
                     "data": []
                 },
                 {
@@ -222,9 +222,9 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
                     "yAxisID": "balance",
                     "lineTension": 0.4,
                     "fill": False,
-                    "borderColor": "red",
+                    "borderColor": "FireBrick",
                     "borderWidth": 2,
-                    "pointRadius": 0,
+                    "pointRadius": 2,
                     "data": []
                 }
             ]
@@ -249,7 +249,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
                         "display": True,
                         "position": "left",
                         "stacked": True,
-                        "ticks": { "min": 0, "fontColor": "black" },
+                        "ticks": { "min": 0, "fontColor": "LightSeaGreen" },
                         "gridLines": { "drawOnChartArea": False }
                     },
                     {
@@ -257,8 +257,8 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
                         "display": True,
                         "position": "right",
                         "stacked": False,
-                        "ticks": { "fontColor": "blue" },
-                        "gridLines": { "drawOnChartArea": False }
+                        "ticks": { "fontColor": "DarkViolet" },
+                        "gridLines": { "drawOnChartArea": True }
                     }
                 ],
                 "xAxes": [ { "stacked": True } ]
@@ -272,27 +272,27 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
             "datasets": [
                 {
                     "type": "line",
-                    "label": "Estimated earnings (MAS)",
+                    "label": "Est. Earnings (MAS / Day)",
                     "yAxisID": "earnings",
                     "lineTension": 0.4,
                     "fill": False,
-                    "borderColor": "blue",
+                    "borderColor": "DarkViolet",
                     "borderWidth": 2,
-                    "pointRadius": 0,
+                    "pointRadius": 2,
                     "data": []
                 },
                 {
                     "type": "bar",
                     "label": "Operated blocks",
                     "yAxisID": "blocks",
-                    "backgroundColor": "green",
+                    "backgroundColor": "LightSeaGreen",
                     "data": []
                 },
                 {
                     "type": "bar",
                     "label": "Missed blocks",
                     "yAxisID": "blocks",
-                    "backgroundColor": "red",
+                    "backgroundColor": "LightSalmon",
                     "data": []
                 },
             ]

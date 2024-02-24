@@ -26,6 +26,7 @@ acheta_start_time = t_now()
 results_lock = asyncio.Lock()
 
 
+
 ### Init results ###
 app_results = {}
 
@@ -57,8 +58,6 @@ else:
 
     else:
         logger.info(f"Successfully created empty '{app_results_obj}' file")
-
-
 
 for node_name in app_results:
     app_results[node_name]['last_status'] = "unknown"
@@ -153,18 +152,26 @@ if app_stat_obj.exists():
 
 
 ### Init Telegram stuff ###
-class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=".env", env_file_encoding='utf-8')
+class BotSettings(BaseSettings):
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding='utf-8'
+    )
 
     ACHETA_KEY: SecretStr
     ACHETA_CHAT: int
 
-bot = Settings()
-
+bot = BotSettings()
 
 telegram_queue = deque()
-tg_dp = Dispatcher(storage=MemoryStorage())
-tg_bot = Bot(token=bot.ACHETA_KEY.get_secret_value(), disable_web_page_preview=True, parse_mode=ParseMode.HTML)
+tg_dp = Dispatcher(
+    storage=MemoryStorage()
+)
+tg_bot = Bot(
+    token=bot.ACHETA_KEY.get_secret_value(),
+    parse_mode=ParseMode.HTML,
+    disable_web_page_preview=True
+)
 
 
 

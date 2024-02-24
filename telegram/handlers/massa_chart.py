@@ -36,15 +36,15 @@ async def cmd_massa_chart(message: Message) -> None:
                         "id": "stakers",
                         "display": True,
                         "position": "left",
-                        "ticks": { "fontColor": "green" },
+                        "ticks": { "fontColor": "Teal" },
                         "gridLines": { "drawOnChartArea": False }
                     },
                     {
                         "id": "rolls",
                         "display": True,
                         "position": "right",
-                        "ticks": { "fontColor": "red" },
-                        "gridLines": { "drawOnChartArea": False }
+                        "ticks": { "fontColor": "FireBrick" },
+                        "gridLines": { "drawOnChartArea": True }
                     }
                 ]
             }
@@ -59,9 +59,9 @@ async def cmd_massa_chart(message: Message) -> None:
                     "yAxisID": "stakers",
                     "lineTension": 0.4,
                     "fill": False,
-                    "borderColor": "green",
-                    "borderWidth": 1,
-                    "pointRadius": 0,
+                    "borderColor": "Teal",
+                    "borderWidth": 2,
+                    "pointRadius": 2,
                     "data": []
                 },
                 {
@@ -69,9 +69,9 @@ async def cmd_massa_chart(message: Message) -> None:
                     "yAxisID": "rolls",
                     "lineTension": 0.4,
                     "fill": False,
-                    "borderColor": "red",
+                    "borderColor": "FireBrick",
                     "borderWidth": 2,
-                    "pointRadius": 0,
+                    "pointRadius": 2,
                     "data": []
                 }
             ]
