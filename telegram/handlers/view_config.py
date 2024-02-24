@@ -4,7 +4,7 @@ from aiogram import Router
 from aiogram.filters import Command, StateFilter
 from aiogram.types import Message
 from aiogram.enums import ParseMode
-from aiogram.utils.formatting import as_list, as_line, TextLink, as_numbered_list
+from aiogram.utils.formatting import as_list, as_line, TextLink
 
 from app_config import app_config
 import app_globals
@@ -41,7 +41,9 @@ async def cmd_view_config(message: Message) -> None:
 
                 for wallet_address in app_globals.app_results[node_name]['wallets']:
                     wallet_list.append(
+                        as_line("⦙"),
                         as_line(
+                            "⦙… ",
                             TextLink(
                                 get_short_address(address=wallet_address),
                                 url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
@@ -50,9 +52,8 @@ async def cmd_view_config(message: Message) -> None:
                     )
 
                 config_list.append(
-                    as_numbered_list(*wallet_list)
+                    as_list(*wallet_list)
                 )
-                config_list.append("")
 
     t = as_list(
         "📋 Current service configuration:", "",
