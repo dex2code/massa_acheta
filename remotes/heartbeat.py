@@ -7,7 +7,7 @@ from app_config import app_config
 import app_globals
 
 from telegram.queue import queue_telegram_message
-from tools import get_last_seen, get_short_address, get_rewards
+from tools import get_last_seen, get_short_address, get_rewards, save_app_stat
 
 
 async def heartbeat() -> None:
@@ -15,7 +15,6 @@ async def heartbeat() -> None:
 
     try:
         while True:
-
             logger.info(f"Sleeping for {app_config['service']['heartbeat_period_hours'] * 60 * 60} seconds...")
             await asyncio.sleep(delay=(app_config['service']['heartbeat_period_hours'] * 60 * 60))
             logger.info(f"Heartbeat planner shedule time")
@@ -37,7 +36,6 @@ async def heartbeat() -> None:
                 heartbeat_list.append("⭕ Node list is empty\n")
 
             else:
-
                 for node_name in app_globals.app_results:
                     heartbeat_list.append(f"🏠 Node: \"{node_name}\"")
                     heartbeat_list.append(f"📍 {app_globals.app_results[node_name]['url']}")

@@ -8,6 +8,7 @@ import app_globals
 from remotes.node import check_node
 from remotes.wallet import check_wallet
 from remotes.releases import check_releases
+from tools import save_app_stat
 
 
 @logger.catch
@@ -28,6 +29,7 @@ async def monitor() -> None:
             async with app_globals.results_lock:
                 await asyncio.gather(*node_coros)
                 await asyncio.gather(*wallet_coros)
+                save_app_stat()
 
             await asyncio.gather(check_releases())
 
