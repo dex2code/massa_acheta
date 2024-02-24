@@ -44,7 +44,6 @@ echo "::..:::::..::..:::::..:::......::::......:::..:::::..:::"
 echo "::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
 echo
 echo "[ MASSA 🦗 Acheta Telebot ] -- https://github.com/dex2code/massa_acheta/"
-echo "Release: ACHETA.1.0.1"
 echo
 echo "This script will configure your system and install all neccessary software:"
 echo "  - python3"
