@@ -275,7 +275,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
             f"💰 Final balance: {wallet_final_balance:,} MAS",
             f"🗞 Candidate / Active rolls: {wallet_candidate_rolls:,} / {wallet_active_rolls:,}",
             f"🥊 Missed blocks: {wallet_missed_blocks}", "",
-            f"🪙 Estimated earnings ≈ {wallet_computed_rewards:,} MAS / day", "",
+            f"🪙 Estimated earnings ≈ {wallet_computed_rewards:,} MAS / Day", "",
             "🔎 Detailed info:", "",
             as_line(f"🧵 Thread: {wallet_thread}"),
             *cycles_list, "",

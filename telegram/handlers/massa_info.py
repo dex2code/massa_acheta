@@ -34,7 +34,7 @@ async def cmd_massa_info(message: Message) -> None:
         f"💰 Block reward: {app_globals.massa_network['values']['block_reward']} MAS", "",
         f"👥 Total stakers: {app_globals.massa_network['values']['total_stakers']:,}",
         f"🗞 Total staked rolls: {app_globals.massa_network['values']['total_staked_rolls']:,}", "",
-        f"🪙 Estimated earnings for 100 Rolls ≈ {wallet_computed_rewards:,} MAS / day", "",
+        f"🪙 Estimated earnings for 100 Rolls ≈ {wallet_computed_rewards:,} MAS / Day", "",
         f"👁 Info updated: {info_last_update}", "",
         f"☝ Service checks updates: every {app_config['service']['massa_network_update_period_min']} mins"
     )

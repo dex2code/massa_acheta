@@ -27,7 +27,7 @@ async def heartbeat() -> None:
                     "📚 MASSA network info:",
                     f" 👥 Total stakers: {app_globals.massa_network['values']['total_stakers']:,}",
                     f" 🗞 Total staked rolls: {app_globals.massa_network['values']['total_staked_rolls']:,}",
-                    f"🪙 Estimated rewards for 100 Rolls ≈ {computed_rewards:,} MAS / day",
+                    f"🪙 Estimated rewards for 100 Rolls ≈ {computed_rewards:,} MAS / Day",
                     f"👁 Info updated: {get_last_seen(last_time=app_globals.massa_network['values']['last_updated'])}", ""
                 )
             )

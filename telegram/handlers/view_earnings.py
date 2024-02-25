@@ -54,7 +54,7 @@ async def get_earnings(rolls_number: int=1) -> Text:
         return as_list(
             f"🏦 Total number of staked Rolls in MASSA Mainnet: {app_globals.massa_network['values']['total_staked_rolls']:,} (updated: {massa_updated})", "",
             f"🍰 Your contribution is: {rolls_number:,} Rolls ({my_percentage}%)", "",
-            f"🪙 Your estimated earnings ≈ {computed_rewards:,} MAS / day", "",
+            f"🪙 Your estimated earnings ≈ {computed_rewards:,} MAS / Day", "",
             as_line(
                 "👉 ",
                 TextLink(

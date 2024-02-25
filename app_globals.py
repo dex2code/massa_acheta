@@ -176,7 +176,7 @@ tg_bot = Bot(
 
 
 ### Acheta releases stuff ###
-local_acheta_release = "ACHETA.1.0.9"
+local_acheta_release = "ACHETA.1.2.0"
 latest_acheta_release = ""
 
 
