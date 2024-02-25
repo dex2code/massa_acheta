@@ -210,7 +210,7 @@ else:
 ### Init public_user_dir ###
 public_dir = {}
 
-public_dir_obj = Path(app_config['service']['public_dit_path'])
+public_dir_obj = Path(app_config['service']['public_dir_path'])
 
 if not public_dir_obj.exists():
     logger.warning(f"No public_dir file '{public_dir_obj}' exists. Skipping...")
