@@ -23,7 +23,7 @@ async def cmd_massa_info(message: Message) -> None:
 
     wallet_computed_rewards = await get_rewards(rolls_number=100)
 
-    info_last_update = get_last_seen(
+    info_last_update = await get_last_seen(
         last_time=app_globals.massa_network['values']['last_updated']
     )
     t = as_list(

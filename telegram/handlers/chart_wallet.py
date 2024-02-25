@@ -154,7 +154,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
             as_line(
                 "‼ Error: Wallet ",
                 TextLink(
-                    get_short_address(address=wallet_address),
+                    await get_short_address(address=wallet_address),
                     url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                 ),
                 f" is not attached to node \"{node_name}\""
@@ -180,7 +180,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
 
             "title": {
                 "display": True,
-                "text": f"Wallet: {get_short_address(address=wallet_address)}"
+                "text": f"Wallet: {await get_short_address(address=wallet_address)}"
             },
 
             "scales": {
@@ -238,7 +238,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
 
             "title": {
                 "display": True,
-                "text": f"Wallet: {get_short_address(address=wallet_address)}"
+                "text": f"Wallet: {await get_short_address(address=wallet_address)}"
             },
 
             "scales": {

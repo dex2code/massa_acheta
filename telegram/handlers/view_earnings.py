@@ -42,7 +42,7 @@ async def get_earnings(rolls_number: int=1) -> Text:
     else:
         computed_rewards = await get_rewards(rolls_number=rolls_number)
 
-        massa_updated = get_last_seen(
+        massa_updated = await get_last_seen(
             last_time=app_globals.massa_network['values']['last_updated']
         )
 

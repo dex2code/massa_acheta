@@ -70,14 +70,14 @@ async def get_address(wallet_address: str="") -> Text:
             as_line(
                 "👛 Wallet: ",
                 TextLink(
-                    get_short_address(wallet_address),
+                    await get_short_address(wallet_address),
                     url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                 )
             ),
             as_line(
                 "⁉ Error getting address info for wallet: ",
                 TextLink(
-                    get_short_address(wallet_address),
+                    await get_short_address(wallet_address),
                     url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                 )
             ),
@@ -154,7 +154,7 @@ async def get_address(wallet_address: str="") -> Text:
             as_line(
                 "👛 Wallet: ",
                 TextLink(
-                    get_short_address(wallet_address),
+                    await get_short_address(wallet_address),
                     url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                 )
             ),

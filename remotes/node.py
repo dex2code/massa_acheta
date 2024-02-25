@@ -85,7 +85,7 @@ async def check_node(node_name: str="") -> None:
                 await queue_telegram_message(message_text=t.as_html())
 
         app_globals.app_results[node_name]['last_status'] = True
-        app_globals.app_results[node_name]['last_update'] = t_now()
+        app_globals.app_results[node_name]['last_update'] = await t_now()
         app_globals.app_results[node_name]['last_chain_id'] = node_chain_id
         app_globals.app_results[node_name]['last_cycle'] = node_current_cycle
         app_globals.app_results[node_name]['last_result'] = node_result

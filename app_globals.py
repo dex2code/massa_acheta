@@ -11,14 +11,17 @@ from collections import deque
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import SecretStr
 from collections import deque
+from time import time
 
 from app_config import app_config
 
-from tools import save_app_results, t_now
+from tools import save_app_results
 
 
 ### Set start time ###
-acheta_start_time = t_now()
+acheta_start_time = int(
+    time()
+)
 
 
 

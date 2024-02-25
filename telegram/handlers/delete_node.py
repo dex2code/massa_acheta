@@ -103,7 +103,7 @@ async def delete_node(message: Message, state: FSMContext) -> None:
         t = as_list(
             as_line(
                 "‼ Error: Could not delete node ",
-                Code(get_short_address(node_name))
+                Code(await get_short_address(node_name))
             ),
             as_line(
                 "💻 Result: ",
@@ -123,7 +123,7 @@ async def delete_node(message: Message, state: FSMContext) -> None:
         t = as_list(
             as_line(
                 "👌 Successfully removed node ",
-                Code(get_short_address(node_name))
+                Code(await get_short_address(node_name))
             ),
             "👉 You can check new settings using /view_config command"
         )

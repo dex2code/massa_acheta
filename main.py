@@ -34,7 +34,7 @@ from telegram.handlers import massa_info, massa_chart, acheta_release
 from telegram.handlers import reset
 from telegram.handlers import unknown
 
-from tools import t_now, save_app_results, save_app_stat
+from tools import save_app_results, save_app_stat
 
 
 @logger.catch
@@ -149,7 +149,6 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
-    app_globals.acheta_start_time = t_now()
     logger.info(f"MASSA Acheta started at {app_globals.acheta_start_time}")
 
     try:

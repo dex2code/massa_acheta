@@ -152,7 +152,7 @@ async def delete_wallet(message: Message, state: FSMContext) -> None:
             as_line(
                 "‼ Error: Wallet ",
                 TextLink(
-                    get_short_address(address=wallet_address),
+                    await get_short_address(address=wallet_address),
                     url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                 ),
                 f" is not attached to node {node_name}"
@@ -184,11 +184,11 @@ async def delete_wallet(message: Message, state: FSMContext) -> None:
             as_line(
                 "‼ Error: Could not delete wallet ",
                 TextLink(
-                    get_short_address(wallet_address),
+                    await get_short_address(wallet_address),
                     url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                 ),
                 " from node ",
-                Code(get_short_address(node_name)),
+                Code(await get_short_address(node_name)),
             ),
             as_line(
                 "💻 Result: ",
@@ -210,11 +210,11 @@ async def delete_wallet(message: Message, state: FSMContext) -> None:
             as_line(
                 "👌 Successfully removed wallet ",
                 TextLink(
-                    get_short_address(wallet_address),
+                    await get_short_address(wallet_address),
                     url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                 ),
                 " from node ",
-                Code(get_short_address(node_name)),
+                Code(await get_short_address(node_name)),
             ),
             "👉 You can check new settings using /view_config command"
         )

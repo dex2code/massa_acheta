@@ -273,7 +273,7 @@ async def massa() -> None:
             if success_flag:
                 logger.info(f"Successfully collected MASSA mainnet network info")
 
-                time_now = t_now()
+                time_now = await t_now()
 
                 try:
                     app_globals.massa_network['values']['last_updated'] = time_now

@@ -140,7 +140,7 @@ async def add_wallet(message: Message, state: FSMContext) -> None:
             as_line(
                 "‼ Error: Wallet ",
                 TextLink(
-                    get_short_address(address=wallet_address),
+                    await get_short_address(address=wallet_address),
                     url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                 ),
                 f" already attached to node \"{node_name}\""
@@ -182,7 +182,7 @@ async def add_wallet(message: Message, state: FSMContext) -> None:
             as_line(
                 "‼ Error: Could not add wallet ",
                 TextLink(
-                    get_short_address(wallet_address),
+                    await get_short_address(wallet_address),
                     url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                 ),
                 f" to node \"{node_name}\""
@@ -206,7 +206,7 @@ async def add_wallet(message: Message, state: FSMContext) -> None:
             as_line(
                 "👌 Successfully added wallet: ",
                 TextLink(
-                    get_short_address(wallet_address),
+                    await get_short_address(wallet_address),
                     url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                 )
             ),

@@ -126,7 +126,7 @@ async def add_node(message: Message, state: FSMContext) -> None:
         t = as_list(
             as_line(
                 "‼ Error: Could not add node ",
-                Code(get_short_address(node_name)),
+                Code(await get_short_address(node_name)),
                 f" with API URL {node_url}"
             ),
             as_line(
@@ -147,7 +147,7 @@ async def add_node(message: Message, state: FSMContext) -> None:
         t = as_list(
             as_line(
                 "✅ Successfully added node: ",
-                Code(get_short_address(node_name)),
+                Code(await get_short_address(node_name)),
                 f" with API URL: {node_url}"
             ),
             "👁 Please note that bot will update info for this node a bit later", "",

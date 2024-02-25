@@ -7,7 +7,7 @@ from app_config import app_config
 import app_globals
 
 from telegram.queue import queue_telegram_message
-from tools import get_last_seen, get_short_address, get_rewards, save_app_stat
+from tools import get_last_seen, get_short_address, get_rewards
 
 
 async def heartbeat() -> None:
@@ -28,7 +28,7 @@ async def heartbeat() -> None:
                     f" 👥 Total stakers: {app_globals.massa_network['values']['total_stakers']:,}",
                     f" 🗞 Total staked rolls: {app_globals.massa_network['values']['total_staked_rolls']:,}",
                     f"🪙 Estimated rewards for 100 Rolls ≈ {computed_rewards:,} MAS / Day",
-                    f"👁 Info updated: {get_last_seen(last_time=app_globals.massa_network['values']['last_updated'])}", ""
+                    f"👁 Info updated: {await get_last_seen(last_time=app_globals.massa_network['values']['last_updated'])}", ""
                 )
             )
 
@@ -40,7 +40,7 @@ async def heartbeat() -> None:
                     heartbeat_list.append(f"🏠 Node: \"{node_name}\"")
                     heartbeat_list.append(f"📍 {app_globals.app_results[node_name]['url']}")
 
-                    last_seen = get_last_seen(
+                    last_seen = await get_last_seen(
                         last_time=app_globals.app_results[node_name]['last_update']
                     )
 
@@ -63,7 +63,7 @@ async def heartbeat() -> None:
                                             "⦙\n",
                                             "⦙… ",
                                             TextLink(
-                                                get_short_address(address=wallet_address),
+                                                await get_short_address(address=wallet_address),
                                                 url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                                             ),
                                             f" ( {app_globals.app_results[node_name]['wallets'][wallet_address]['final_balance']:,} MAS )",
@@ -76,7 +76,7 @@ async def heartbeat() -> None:
                                             "⦙\n",
                                             "⦙… ",
                                             TextLink(
-                                                get_short_address(address=wallet_address),
+                                                await get_short_address(address=wallet_address),
                                                 url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                                             ),
                                             " ( ? MAS )",

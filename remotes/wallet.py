@@ -96,7 +96,7 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
                 as_line(
                     "🚨 Cannot get info for wallet: ",
                     TextLink(
-                        get_short_address(address=wallet_address),
+                        await get_short_address(address=wallet_address),
                         url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                     )
                 ),
@@ -121,7 +121,7 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
                 as_line(
                     "👛 Successfully got info for wallet: ",
                     TextLink(
-                        get_short_address(address=wallet_address),
+                        await get_short_address(address=wallet_address),
                         url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                     )
                 ),
@@ -141,7 +141,7 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
                     as_line(
                         "💸 Decreased balance on wallet: ",
                         TextLink(
-                            get_short_address(address=wallet_address),
+                            await get_short_address(address=wallet_address),
                             url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                         )
                     ),
@@ -157,7 +157,7 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
                     as_line(
                         "🗞 Candidate rolls changed on wallet: ",
                         TextLink(
-                            get_short_address(address=wallet_address),
+                            await get_short_address(address=wallet_address),
                             url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                         )
                     ),
@@ -173,7 +173,7 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
                     as_line(
                         "🗞 Active rolls changed on wallet: ",
                         TextLink(
-                            get_short_address(address=wallet_address),
+                            await get_short_address(address=wallet_address),
                             url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                         )
                     ),
@@ -189,7 +189,7 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
                     as_line(
                         "🥊 New missed blocks on wallet: ",
                         TextLink(
-                            get_short_address(address=wallet_address),
+                            await get_short_address(address=wallet_address),
                             url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                         )
                     ),
@@ -197,7 +197,7 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
                 )
                 await queue_telegram_message(message_text=t.as_html())
 
-        time_now = t_now()
+        time_now = await t_now()
 
         try:
             app_globals.app_results[node_name]['wallets'][wallet_address]['last_status'] = True

@@ -96,7 +96,7 @@ async def show_node(message: Message, state: FSMContext) -> None:
     else:
         wallets_attached = f"👛 Wallets attached: {len(app_globals.app_results[node_name]['wallets'])}"
 
-    last_seen = get_last_seen(
+    last_seen = await get_last_seen(
         last_time=app_globals.app_results[node_name]['last_update']
     )
 
@@ -139,7 +139,7 @@ async def show_node(message: Message, state: FSMContext) -> None:
             f"📍 {app_globals.app_results[node_name]['url']}",
             f"{wallets_attached}", "",
             f"{node_status}", "",
-            f"🆔: {get_short_address(node_id)}", "",
+            f"🆔: {await get_short_address(node_id)}", "",
             f"🎯 Routable IP: {node_ip}", "",
             f"💾 Release: \"{node_version}\" {node_update_needed}", "",
             f"🌀 Cycle: {current_cycle}", "",

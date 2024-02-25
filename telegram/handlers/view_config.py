@@ -45,7 +45,7 @@ async def cmd_view_config(message: Message) -> None:
                             "⦙\n",
                             "⦙… ",
                             TextLink(
-                                get_short_address(address=wallet_address),
+                                await get_short_address(address=wallet_address),
                                 url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                             ),
                             end=""
@@ -59,7 +59,7 @@ async def cmd_view_config(message: Message) -> None:
     t = as_list(
         "📋 Current service configuration:", "",
         *config_list,
-        f"🏃 Bot started: {get_last_seen(last_time=app_globals.acheta_start_time, show_days=True)}", "",
+        f"🏃 Bot started: {await get_last_seen(last_time=app_globals.acheta_start_time, show_days=True)}", "",
         "👉 Try /help to learn how to manage settings"
     )
     try:

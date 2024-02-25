@@ -151,51 +151,7 @@ def save_app_stat() -> bool:
 
 
 @logger.catch
-def get_list_nodes() -> list:
-    logger.debug("-> Enter Def")
-
-    result_list = []
-
-    for node_name in app_globals.app_results:
-        result_list.append(node_name)
-    
-    return result_list
-
-
-
-@logger.catch
-def get_list_wallets(node_name: str="") -> list:
-    logger.debug("-> Enter Def")
-
-    result_list = []
-
-    if node_name not in app_globals.app_results:
-        return result_list
-    
-    for wallet_address in app_globals.app_results[node_name]['wallets']:
-        result_list.append(wallet_address)
-    
-    return result_list
-
-
-
-@logger.catch
-def get_all_wallets() -> list:
-    logger.debug("-> Enter Def")
-
-    result_list = []
-
-    for node_name in app_globals.app_results:
-        for wallet_address in app_globals.app_results[node_name]['wallets']:
-            result_list.append(wallet_address)
-
-    logger.info(f"{result_list=}")
-    return result_list
-
-
-
-@logger.catch
-def t_now() -> int:
+async def t_now() -> int:
     logger.debug("-> Enter Def")
 
     return int(
@@ -205,13 +161,13 @@ def t_now() -> int:
 
 
 @logger.catch
-def get_last_seen(last_time: int=0, show_days: bool=False) -> str:
+async def get_last_seen(last_time: int=0, show_days: bool=False) -> str:
     logger.debug("-> Enter Def")
 
     if last_time == 0:
         return "Never"
     
-    current_time = t_now()
+    current_time = await t_now()
     diff_seconds = current_time - last_time
 
     if show_days:
@@ -229,7 +185,7 @@ def get_last_seen(last_time: int=0, show_days: bool=False) -> str:
 
 
 @logger.catch
-def get_short_address(address: str="") -> str:
+async def get_short_address(address: str="") -> str:
     logger.debug("-> Enter Def")
 
     if len(address) > 16:

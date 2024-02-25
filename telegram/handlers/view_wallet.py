@@ -153,7 +153,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
             as_line(
                 "‼ Error: Wallet ",
                 TextLink(
-                    get_short_address(address=wallet_address),
+                    await get_short_address(address=wallet_address),
                     url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                 ),
                 f" is not attached to node \"{node_name}\""
@@ -172,11 +172,11 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
         await state.clear()
         return
 
-    wallet_last_seen = get_last_seen(
+    wallet_last_seen = await get_last_seen(
         last_time=app_globals.app_results[node_name]['wallets'][wallet_address]['last_update']
     )
     
-    node_last_seen = get_last_seen(
+    node_last_seen = await get_last_seen(
         last_time=app_globals.app_results[node_name]['last_update']
     )
     
@@ -190,7 +190,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
             as_line(
                 f"⁉ No actual data for wallet: ",
                 TextLink(
-                    get_short_address(address=wallet_address),
+                    await get_short_address(address=wallet_address),
                     url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                 ),
                 end=""
@@ -266,7 +266,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
             as_line(
                 "👛 Wallet: ",
                 TextLink(
-                    get_short_address(address=wallet_address),
+                    await get_short_address(address=wallet_address),
                     url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                 ),
                 end=""

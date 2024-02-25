@@ -41,7 +41,7 @@ async def get_credits(wallet_address: str="") -> Text:
             as_line(
                 "👛 Wallet: ",
                 TextLink(
-                    get_short_address(wallet_address),
+                    await get_short_address(wallet_address),
                     url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                 )
             ),
@@ -52,7 +52,7 @@ async def get_credits(wallet_address: str="") -> Text:
     deferred_credits.append("💳 Deferred credits:")
     deferred_credits.append(" ⦙")
 
-    now_unix = int(t_now())
+    now_unix = int(await t_now())
 
     for wallet_credit in wallet_credits:
         try:
@@ -100,7 +100,7 @@ async def get_credits(wallet_address: str="") -> Text:
         as_line(
             "👛 Wallet: ",
             TextLink(
-                get_short_address(wallet_address),
+                await get_short_address(wallet_address),
                 url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
             )
         ),
