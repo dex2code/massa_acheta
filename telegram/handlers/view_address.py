@@ -217,9 +217,13 @@ async def cmd_view_address(message: Message, state: FSMContext) -> None:
             parse_mode=ParseMode.HTML,
             request_timeout=app_config['telegram']['sending_timeout_sec']
         )
+
     except BaseException as E:
         logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
         await state.clear()
+
+    else:
+        add_public_dir(chat_id=message.chat.id, wallet_address=wallet_address)
 
     return
 
