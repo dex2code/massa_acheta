@@ -223,7 +223,7 @@ async def cmd_view_address(message: Message, state: FSMContext) -> None:
         await state.clear()
 
     else:
-        add_public_dir(chat_id=message.chat.id, wallet_address=wallet_address)
+        await add_public_dir(chat_id=message.chat.id, wallet_address=wallet_address)
 
     return
 
@@ -254,7 +254,7 @@ async def show_address(message: Message, state: FSMContext) -> None:
         logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
     
     else:
-        add_public_dir(chat_id=message.chat.id, wallet_address=wallet_address)
+        await add_public_dir(chat_id=message.chat.id, wallet_address=wallet_address)
 
     await state.clear()
     return
@@ -281,6 +281,6 @@ async def cmd_default(message: Message) -> None:
         logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
 
     else:
-        add_public_dir(chat_id=message.chat.id, wallet_address=wallet_address)
+        await add_public_dir(chat_id=message.chat.id, wallet_address=wallet_address)
 
     return
