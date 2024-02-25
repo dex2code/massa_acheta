@@ -7,7 +7,7 @@ from app_config import app_config
 import app_globals
 
 from telegram.queue import queue_telegram_message
-from tools import get_last_seen, get_short_address, get_rewards
+from tools import get_last_seen, get_short_address, get_rewards, save_public_dir
 
 
 async def heartbeat() -> None:
@@ -98,6 +98,8 @@ async def heartbeat() -> None:
                 f"⏳ Heartbeat schedule: every {app_config['service']['heartbeat_period_hours']} hour(s)"
             )
             await queue_telegram_message(message_text=t.as_html())
+
+            save_public_dir()
 
     except BaseException as E:
         logger.error(f"Exception {str(E)} ({E})")

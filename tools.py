@@ -100,7 +100,7 @@ def save_app_results() -> bool:
             output_results.flush()
                     
     except BaseException as E:
-        logger.critical(f"Cannot save app_results into '{app_results_obj}' file: ({str(E)})")
+        logger.error(f"Cannot save app_results into '{app_results_obj}' file: ({str(E)})")
         return False
         
     else:
@@ -141,7 +141,7 @@ def save_app_stat() -> bool:
             output_stat.flush()
                     
     except BaseException as E:
-        logger.critical(f"Cannot save app_stat into '{app_stat_obj}' file: ({str(E)})")
+        logger.error(f"Cannot save app_stat into '{app_stat_obj}' file: ({str(E)})")
         return False
         
     else:
@@ -239,6 +239,47 @@ async def get_rewards(rolls_number: int=0) -> int:
         my_reward = int(my_reward)
 
     return my_reward
+
+
+
+async def add_public_dir(chat_id: int=0, wallet_address: str="") -> bool:
+    logger.debug("-> Enter Def")
+
+    try:
+        app_globals.public_dir[chat_id] = wallet_address
+    
+    except BaseException as E:
+        logger.warning(f"Cannot save wallet '{wallet_address}' for user '{chat_id}' ({str(E)})")
+        return False
+    
+    else:
+        logger.info(f"Successfully saved wallet '{wallet_address}' for user '{chat_id}'")
+        return True
+
+
+async def get_public_dir(chat_id: int=0) -> str:
+    logger.debug("-> Enter Def")
+
+    return app_globals.public_dir.get(chat_id, None)
+
+
+
+def save_public_dir() -> bool:
+    logger.debug("-> Enter Def")
+
+    try:
+        public_dir_obj = Path(app_config['service']['public_dir_path'])
+        with open(file=public_dir_obj, mode="wt") as output_public_dir:
+            output_public_dir.write(json.dumps(obj=app_globals.public_dir, indent=4))
+            output_public_dir.flush()
+                    
+    except BaseException as E:
+        logger.critical(f"Cannot save public_dir into '{public_dir_obj}' file: ({str(E)})")
+        return False
+        
+    else:
+        logger.info(f"Successfully saved public_dir into '{public_dir_obj}' file!")
+        return True
 
 
 

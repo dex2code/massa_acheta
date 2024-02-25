@@ -297,6 +297,7 @@ async def massa() -> None:
 
             logger.info(f"Sleeping for {app_config['service']['massa_network_update_period_min'] * 60} seconds...")
             await asyncio.sleep(delay=app_config['service']['massa_network_update_period_min'] * 60)
+
             save_app_stat()
 
     except BaseException as E:

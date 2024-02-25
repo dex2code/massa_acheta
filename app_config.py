@@ -12,6 +12,7 @@ app_config['telegram']['sending_timeout_sec'] = 5
 app_config['service']['results_path'] = "app_results.json"
 app_config['service']['deferred_credits_path'] = "deferred_credits.json"
 app_config['service']['stat_path'] = "app_stat.json"
+app_config['service']['public_dir_path'] = 'public_dir.json'
 
 app_config['service']['main_loop_period_min'] = 10
 app_config['service']['heartbeat_period_hours'] = 6

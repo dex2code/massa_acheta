@@ -42,7 +42,7 @@ if app_results_obj.exists():
             app_results = json.load(fp=input_results)
 
         except BaseException as E:
-            logger.critical(f"Cannot load results from '{app_results_obj}': ({str(E)})")
+            logger.critical(f"Cannot load results from '{app_results_obj}' ({str(E)})")
             sys_exit(1)
 
         else:
@@ -190,20 +190,44 @@ deferred_credits = {}
 deferred_credits_obj = Path(app_config['service']['deferred_credits_path'])
 
 if not deferred_credits_obj.exists():
-    logger.error(f"No deferred_credits file '{deferred_credits_obj}' exists. Skipping...")
+    logger.warning(f"No deferred_credits file '{deferred_credits_obj}' exists. Skipping...")
 
 else:
     logger.info(f"Loading deferred_credits from '{deferred_credits_obj}' file...")
 
-    with open(file=deferred_credits_obj, mode="r") as input_deferred_credits:
+    with open(file=deferred_credits_obj, mode="rt") as input_deferred_credits:
         try:
             deferred_credits = json.load(fp=input_deferred_credits)
 
         except BaseException as E:
-            logger.error(f"Cannot load deferred_credits from '{deferred_credits_obj}': ({str(E)})")
+            logger.error(f"Cannot load deferred_credits from '{deferred_credits_obj}' ({str(E)})")
 
         else:
             logger.info(f"Successfully loaded deferred_credits from '{deferred_credits_obj}' file!")
+
+
+
+### Init public_user_dir ###
+public_dir = {}
+
+public_dir_obj = Path(app_config['service']['public_dit_path'])
+
+if not public_dir_obj.exists():
+    logger.warning(f"No public_dir file '{public_dir_obj}' exists. Skipping...")
+
+else:
+    logger.info(f"Loading public_dir from '{public_dir_obj}' file...")
+
+    with open(file=public_dir_obj, mode="rt") as input_public_dir:
+        try:
+            public_dir = json.load(fp=input_public_dir)
+        
+        except BaseException as E:
+            logger.error(f"Cannot load public_dir from '{public_dir_obj}' file ({str(E)})")
+        
+        else:
+            logger.info(f"Successfully loaded public_dir from '{public_dir_obj}' file!")
+
 
 
 
