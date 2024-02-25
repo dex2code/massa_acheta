@@ -181,9 +181,9 @@ async def cmd_view_address(message: Message, state: FSMContext) -> None:
     if len(message_list) < 2:
 
         public_wallet_address = await get_public_dir(chat_id=message.chat.id)
-
         if public_wallet_address:
             t = await get_address(wallet_address=public_wallet_address)
+
         else:
             t = as_list(
                 "❓ Please answer with a wallet address you want to explore: ", "",
