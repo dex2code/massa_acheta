@@ -15,7 +15,7 @@ import app_globals
 
 from telegram.keyboards.kb_nodes import kb_nodes
 from telegram.keyboards.kb_wallets import kb_wallets
-from tools import get_short_address, check_privacy, get_rewards
+from tools import get_short_address, check_privacy, get_rewards_mas, get_rewards_blocks
 
 
 class ChartWalletViewer(StatesGroup):
@@ -282,6 +282,18 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
                     "data": []
                 },
                 {
+                    "type": "line",
+                    "label": "Est. blocks",
+                    "yAxisID": "blocks",
+                    "lineTension": 0.4,
+                    "fill": True,
+                    "borderColor": "lightgray",
+                    "backgroundColor": "lightgray",
+                    "borderWidth": 0,
+                    "pointRadius": 0,
+                    "data": []
+                },
+                {
                     "type": "bar",
                     "label": "Operated blocks",
                     "yAxisID": "blocks",
@@ -355,9 +367,10 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
             staking_chart_config['data']['datasets'][1]['data'].append(balance)
 
             blocks_chart_config['data']['labels'].append(cycle)
-            blocks_chart_config['data']['datasets'][0]['data'].append(await get_rewards(rolls_number=rolls))
-            blocks_chart_config['data']['datasets'][1]['data'].append(ok_blocks)
-            blocks_chart_config['data']['datasets'][2]['data'].append(nok_blocks)
+            blocks_chart_config['data']['datasets'][0]['data'].append(await get_rewards_mas(rolls_number=rolls))
+            blocks_chart_config['data']['datasets'][1]['data'].append(await get_rewards_blocks(rolls_number=rolls))
+            blocks_chart_config['data']['datasets'][2]['data'].append(ok_blocks)
+            blocks_chart_config['data']['datasets'][3]['data'].append(nok_blocks)
 
         staking_chart = QuickChart()
         staking_chart.device_pixel_ratio = 2.0
