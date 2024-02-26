@@ -101,8 +101,8 @@ async def cmd_massa_chart(message: Message) -> None:
         massa_stat_keycycle_unsorted = {}
         for measure in massa_stat_keytime_sorted:
             measure_cycle = massa_stat_keytime_sorted[measure].get("cycle", 0)
-            measure_stakers = massa_stat_keytime_sorted[measure]("stakers", 0)
-            measure_rolls = massa_stat_keytime_sorted[measure]("rolls", 0)
+            measure_stakers = massa_stat_keytime_sorted[measure].get("stakers", 0)
+            measure_rolls = massa_stat_keytime_sorted[measure].get("rolls", 0)
 
             massa_stat_keycycle_unsorted[measure_cycle] = {
                 "stakers": measure_stakers,
