@@ -260,7 +260,14 @@ async def add_public_dir(chat_id: int=0, wallet_address: str="") -> bool:
 async def get_public_dir(chat_id: int=0) -> str:
     logger.debug("-> Enter Def")
 
-    return app_globals.public_dir.get(chat_id, None)
+    public_wallet_address = app_globals.public_dir.get(chat_id, None)
+
+    if public_wallet_address:
+        logger.info(f"Found wallet '{public_wallet_address}' for chat_id '{chat_id}' in public_dir")
+    else:
+        logger.info(f"No wallet for chat_id '{chat_id}' in public_dir")
+
+    return public_wallet_address
 
 
 
