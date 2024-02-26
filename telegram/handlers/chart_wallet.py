@@ -360,6 +360,11 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
             )
         )
 
+        total_cycles = len(wallet_stat_keycycle_sorted)
+        total_ok_blocks = 0
+        total_nok_blocks = 0
+        total_rewards_block_cycle = 0
+
         for cycle in wallet_stat_keycycle_sorted:
             balance = wallet_stat_keycycle_sorted[cycle].get("balance", 0)
             rolls = wallet_stat_keycycle_sorted[cycle].get("rolls", 0)
@@ -367,15 +372,41 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
             ok_blocks = wallet_stat_keycycle_sorted[cycle].get("ok_blocks", 0)
             nok_blocks = wallet_stat_keycycle_sorted[cycle].get("nok_blocks", 0)
 
+            total_ok_blocks += ok_blocks
+            total_nok_blocks += nok_blocks
+
             staking_chart_config['data']['labels'].append(cycle)
             staking_chart_config['data']['datasets'][0]['data'].append(rolls)
             staking_chart_config['data']['datasets'][1]['data'].append(balance)
 
             blocks_chart_config['data']['labels'].append(cycle)
-            blocks_chart_config['data']['datasets'][0]['data'].append(await get_rewards_mas_day(rolls_number=rolls, total_rolls=total_rolls))
+            rewards_mas_day = await get_rewards_mas_day(rolls_number=rolls, total_rolls=total_rolls)
+            blocks_chart_config['data']['datasets'][0]['data'].append(rewards_mas_day)
+
             blocks_chart_config['data']['datasets'][1]['data'].append(ok_blocks)
             blocks_chart_config['data']['datasets'][2]['data'].append(nok_blocks)
-            blocks_chart_config['data']['datasets'][3]['data'].append(await get_rewards_blocks_cycle(rolls_number=rolls, total_rolls=total_rolls))
+
+            rewards_blocks_cycle = await get_rewards_blocks_cycle(rolls_number=rolls, total_rolls=total_rolls)
+            blocks_chart_config['data']['datasets'][3]['data'].append(rewards_blocks_cycle)
+            total_rewards_block_cycle += rewards_blocks_cycle
+        
+        fact_blocks_per_cycle = round(
+            (total_ok_blocks + total_nok_blocks) / total_cycles,
+            4
+        )
+
+        est_blocks_per_cycle = round(
+            total_rewards_block_cycle / total_cycles,
+            4
+        )
+
+        caption_blocks = as_list(
+            "Staking chart:", "",
+            f"Cycles collected: {total_cycles}",
+            f"Operated blocks: {total_ok_blocks + total_nok_blocks}",
+            f"Estimated Blocks / Cycle: {est_blocks_per_cycle}",
+            f"Fact Blocks / Cycle: {fact_blocks_per_cycle}"
+        )
 
         staking_chart = QuickChart()
         staking_chart.device_pixel_ratio = 2.0
@@ -411,11 +442,12 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
         try:
             await message.answer_photo(
                 photo=staking_chart_url,
-                caption="Staking chart",
+                caption=caption_blocks.as_html()
                 parse_mode=ParseMode.HTML,
                 reply_markup=ReplyKeyboardRemove(),
                 request_timeout=app_config['telegram']['sending_timeout_sec']
             )
+
             await message.answer_photo(
                 photo=blocks_chart_url,
                 caption="Blocks chart",
