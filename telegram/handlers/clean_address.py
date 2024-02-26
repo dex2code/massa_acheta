@@ -2,32 +2,32 @@ from loguru import logger
 
 from aiogram import Router
 from aiogram.filters import Command
-from aiogram.types import Message, ReplyKeyboardRemove
+from aiogram.types import Message
 from aiogram.enums import ParseMode
-from aiogram.fsm.context import FSMContext
+
 from aiogram.utils.formatting import as_list
 
 from app_config import app_config
+import app_globals
 
 
 router = Router()
 
 
-@router.message(Command("cancel"))
+@router.message(Command("clean_address"))
 @logger.catch
-async def cmd_cancel(message: Message, state: FSMContext) -> None:
+async def cmd_clean_address(message: Message) -> None:
     logger.debug("-> Enter Def")
     logger.info(f"-> Got '{message.text}' command from '{message.from_user.id}'@'{message.chat.id}'")
 
     t = as_list(
-        "❌ Action cancelled!"
+        "🗑 Address wiped!"
     )
     try:
-        await state.clear()
+        app_globals.public_dir.pop(message.chat.id, None)
         await message.reply(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
-            reply_markup=ReplyKeyboardRemove(),
             request_timeout=app_config['telegram']['sending_timeout_sec']
         )
     except BaseException as E:

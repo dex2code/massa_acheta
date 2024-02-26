@@ -95,7 +95,7 @@ async def delete_node(message: Message, state: FSMContext) -> None:
 
     try:
         async with app_globals.results_lock:
-            del app_globals.app_results[node_name]
+            app_globals.app_results.pop(node_name, None)
             save_app_results()
 
     except BaseException as E:

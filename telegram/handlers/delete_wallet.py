@@ -174,7 +174,7 @@ async def delete_wallet(message: Message, state: FSMContext) -> None:
 
     try:
         async with app_globals.results_lock:
-            del app_globals.app_results[node_name]['wallets'][wallet_address]
+            app_globals.app_results[node_name]['wallets'].pop(wallet_address, None)
             save_app_results()
 
     except BaseException as E:

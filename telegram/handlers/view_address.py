@@ -26,13 +26,15 @@ async def get_address(wallet_address: str="") -> Text:
     logger.debug("-> Enter Def")
 
     if not wallet_address.startswith("AU"):
-        return as_list(
-            "‼ Wrong wallet address format (expected a string starting with AU prefix)", "",
-            as_line(
-                "☝ Try /view_address with ",
-                Underline("AU..."),
-                " wallet address"
-            )
+        return (False,
+                as_list(
+                    "‼ Wrong wallet address format (expected a string starting with AU prefix)", "",
+                    as_line(
+                        "☝ Try /view_address with ",
+                        Underline("AU..."),
+                        " wallet address"
+                    )
+                )
         )
 
     payload = json.dumps(
@@ -66,26 +68,28 @@ async def get_address(wallet_address: str="") -> Text:
     except BaseException as E:
         logger.warning(f"Cannot operate received address result: ({str(E)})")
 
-        return as_list(
-            as_line(
-                "👛 Wallet: ",
-                TextLink(
-                    await get_short_address(wallet_address),
-                    url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
+        return (False,
+                as_list(
+                    as_line(
+                        "👛 Wallet: ",
+                        TextLink(
+                            await get_short_address(wallet_address),
+                            url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
+                        )
+                    ),
+                    as_line(
+                        "⁉ Error getting address info for wallet: ",
+                        TextLink(
+                            await get_short_address(wallet_address),
+                            url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
+                        )
+                    ),
+                    as_line(
+                        "💥 Exception: ",
+                        Code(str(E))
+                    ),
+                    as_line("⚠️ Check wallet address or try later!")
                 )
-            ),
-            as_line(
-                "⁉ Error getting address info for wallet: ",
-                TextLink(
-                    await get_short_address(wallet_address),
-                    url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
-                )
-            ),
-            as_line(
-                "💥 Exception: ",
-                Code(str(E))
-            ),
-            as_line("⚠️ Check wallet address or try later!")
         )
 
     else:
@@ -150,23 +154,25 @@ async def get_address(wallet_address: str="") -> Text:
                     f" ⋅ {credit_date}: {credit_amount:,} MAS"
                 )
 
-        return as_list(
-            as_line(
-                "👛 Wallet: ",
-                TextLink(
-                    await get_short_address(wallet_address),
-                    url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
+        return (True,
+                as_list(
+                    as_line(
+                        "👛 Wallet: ",
+                        TextLink(
+                            await get_short_address(wallet_address),
+                            url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
+                        )
+                    ),
+                    f"💰 Final balance: {wallet_final_balance:,} MAS",
+                    f"🗞 Candidate / Active rolls: {wallet_candidate_rolls:,} / {wallet_active_rolls:,}",
+                    f"🥊 Missed blocks: {wallet_missed_blocks}", "",
+                    f"🪙 Estimated earnings ≈ {wallet_computed_rewards:,} MAS / Day", "",
+                    "🔎 Detailed info:", "",
+                    f"🧵 Thread: {wallet_thread}", "",
+                    *cycles_list, "",
+                    *credit_list, "",
+                    "☝ To view ALL deferred credits try /view_credits or /help to learn bot commands"
                 )
-            ),
-            f"💰 Final balance: {wallet_final_balance:,} MAS",
-            f"🗞 Candidate / Active rolls: {wallet_candidate_rolls:,} / {wallet_active_rolls:,}",
-            f"🥊 Missed blocks: {wallet_missed_blocks}", "",
-            f"🪙 Estimated earnings ≈ {wallet_computed_rewards:,} MAS / Day", "",
-            "🔎 Detailed info:", "",
-            f"🧵 Thread: {wallet_thread}", "",
-            *cycles_list, "",
-            *credit_list, "",
-            "☝ To view ALL deferred credits try /view_credits or /help to learn bot commands"
         )
 
 
@@ -182,7 +188,7 @@ async def cmd_view_address(message: Message, state: FSMContext) -> None:
 
         public_wallet_address = await get_public_dir(chat_id=message.chat.id)
         if public_wallet_address:
-            t = await get_address(wallet_address=public_wallet_address)
+            _, t = await get_address(wallet_address=public_wallet_address)
 
         else:
             t = as_list(
@@ -198,6 +204,7 @@ async def cmd_view_address(message: Message, state: FSMContext) -> None:
         try:
             if not public_wallet_address:
                 await state.set_state(AddressViewer.waiting_wallet_address)
+
             await message.reply(
                 text=t.as_html(),
                 parse_mode=ParseMode.HTML,
@@ -211,7 +218,7 @@ async def cmd_view_address(message: Message, state: FSMContext) -> None:
         return
 
     wallet_address = message_list[1]
-    t = await get_address(wallet_address=wallet_address)
+    r, t = await get_address(wallet_address=wallet_address)
     try:
         await message.reply(
             text=t.as_html(),
@@ -224,7 +231,8 @@ async def cmd_view_address(message: Message, state: FSMContext) -> None:
         await state.clear()
 
     else:
-        await add_public_dir(chat_id=message.chat.id, wallet_address=wallet_address)
+        if r:
+            await add_public_dir(chat_id=message.chat.id, wallet_address=wallet_address)
 
     return
 
@@ -243,7 +251,7 @@ async def show_address(message: Message, state: FSMContext) -> None:
             wallet_address = cmd
             break
 
-    t = await get_address(wallet_address=wallet_address)
+    r, t = await get_address(wallet_address=wallet_address)
     try:
         await message.reply(
             text=t.as_html(),
@@ -255,7 +263,8 @@ async def show_address(message: Message, state: FSMContext) -> None:
         logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
     
     else:
-        await add_public_dir(chat_id=message.chat.id, wallet_address=wallet_address)
+        if r:
+            await add_public_dir(chat_id=message.chat.id, wallet_address=wallet_address)
 
     await state.clear()
     return
@@ -270,7 +279,7 @@ async def cmd_default(message: Message) -> None:
 
     wallet_address = message.text
 
-    t = await get_address(wallet_address=wallet_address)
+    r, t = await get_address(wallet_address=wallet_address)
     try:
         await message.reply(
             text=t.as_html(),
@@ -282,6 +291,7 @@ async def cmd_default(message: Message) -> None:
         logger.error(f"Could not send message to user '{message.from_user.id}' in chat '{message.chat.id}' ({str(E)})")
 
     else:
-        await add_public_dir(chat_id=message.chat.id, wallet_address=wallet_address)
+        if r:
+            await add_public_dir(chat_id=message.chat.id, wallet_address=wallet_address)
 
     return
