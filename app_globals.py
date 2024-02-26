@@ -226,7 +226,7 @@ else:
             logger.error(f"Cannot load public_dir from '{public_dir_obj}' file ({str(E)})")
         
         else:
-            logger.info(f"Successfully loaded public_dir from '{public_dir_obj}' file!")
+            logger.info(f"Successfully loaded public_dir from '{public_dir_obj}' file ({len(public_dir)} keys)")
 
 
 
