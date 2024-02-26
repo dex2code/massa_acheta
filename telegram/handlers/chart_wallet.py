@@ -282,18 +282,6 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
                     "data": []
                 },
                 {
-                    "type": "line",
-                    "label": "Est. Blocks / Cycle",
-                    "yAxisID": "blocks",
-                    "lineTension": 0.4,
-                    "fill": True,
-                    "borderColor": "lightgray",
-                    "backgroundColor": "rgba(220, 220, 220, 0.4)",
-                    "borderWidth": 0,
-                    "pointRadius": 0,
-                    "data": []
-                },
-                {
                     "type": "bar",
                     "label": "OK blocks",
                     "yAxisID": "blocks",
@@ -307,6 +295,18 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
                     "backgroundColor": "LightSalmon",
                     "data": []
                 },
+                {
+                    "type": "line",
+                    "label": "Est. Blocks / Cycle",
+                    "yAxisID": "blocks",
+                    "lineTension": 0.4,
+                    "fill": True,
+                    "borderColor": "lightgray",
+                    "backgroundColor": "rgba(220, 220, 220, 0.4)",
+                    "borderWidth": 0,
+                    "pointRadius": 0,
+                    "data": []
+                }
             ]
         }
     }
@@ -368,9 +368,9 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
 
             blocks_chart_config['data']['labels'].append(cycle)
             blocks_chart_config['data']['datasets'][0]['data'].append(await get_rewards_mas_day(rolls_number=rolls))
-            blocks_chart_config['data']['datasets'][1]['data'].append(await get_rewards_blocks_cycle(rolls_number=rolls))
-            blocks_chart_config['data']['datasets'][2]['data'].append(ok_blocks)
-            blocks_chart_config['data']['datasets'][3]['data'].append(nok_blocks)
+            blocks_chart_config['data']['datasets'][1]['data'].append(ok_blocks)
+            blocks_chart_config['data']['datasets'][2]['data'].append(nok_blocks)
+            blocks_chart_config['data']['datasets'][3]['data'].append(await get_rewards_blocks_cycle(rolls_number=rolls))
 
         staking_chart = QuickChart()
         staking_chart.device_pixel_ratio = 2.0
