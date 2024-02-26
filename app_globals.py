@@ -87,6 +87,7 @@ for node_name in app_results:
 
 
 ### MASSA network values ###
+massa_config = {}
 massa_network = {}
 
 massa_network['values'] =  {

@@ -75,9 +75,11 @@ async def massa_get_status() -> bool:
             return False
 
         massa_status_config = massa_status_result.get("config", None)
-        if not massa_status_config:
+        if not massa_status_config or type(massa_status_config) != dict:
             logger.warning(f"No config in MASSA mainnet RPC 'get_status' answer ({str(massa_status_answer)})")
             return False
+        else:
+            app_globals.massa_config = massa_status_config.copy()
 
         massa_block_reward = massa_status_config.get("block_reward", None)
         if not massa_block_reward:
