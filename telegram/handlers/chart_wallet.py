@@ -288,7 +288,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
                     "lineTension": 0.4,
                     "fill": True,
                     "borderColor": "lightgray",
-                    "backgroundColor": "lightgray",
+                    "backgroundColor": "rgba(220, 220, 220, 0.4)",
                     "borderWidth": 0,
                     "pointRadius": 0,
                     "data": []
