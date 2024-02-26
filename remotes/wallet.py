@@ -216,6 +216,7 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
                     "cycle": wallet_last_cycle,
                     "balance": wallet_final_balance,
                     "rolls": wallet_active_rolls,
+                    "total_rolls": app_globals.massa_network['values']['total_staked_rolls'],
                     "ok_blocks": wallet_last_cycle_operated_blocks,
                     "nok_blocks": wallet_last_cycle_missed_blocks
                 }

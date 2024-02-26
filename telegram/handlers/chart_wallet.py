@@ -313,18 +313,20 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
 
     try:
         wallet_stat_keytime_unsorted = {}
-        for measure in app_globals.app_results[node_name]['wallets'][wallet_address]['stat']:
-            measure_time = measure['time']
-            measure_cycle = measure['cycle']
-            measure_balance = measure['balance']
-            measure_rolls = measure['rolls']
-            measure_ok_blocks = measure['ok_blocks']
-            measure_nok_blocks = measure['nok_blocks']
+        for measure in app_globals.app_results[node_name]['wallets'][wallet_address].get("stat", {}):
+            measure_time = measure.get("time", 0)
+            measure_cycle = measure.get("cycle", 0)
+            measure_balance = measure.get("balance", 0)
+            measure_rolls = measure.get("rolls", 0)
+            measure_total_rolls = measure.get("total_rolls", 0)
+            measure_ok_blocks = measure.get("ok_blocks", 0)
+            measure_nok_blocks = measure.get("nok_blocks", 0)
 
             wallet_stat_keytime_unsorted[measure_time] = {
                 "cycle": measure_cycle,
                 "balance": measure_balance,
                 "rolls": measure_rolls,
+                "total_rolls": measure_total_rolls,
                 "ok_blocks": measure_ok_blocks,
                 "nok_blocks": measure_nok_blocks
             }
@@ -337,15 +339,17 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
 
         wallet_stat_keycycle_unsorted = {}
         for measure in wallet_stat_keytime_sorted:
-            measure_cycle = wallet_stat_keytime_sorted[measure]['cycle']
-            measure_balance = wallet_stat_keytime_sorted[measure]['balance']
-            measure_rolls = wallet_stat_keytime_sorted[measure]['rolls']
-            measure_ok_blocks = wallet_stat_keytime_sorted[measure]['ok_blocks']
-            measure_nok_blocks = wallet_stat_keytime_sorted[measure]['nok_blocks']
+            measure_cycle = wallet_stat_keytime_sorted[measure].get("cycle", 0)
+            measure_balance = wallet_stat_keytime_sorted[measure].get("balance", 0)
+            measure_rolls = wallet_stat_keytime_sorted[measure].get("rolls", 0)
+            measure_total_rolls = wallet_stat_keytime_sorted[measure].get("total_rolls", 0)
+            measure_ok_blocks = wallet_stat_keytime_sorted[measure].get("ok_blocks", 0)
+            measure_nok_blocks = wallet_stat_keytime_sorted[measure].get("nok_blocks", 0)
 
             wallet_stat_keycycle_unsorted[measure_cycle] = {
                 "balance": measure_balance,
                 "rolls": measure_rolls,
+                "total_rolls": measure_total_rolls,
                 "ok_blocks": measure_ok_blocks,
                 "nok_blocks": measure_nok_blocks
             }
@@ -357,20 +361,21 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
         )
 
         for cycle in wallet_stat_keycycle_sorted:
-            balance = wallet_stat_keycycle_sorted[cycle]['balance']
-            rolls = wallet_stat_keycycle_sorted[cycle]['rolls']
-            ok_blocks = wallet_stat_keycycle_sorted[cycle]['ok_blocks']
-            nok_blocks = wallet_stat_keycycle_sorted[cycle]['nok_blocks']
+            balance = wallet_stat_keycycle_sorted[cycle].get("balance", 0)
+            rolls = wallet_stat_keycycle_sorted[cycle].get("rolls", 0)
+            total_rolls = wallet_stat_keycycle_sorted[cycle].get("total_rolls", 0)
+            ok_blocks = wallet_stat_keycycle_sorted[cycle].get("ok_blocks", 0)
+            nok_blocks = wallet_stat_keycycle_sorted[cycle].get("nok_blocks", 0)
 
             staking_chart_config['data']['labels'].append(cycle)
             staking_chart_config['data']['datasets'][0]['data'].append(rolls)
             staking_chart_config['data']['datasets'][1]['data'].append(balance)
 
             blocks_chart_config['data']['labels'].append(cycle)
-            blocks_chart_config['data']['datasets'][0]['data'].append(await get_rewards_mas_day(rolls_number=rolls))
+            blocks_chart_config['data']['datasets'][0]['data'].append(await get_rewards_mas_day(rolls_number=rolls, total_rolls=total_rolls))
             blocks_chart_config['data']['datasets'][1]['data'].append(ok_blocks)
             blocks_chart_config['data']['datasets'][2]['data'].append(nok_blocks)
-            blocks_chart_config['data']['datasets'][3]['data'].append(await get_rewards_blocks_cycle(rolls_number=rolls))
+            blocks_chart_config['data']['datasets'][3]['data'].append(await get_rewards_blocks_cycle(rolls_number=rolls, total_rolls=total_rolls))
 
         staking_chart = QuickChart()
         staking_chart.device_pixel_ratio = 2.0

@@ -80,11 +80,11 @@ async def cmd_massa_chart(message: Message) -> None:
 
     try:
         massa_stat_keytime_unsorted = {}
-        for measure in app_globals.massa_network['stat']:
-            measure_time = measure['time']
-            measure_cycle = measure['cycle']
-            measure_stakers = measure['stakers']
-            measure_rolls = measure['rolls']
+        for measure in app_globals.massa_network.get("stat", {}):
+            measure_time = measure.get("time", 0)
+            measure_cycle = measure.get("cycle", 0)
+            measure_stakers = measure.get("stakers", 0)
+            measure_rolls = measure.get("rolls", 0)
 
             massa_stat_keytime_unsorted[measure_time] = {
                 "cycle": measure_cycle,
@@ -100,9 +100,9 @@ async def cmd_massa_chart(message: Message) -> None:
 
         massa_stat_keycycle_unsorted = {}
         for measure in massa_stat_keytime_sorted:
-            measure_cycle = massa_stat_keytime_sorted[measure]['cycle']
-            measure_stakers = massa_stat_keytime_sorted[measure]['stakers']
-            measure_rolls = massa_stat_keytime_sorted[measure]['rolls']
+            measure_cycle = massa_stat_keytime_sorted[measure].get("cycle", 0)
+            measure_stakers = massa_stat_keytime_sorted[measure]("stakers", 0)
+            measure_rolls = massa_stat_keytime_sorted[measure]("rolls", 0)
 
             massa_stat_keycycle_unsorted[measure_cycle] = {
                 "stakers": measure_stakers,
@@ -116,8 +116,8 @@ async def cmd_massa_chart(message: Message) -> None:
         )
 
         for cycle in massa_stat_keycycle_sorted:
-            stakers = massa_stat_keycycle_sorted[cycle]['stakers']
-            rolls = massa_stat_keycycle_sorted[cycle]['rolls']
+            stakers = massa_stat_keycycle_sorted[cycle].get("stakers", 0)
+            rolls = massa_stat_keycycle_sorted[cycle].get("rolls", 0)
 
             chart_config['data']['labels'].append(cycle)
             chart_config['data']['datasets'][0]['data'].append(stakers)

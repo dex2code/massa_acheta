@@ -226,7 +226,7 @@ async def check_privacy(message: Message) -> bool:
 
 
 @logger.catch
-async def get_rewards_mas_day(rolls_number: int=0) -> int:
+async def get_rewards_mas_day(rolls_number: int=0, total_rolls: int=0) -> int:
     logger.debug("-> Enter Def")
 
     SEC_PER_DAY = 86_400
@@ -257,7 +257,10 @@ async def get_rewards_mas_day(rolls_number: int=0) -> int:
         blocks_per_day = 0
 
     try:
-        my_contribution = app_globals.massa_network['values']['total_staked_rolls'] / rolls_number
+        if total_rolls == 0:
+            total_rolls = app_globals.massa_network['values']['total_staked_rolls']
+
+        my_contribution = total_rolls / rolls_number
         my_blocks = blocks_per_day / my_contribution
         my_reward = my_blocks * app_globals.massa_network['values']['block_reward']
         my_reward = int(my_reward)
@@ -271,7 +274,7 @@ async def get_rewards_mas_day(rolls_number: int=0) -> int:
 
 
 @logger.catch
-async def get_rewards_blocks_cycle(rolls_number: int=0) -> float:
+async def get_rewards_blocks_cycle(rolls_number: int=0, total_rolls: int=0) -> float:
     logger.debug("-> Enter Def")
 
     threads_num = app_globals.massa_config.get("thread_count", None)
@@ -295,7 +298,9 @@ async def get_rewards_blocks_cycle(rolls_number: int=0) -> float:
         blocks_per_cycle = 0
     
     try:
-        my_contribution = app_globals.massa_network['values']['total_staked_rolls'] / rolls_number
+        if total_rolls == 0:
+            total_rolls = app_globals.massa_network['values']['total_staked_rolls']
+        my_contribution = total_rolls / rolls_number
         my_blocks = round(
             blocks_per_cycle / my_contribution,
             4
