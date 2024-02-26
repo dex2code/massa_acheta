@@ -77,9 +77,9 @@ async def get_credits(wallet_address: str="") -> Text:
         
         else:
             if credit_unix < now_unix:
-                deferred_credits.append(" ⦙"),
                 deferred_credits.append(
                     as_line(
+                        " ⦙\n",
                         " ⦙… ",
                         Strikethrough(
                             f"{credit_date}: {credit_amount:,} MAS"
@@ -87,9 +87,9 @@ async def get_credits(wallet_address: str="") -> Text:
                     )
                 )
             else:
-                deferred_credits.append(" ⦙"),
                 deferred_credits.append(
                     as_line(
+                        " ⦙\n",
                         " ⦙… ",
                         f"{credit_date}: {credit_amount:,} MAS"
                     )
