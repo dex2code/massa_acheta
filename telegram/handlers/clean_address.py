@@ -24,7 +24,8 @@ async def cmd_clean_address(message: Message) -> None:
         "🗑 Address wiped!"
     )
     try:
-        app_globals.public_dir.pop(message.chat.id, None)
+        chat_id = str(message.chat.id)
+        app_globals.public_dir.pop(chat_id, None)
         await message.reply(
             text=t.as_html(),
             parse_mode=ParseMode.HTML,
