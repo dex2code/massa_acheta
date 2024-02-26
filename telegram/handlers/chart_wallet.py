@@ -401,7 +401,6 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
         )
 
         caption_blocks = as_list(
-            "Staking chart:", "",
             f"Cycles collected: {total_cycles}",
             f"Operated blocks: {total_ok_blocks + total_nok_blocks}",
             f"Estimated Blocks / Cycle: {est_blocks_per_cycle}",
@@ -442,7 +441,6 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
         try:
             await message.answer_photo(
                 photo=staking_chart_url,
-                caption=caption_blocks.as_html(),
                 parse_mode=ParseMode.HTML,
                 reply_markup=ReplyKeyboardRemove(),
                 request_timeout=app_config['telegram']['sending_timeout_sec']
@@ -450,7 +448,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
 
             await message.answer_photo(
                 photo=blocks_chart_url,
-                caption="Blocks chart",
+                caption=caption_blocks.as_html(),
                 parse_mode=ParseMode.HTML,
                 reply_markup=ReplyKeyboardRemove(),
                 request_timeout=app_config['telegram']['sending_timeout_sec']
