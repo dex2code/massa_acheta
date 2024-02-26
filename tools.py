@@ -249,11 +249,11 @@ async def add_public_dir(chat_id: int=0, wallet_address: str="") -> bool:
         app_globals.public_dir[chat_id] = wallet_address
     
     except BaseException as E:
-        logger.warning(f"Cannot save wallet '{wallet_address}' for user '{chat_id}' ({str(E)})")
+        logger.warning(f"Cannot save wallet '{wallet_address}' for user '{chat_id}' ({type(chat_id)}) ({str(E)})")
         return False
     
     else:
-        logger.info(f"Successfully saved wallet '{wallet_address}' for user '{chat_id}'")
+        logger.info(f"Successfully saved wallet '{wallet_address}' for user '{chat_id}' ({type(chat_id)})")
         return True
 
 
@@ -263,9 +263,9 @@ async def get_public_dir(chat_id: int=0) -> str:
     public_wallet_address = app_globals.public_dir.get(chat_id, None)
 
     if public_wallet_address:
-        logger.info(f"Found wallet '{public_wallet_address}' for chat_id '{chat_id}' in public_dir")
+        logger.info(f"Found wallet '{public_wallet_address}' for chat_id '{chat_id}' ({type(chat_id)}) in public_dir")
     else:
-        logger.info(f"No wallet for chat_id '{chat_id}' in public_dir")
+        logger.info(f"No wallet for chat_id '{chat_id}' ({type(chat_id)}) in public_dir")
 
     return public_wallet_address
 
