@@ -259,18 +259,24 @@ async def add_public_dir(chat_id: any, wallet_address: str="") -> bool:
         return True
 
 
-async def get_public_dir(chat_id: int=0) -> str:
+async def get_public_dir(chat_id: any) -> str:
     logger.debug("-> Enter Def")
 
-    chat_id = str(chat_id)
-    public_wallet_address = app_globals.public_dir.get(chat_id, None)
+    public_wallet_address = None
+    try:
+        chat_id = str(chat_id)
+        public_wallet_address = app_globals.public_dir.get(chat_id, None)
+
+    except BaseException as E:
+        logger.warning(f"Cannot get public_wallet_addres for chat_id '{chat_id}' ({str(E)})")
 
     if public_wallet_address:
         logger.info(f"Found wallet '{public_wallet_address}' for chat_id '{chat_id}' in public_dir")
+        return str(public_wallet_address)
+
     else:
         logger.info(f"No wallet for chat_id '{chat_id}' in public_dir")
-
-    return public_wallet_address
+        return None
 
 
 
@@ -284,7 +290,7 @@ def save_public_dir() -> bool:
             output_public_dir.flush()
                     
     except BaseException as E:
-        logger.critical(f"Cannot save public_dir into '{public_dir_obj}' file: ({str(E)})")
+        logger.error(f"Cannot save public_dir into '{public_dir_obj}' file: ({str(E)})")
         return False
         
     else:
