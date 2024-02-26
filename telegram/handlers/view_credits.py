@@ -83,7 +83,8 @@ async def get_credits(wallet_address: str="") -> Text:
                         " ⦙… ",
                         Strikethrough(
                             f"{credit_date}: {credit_amount:,} MAS"
-                        )
+                        ),
+                        end=""
                     )
                 )
             else:
@@ -91,7 +92,8 @@ async def get_credits(wallet_address: str="") -> Text:
                     as_line(
                         " ⦙\n",
                         " ⦙… ",
-                        f"{credit_date}: {credit_amount:,} MAS"
+                        f"{credit_date}: {credit_amount:,} MAS",
+                        end=""
                     )
                 )
 
@@ -104,7 +106,7 @@ async def get_credits(wallet_address: str="") -> Text:
                         url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                     )
                 ),
-                *deferred_credits,
+                *deferred_credits, "",
                 as_line(
                     "☝️ Info collected from ",
                     TextLink(
