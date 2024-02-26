@@ -7,7 +7,7 @@ from app_config import app_config
 import app_globals
 
 from telegram.queue import queue_telegram_message
-from tools import get_last_seen, get_short_address, get_rewards_mas, save_public_dir
+from tools import get_last_seen, get_short_address, get_rewards_mas_day, save_public_dir
 
 
 async def heartbeat() -> None:
@@ -19,7 +19,7 @@ async def heartbeat() -> None:
             await asyncio.sleep(delay=(app_config['service']['heartbeat_period_hours'] * 60 * 60))
             logger.info(f"Heartbeat planner shedule time")
 
-            computed_rewards = await get_rewards_mas(rolls_number=100)
+            computed_rewards = await get_rewards_mas_day(rolls_number=100)
 
             heartbeat_list = []
             heartbeat_list.append(

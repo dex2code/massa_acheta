@@ -14,7 +14,7 @@ import app_globals
 
 from telegram.keyboards.kb_nodes import kb_nodes
 from telegram.keyboards.kb_wallets import kb_wallets
-from tools import get_short_address, get_last_seen, check_privacy, get_rewards_mas
+from tools import get_short_address, get_last_seen, check_privacy, get_rewards_mas_day
 
 
 class WalletViewer(StatesGroup):
@@ -219,7 +219,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
         wallet_candidate_rolls = app_globals.app_results[node_name]['wallets'][wallet_address]['candidate_rolls']
         wallet_active_rolls = app_globals.app_results[node_name]['wallets'][wallet_address]['active_rolls']
         wallet_missed_blocks = app_globals.app_results[node_name]['wallets'][wallet_address]['missed_blocks']
-        wallet_computed_rewards = await get_rewards_mas(rolls_number=wallet_active_rolls)
+        wallet_computed_rewards = await get_rewards_mas_day(rolls_number=wallet_active_rolls)
         wallet_thread = app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'].get("thread", 0)
 
         cycles_list = []

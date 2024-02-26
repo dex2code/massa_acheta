@@ -15,7 +15,7 @@ import app_globals
 
 from telegram.keyboards.kb_nodes import kb_nodes
 from telegram.keyboards.kb_wallets import kb_wallets
-from tools import get_short_address, check_privacy, get_rewards_mas, get_rewards_blocks
+from tools import get_short_address, check_privacy, get_rewards_mas_day, get_rewards_blocks_cycle
 
 
 class ChartWalletViewer(StatesGroup):
@@ -272,7 +272,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
             "datasets": [
                 {
                     "type": "line",
-                    "label": "Est. Earnings (MAS / Day)",
+                    "label": "Est. MAS / Day",
                     "yAxisID": "earnings",
                     "lineTension": 0.4,
                     "fill": False,
@@ -283,7 +283,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
                 },
                 {
                     "type": "line",
-                    "label": "Est. blocks",
+                    "label": "Est. Blocks / Cycle",
                     "yAxisID": "blocks",
                     "lineTension": 0.4,
                     "fill": True,
@@ -295,14 +295,14 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
                 },
                 {
                     "type": "bar",
-                    "label": "Operated blocks",
+                    "label": "OK blocks",
                     "yAxisID": "blocks",
                     "backgroundColor": "LightSeaGreen",
                     "data": []
                 },
                 {
                     "type": "bar",
-                    "label": "Missed blocks",
+                    "label": "nOK blocks",
                     "yAxisID": "blocks",
                     "backgroundColor": "LightSalmon",
                     "data": []
@@ -367,8 +367,8 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
             staking_chart_config['data']['datasets'][1]['data'].append(balance)
 
             blocks_chart_config['data']['labels'].append(cycle)
-            blocks_chart_config['data']['datasets'][0]['data'].append(await get_rewards_mas(rolls_number=rolls))
-            blocks_chart_config['data']['datasets'][1]['data'].append(await get_rewards_blocks(rolls_number=rolls))
+            blocks_chart_config['data']['datasets'][0]['data'].append(await get_rewards_mas_day(rolls_number=rolls))
+            blocks_chart_config['data']['datasets'][1]['data'].append(await get_rewards_blocks_cycle(rolls_number=rolls))
             blocks_chart_config['data']['datasets'][2]['data'].append(ok_blocks)
             blocks_chart_config['data']['datasets'][3]['data'].append(nok_blocks)
 
