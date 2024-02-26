@@ -7,6 +7,7 @@ pyvenv.cfg
 app_results.json
 app_stat.json
 public
+public_dir.json
 
 
 # Byte-compiled / optimized / DLL files
