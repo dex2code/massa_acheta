@@ -242,10 +242,12 @@ async def get_rewards(rolls_number: int=0) -> int:
 
 
 
-async def add_public_dir(chat_id: int=0, wallet_address: str="") -> bool:
+async def add_public_dir(chat_id: any, wallet_address: str="") -> bool:
     logger.debug("-> Enter Def")
 
     try:
+        chat_id = str(chat_id)
+        wallet_address = str(wallet_address)
         app_globals.public_dir[chat_id] = wallet_address
     
     except BaseException as E:
@@ -260,6 +262,7 @@ async def add_public_dir(chat_id: int=0, wallet_address: str="") -> bool:
 async def get_public_dir(chat_id: int=0) -> str:
     logger.debug("-> Enter Def")
 
+    chat_id = str(chat_id)
     public_wallet_address = app_globals.public_dir.get(chat_id, None)
 
     if public_wallet_address:
