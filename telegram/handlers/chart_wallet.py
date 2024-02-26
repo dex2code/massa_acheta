@@ -442,7 +442,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
         try:
             await message.answer_photo(
                 photo=staking_chart_url,
-                caption=caption_blocks.as_html()
+                caption=caption_blocks.as_html(),
                 parse_mode=ParseMode.HTML,
                 reply_markup=ReplyKeyboardRemove(),
                 request_timeout=app_config['telegram']['sending_timeout_sec']
