@@ -73,7 +73,7 @@ First of all it can observe MASSA explorer and display wallets info with command
 >
 > `/view_address`
 >
-
+![view_address](https://github.com/dex2code/massa_acheta/blob/main/img/view_address.png?raw=true)
 
 ### 👉 Watch your node
 !!! You can add any number of nodes and wallets you want to your Acheta configuration.
