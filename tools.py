@@ -251,7 +251,7 @@ async def get_rewards_mas_day(rolls_number: int=0, total_rolls: int=0) -> int:
     else:
         threads_num = 0
 
-    if t0_sec:
+    if t0_sec and threads_num:
         blocks_per_day = (SEC_PER_DAY / t0_sec) * threads_num
     else:
         blocks_per_day = 0
@@ -260,10 +260,13 @@ async def get_rewards_mas_day(rolls_number: int=0, total_rolls: int=0) -> int:
         if total_rolls == 0:
             total_rolls = app_globals.massa_network['values']['total_staked_rolls']
 
-        my_contribution = total_rolls / rolls_number
-        my_blocks = blocks_per_day / my_contribution
-        my_reward = my_blocks * app_globals.massa_network['values']['block_reward']
-        my_reward = int(my_reward)
+        if total_rolls == 0 or rolls_number == 0 or blocks_per_day == 0:
+            my_reward = 0
+        else:
+            my_contribution = total_rolls / rolls_number
+            my_blocks = blocks_per_day / my_contribution
+            my_reward = my_blocks * app_globals.massa_network['values']['block_reward']
+            my_reward = int(my_reward)
 
     except BaseException as E:
         logger.error(f"Cannot compute 'rewards_mas_day' ({str(E)})")
@@ -300,6 +303,10 @@ async def get_rewards_blocks_cycle(rolls_number: int=0, total_rolls: int=0) -> f
     try:
         if total_rolls == 0:
             total_rolls = app_globals.massa_network['values']['total_staked_rolls']
+
+        if total_rolls == 0 or rolls_number == 0:
+            my_blocks = 0.0
+
         my_contribution = total_rolls / rolls_number
         my_blocks = round(
             blocks_per_cycle / my_contribution,
