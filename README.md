@@ -135,7 +135,7 @@ To view your current configuration (added nodes and wallets) use command:
 
 To remove added nodes or wallets use:
 >
-> `/delete_node`
+> `/delete_node`\
 > `/delete_wallet`
 >
 
