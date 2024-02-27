@@ -137,12 +137,16 @@ async def cmd_massa_chart(message: Message) -> None:
             chart_config['data']['datasets'][0]['data'].append(stakers)
             chart_config['data']['datasets'][1]['data'].append(rolls)
 
+        if delta_stakers > 0: delta_stakers = f"+{delta_stakers:,}"
+        else: delta_stakers = f"{delta_stakers:,}"
+        
+        if delta_rolls > 0: delta_rolls = f"+{delta_rolls:,}"
+        else: delta_rolls = f"{delta_rolls:,}"
+
         caption_massa = as_list(
             f"Cycles collected: {total_cycles:,}",
-            f"Total stakers: {stakers:,}",
-            f"Total staked rolls: {rolls:,}",
-            f"delta stakers: {delta_stakers:,}",
-            f"delta rolls: {delta_rolls:,}"
+            f"Total stakers: {stakers:,} (d: {delta_stakers})",
+            f"Total staked rolls: {rolls:,} (d: {delta_rolls})"
         )
 
         chart = QuickChart()

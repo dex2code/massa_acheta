@@ -411,11 +411,16 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
 
         delta_balance = delta_rolls * app_globals.massa_network['values']['roll_price'] + delta_balance
         delta_balance = round(delta_balance, 4)
+        if delta_balance > 0: delta_balance = f"+{delta_balance:,}"
+        else: delta_balance = f"{delta_balance:,}"
+
+        if delta_rolls > 0: delta_rolls = f"+{delta_rolls:,}"
+        else: delta_rolls = f"{delta_rolls:,}"
+        
         caption_staking = as_list(
             f"Cycles collected: {total_cycles:,}",
-            f"Current balance: {balance:,} MAS",
-            f"Number of rolls: {rolls:,}",
-            f"delta Balance: {delta_balance:,} MAS (including delta Rolls)"
+            f"Current balance: {balance:,} MAS (d: {delta_balance})",
+            f"Number of rolls: {rolls:,} (d: {delta_rolls})",
         )
 
         caption_blocks = as_list(
