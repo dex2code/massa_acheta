@@ -166,10 +166,19 @@ Total staked rolls: 363,222 (d: +1,551)
 > /chart_wallet
 >
 ![Wallet chart](https://github.com/dex2code/massa_acheta/blob/main/img/wallet_staking_chart.jpg?raw=true)
-
+```
+Cycles collected: 34
+Current balance: 583,777.8462 MAS (d: +7,639.1536)
+Number of rolls: 20,000 (d: 0)
+```
 
 ![Wallet chart](https://github.com/dex2code/massa_acheta/blob/main/img/wallet_blocks_chart.jpg?raw=true)
-
+```
+Cycles collected: 34
+Operated blocks: 6,663
+Estimated Blocks / Cycle: 226.0361
+Fact Blocks / Cycle: 195.9706
+```
 
 ### 👉 Watch deferred credits of any MASSA wallet
 Acheta can check provided MASSA wallet to display all future deferred credits (full list for two years)
