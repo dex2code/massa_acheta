@@ -9,7 +9,7 @@ Just like a little cricket!
 >
 >First of all let's define that this is not a public Telegram Bot, but opensource software that you can install on your own server to get a personal Bot that will be accessible only to you.
 >
-Public bot with limited functionality is also available here: `https://t.me/massa_acheta_bot`
+Public bot with limited functionality is also available here: https://t.me/massa_acheta_bot
 
 
 Before we jump to a detailed description of the service, please watch the video:
@@ -37,7 +37,7 @@ This command will install, configure and start your Bot automatically.
 >
 
 
-You can stop the installation process anywhere by pressing Ctrl+C, but before starting the installation again, run the following command to clear all changes made:
+You can stop the installation process anywhere by pressing `Ctrl+C`, but before starting the installation again, run the following command to clear all changes made:
 ```
 cd ~ && bash <(wget --no-cache -qO- https://raw.githubusercontent.com/dex2code/massa_acheta/main/uninstall.sh)
 ```
@@ -71,7 +71,7 @@ cd ~ && bash <(wget --no-cache -qO- https://raw.githubusercontent.com/dex2code/m
 ### 👉 Explore MASSA blockchain
 First of all it can observe MASSA explorer and display wallets info with command:
 >
-> /view_address
+> `/view_address`
 >
 
 
