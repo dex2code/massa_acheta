@@ -115,13 +115,35 @@ async def cmd_massa_chart(message: Message) -> None:
             )
         )
 
+        total_cycles = len(massa_stat_keycycle_sorted)
+        delta_stakers, delta_rolls = 0, 0
+        last_stakers, last_rolls = 0, 0
+
         for cycle in massa_stat_keycycle_sorted:
+
             stakers = massa_stat_keycycle_sorted[cycle].get("stakers", 0)
+            if last_stakers == 0:
+                last_stakers = stakers
+            delta_stakers += stakers - last_stakers
+            last_stakers = stakers
+
             rolls = massa_stat_keycycle_sorted[cycle].get("rolls", 0)
+            if last_rolls == 0:
+                last_rolls = rolls
+            delta_rolls += rolls - last_rolls
+            last_rolls = rolls
 
             chart_config['data']['labels'].append(cycle)
             chart_config['data']['datasets'][0]['data'].append(stakers)
             chart_config['data']['datasets'][1]['data'].append(rolls)
+
+        caption_massa = as_list(
+            f"Cycles collected: {total_cycles}",
+            f"Total stakers: {stakers}",
+            f"Total staked rolls: {rolls}",
+            f"delta stakers: {delta_stakers}",
+            f"delta rolls: {delta_rolls}"
+        )
 
         chart = QuickChart()
         chart.device_pixel_ratio = 2.0
@@ -149,6 +171,7 @@ async def cmd_massa_chart(message: Message) -> None:
         try:
             await message.reply_photo(
                 photo=chart_url,
+                caption=caption_massa.as_html(),
                 parse_mode=ParseMode.HTML,
                 request_timeout=app_config['telegram']['sending_timeout_sec']
             )
