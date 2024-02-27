@@ -17,6 +17,7 @@ cd ~/massa_acheta
 if [[ $? -eq 0 ]]
 then
     echo "✅ Ready to update"
+    rm ./app_stat.json &> /dev/null
 else
     echo
     echo "‼ Some error occured. Please check your settings."
