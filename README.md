@@ -81,14 +81,14 @@ First of all it can observe MASSA explorer and display wallets info with command
 
 In order to watch your node, you need to add it to the service configuration. To do this use the command:
 >
-> /add_node
+> `/add_node`
 >
 Acheta will ask you for a node nickname (any unique value) and API URL to connect the node using MASSA public API.\
 Use `http://127.0.0.1:33035/api/v2` if you installed Acheta on the same host with MASSA node, otherwise replace `127.0.0.1` with your real MASSA node IP address.
 
-!!! Please make sure if you opened TCP port 33035 on your MASSA node to allow the connection from Acheta! Use `sudo ufw allow 33035/tcp` on Ubuntu hosts.
+!!! Please make sure if you opened port `33035/tcp` on your MASSA node to allow the connection from Acheta! Use `sudo ufw allow 33035/tcp` on Ubuntu hosts.
 
-`33035/TCP` is the public API port so it's safe to open it.\
+`33035/tcp` is the public API port so it's safe to open it.\
 You can read more about MASSA Public API here: https://docs.massa.net/docs/build/api/jsonrpc
 
 
@@ -98,14 +98,14 @@ Every time the status changes, you will receive warning messages about it.
 Moreover, Acheta will notify you if your node becomes out of sync with the MASSA blockchain.
 You also can display actual node info using command:
 >
-> /view_node
+> `/view_node`
 >
 
 
 ### 👉 Watch your staking
 In order to watch your wallet and staking activity, you need to add it to the service configuration. To do this use the command:
 >
-> /add_wallet
+> `/add_wallet`
 >
 Acheta will ask you to select which node this wallet belongs to and will ask you to enter its address.
 
@@ -118,7 +118,7 @@ If the attempt is successful, Acheta will start to watch your wallet and will se
 
 You also can display actual wallet info using command:
 >
-> /view_wallet
+> `/view_wallet`
 > 
 
 
@@ -130,19 +130,18 @@ These messages contains short useful information about your nodes and wallets, i
 ### 👉 Edit configuration
 To view your current configuration (added nodes and wallets) use command:
 >
-> /view_config
+> `/view_config`
 >
 
 To remove added nodes or wallets use:
 >
-> /delete_node
->
-> /delete_wallet
+> `/delete_node`
+> `/delete_wallet`
 >
 
 To reset the whole service configuration use:
 >
-> /reset
+> `/reset`
 >
 
 
