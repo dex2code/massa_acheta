@@ -148,9 +148,8 @@ To reset the whole service configuration use:
 ### 👉 Watch full statistics of your added wallets
 Acheta collects statistics on all your added wallets and can show visual charts:
 >
-> /massa_info
->
-> /massa_chart
+> `/massa_info`\
+> `/massa_chart`
 >
 ![MASSA Chart](https://github.com/dex2code/massa_acheta/blob/main/img/massa_chart.jpg?raw=true)
 ```
@@ -160,9 +159,8 @@ Total staked rolls: 363,222 (d: +1,551)
 ```
 
 >
-> /view_wallet
->
-> /chart_wallet
+> `/view_wallet`\
+> `/chart_wallet`
 >
 ![Wallet chart](https://github.com/dex2code/massa_acheta/blob/main/img/wallet_staking_chart.jpg?raw=true)
 ```
@@ -182,7 +180,7 @@ Fact Blocks / Cycle: 195.9706
 ### 👉 Watch deferred credits of any MASSA wallet
 Acheta can check provided MASSA wallet to display all future deferred credits (full list for two years)
 >
-> /view_credits
+> `/view_credits`
 >
 
 
