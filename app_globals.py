@@ -180,7 +180,7 @@ tg_bot = Bot(
 
 
 ### Acheta releases stuff ###
-local_acheta_release = "ACHETA.1.2.1"
+local_acheta_release = "ACHETA.1.2.2"
 latest_acheta_release = ""
 
 
