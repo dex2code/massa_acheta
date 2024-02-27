@@ -28,11 +28,13 @@ cd ~ && bash <(wget --no-cache -qO- https://raw.githubusercontent.com/dex2code/m
 This command will install, configure and start your Bot automatically.
 
 
+>
 > !! Please check if you have a **Telegram Bot API KEY** and you do know your own **Telegram ID** before start installation
 >
 > How to create a new Telegam Bot and its API KEY: https://www.youtube.com/watch?v=UQrcOj63S2o
 >
 > You can get your own Telegram ID here: https://t.me/massa_acheta_bot (`/view_id` command)
+>
 
 
 You can stop the installation process anywhere by pressing Ctrl+C, but before starting the installation again, run the following command to clear all changes made:
@@ -148,6 +150,7 @@ To reset the whole service configuration use:
 Acheta collects statistics on all your added wallets and can show visual charts:
 >
 > /massa_info
+>
 > /massa_chart
 >
 ![MASSA Chart](https://github.com/dex2code/massa_acheta/blob/main/img/massa_chart.jpg?raw=true)
@@ -155,6 +158,7 @@ Acheta collects statistics on all your added wallets and can show visual charts:
 
 >
 > /view_wallet
+>
 > /chart_wallet
 >
 ![Wallet chart](https://github.com/dex2code/massa_acheta/blob/main/img/wallet_staking_chart.jpg?raw=true)
