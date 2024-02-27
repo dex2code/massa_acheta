@@ -9,7 +9,7 @@ Just like a little cricket!
 >
 >First of all let's define that this is not a public Telegram Bot, but opensource software that you can install on your own server to get a personal Bot that will be accessible only to you.
 >
-Public bot with limited functionality is also available here: https://t.me/massa_acheta_bot
+Public bot with limited functionality is also available here: `https://t.me/massa_acheta_bot`
 
 
 Before we jump to a detailed description of the service, please watch the video:
