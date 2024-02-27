@@ -66,18 +66,10 @@ cd ~ && bash <(wget --no-cache -qO- https://raw.githubusercontent.com/dex2code/m
 
 ## What can Acheta do:
 
-### 👉 View MASSA blockchain
+### 👉 Explore MASSA blockchain
 First of all it can observe MASSA explorer and display wallets info with command:
 >
 > /view_address
->
-
-
-### 👉 Watch new MASSA releases
-Acheta also checks for the latest published version of the MASSA and automatically notifies you if a new version is available.\
-You also can see the latest version with:
->
-> /massa_release
 >
 
 
@@ -101,6 +93,7 @@ You can read more about MASSA Public API here: https://docs.massa.net/docs/build
 Once you have successfully added a node, Acheta will try to connect to it and display its current status.\
 If the node is available, Acheta will start monitoring the node and will notify you if the node's status changes (`Alive -> Dead` or `Dead -> Alive`).\
 Every time the status changes, you will receive warning messages about it.
+Moreover, Acheta will notify you if your node becomes out of sync with the MASSA blockchain.
 You also can display actual node info using command:
 >
 > /view_node
@@ -116,10 +109,10 @@ Acheta will ask you to select which node this wallet belongs to and will ask you
 
 After succesfuly adding a wallet, Acheta will try to obtain information about it from the node and display the status of this attempt.\
 If the attempt is successful, Acheta will start to watch your wallet and will send notifications about the following events:
-- Decrease wallet balance
-- Missed blocks
-- Increase candidate rolls
-- Increase active rolls
+- Decreasing the wallet balance
+- Missing blocks
+- Changing the number of candidate rolls
+- Changing the number of active rolls
 
 You also can display actual wallet info using command:
 >
@@ -128,7 +121,7 @@ You also can display actual wallet info using command:
 
 
 ### 👉 Remind you about its status
-Acheta sends heartbeat messages to your messenger every 4 hours.\
+Acheta sends heartbeat messages to your messenger every 6 hours.\
 These messages contains short useful information about your nodes and wallets, including its status and balance.
 
 
@@ -150,6 +143,13 @@ To reset the whole service configuration use:
 > /reset
 >
 
+
+### 👉 Watch full statistics of your added wallets
+Acheta collects statistics on all your added wallets and can show visual charts.
+>
+> /massa_info
+> /massa_chart
+>
 
 
 ## Notes
