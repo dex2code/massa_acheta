@@ -86,7 +86,8 @@ In order to watch your node, you need to add it to the service configuration. To
 Acheta will ask you for a node nickname (any unique value) and API URL to connect the node using MASSA public API.\
 Use `http://127.0.0.1:33035/api/v2` if you installed Acheta on the same host with MASSA node, otherwise replace `127.0.0.1` with your real MASSA node IP address.
 
-!!! Please make sure if you opened port `33035/tcp` on your MASSA node to allow the connection from Acheta! Use `sudo ufw allow 33035/tcp` on Ubuntu hosts.
+!!! Please make sure if you opened port `33035/tcp` on your MASSA node to allow the connection from Acheta!\
+!!! Use `sudo ufw allow 33035/tcp` on Ubuntu hosts.
 
 `33035/tcp` is the public API port so it's safe to open it.\
 You can read more about MASSA Public API here: https://docs.massa.net/docs/build/api/jsonrpc
