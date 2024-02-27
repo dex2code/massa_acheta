@@ -306,12 +306,12 @@ async def get_rewards_blocks_cycle(rolls_number: int=0, total_rolls: int=0) -> f
 
         if total_rolls == 0 or rolls_number == 0:
             my_blocks = 0.0
-
-        my_contribution = total_rolls / rolls_number
-        my_blocks = round(
-            blocks_per_cycle / my_contribution,
-            4
-        )
+        else:
+            my_contribution = total_rolls / rolls_number
+            my_blocks = round(
+                blocks_per_cycle / my_contribution,
+                4
+            )
     
     except BaseException as E:
         logger.error(f"Cannot compute 'rewards_blocks_cycle' ({str(E)})")
