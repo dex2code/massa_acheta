@@ -361,13 +361,24 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
         )
 
         total_cycles = len(wallet_stat_keycycle_sorted)
-        total_ok_blocks = 0
-        total_nok_blocks = 0
+        total_ok_blocks, total_nok_blocks = 0, 0
         total_rewards_block_cycle = 0
+        delta_balance, delta_rolls = 0, 0
+        last_balance, last_rolls = 0, 0
 
         for cycle in wallet_stat_keycycle_sorted:
             balance = wallet_stat_keycycle_sorted[cycle].get("balance", 0)
+            if last_balance == 0:
+                last_balance = balance
+            delta_balance += balance - last_balance
+            last_balance = balance
+
             rolls = wallet_stat_keycycle_sorted[cycle].get("rolls", 0)
+            if last_rolls == 0:
+                last_rolls = rolls
+            delta_rolls += rolls - last_rolls
+            last_rolls = rolls
+
             total_rolls = wallet_stat_keycycle_sorted[cycle].get("total_rolls", 0)
             ok_blocks = wallet_stat_keycycle_sorted[cycle].get("ok_blocks", 0)
             nok_blocks = wallet_stat_keycycle_sorted[cycle].get("nok_blocks", 0)
@@ -398,6 +409,11 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
         est_blocks_per_cycle = round(
             total_rewards_block_cycle / total_cycles,
             4
+        )
+
+        caption_staking = as_list(
+            f"Cycles collected: {total_cycles}",
+            f"delta Balance: {delta_balance + delta_rolls * app_globals.massa_network['values']['roll_price']} MAS (including delta Rolls)"
         )
 
         caption_blocks = as_list(
@@ -441,6 +457,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
         try:
             await message.answer_photo(
                 photo=staking_chart_url,
+                caption=caption_staking.as_html(),
                 parse_mode=ParseMode.HTML,
                 reply_markup=ReplyKeyboardRemove(),
                 request_timeout=app_config['telegram']['sending_timeout_sec']
