@@ -101,7 +101,7 @@ You also can display actual node info using command:
 >
 > `/view_node`
 >
-![view_address](https://github.com/dex2code/massa_acheta/blob/main/img/view_node.png?raw=true)
+![view_node](https://github.com/dex2code/massa_acheta/blob/main/img/view_node.png?raw=true)
 
 ### 👉 Watch your staking
 In order to watch your wallet and staking activity, you need to add it to the service configuration. To do this use the command:
@@ -121,7 +121,7 @@ You also can display actual wallet info using command:
 >
 > `/view_wallet`
 > 
-![view_address](https://github.com/dex2code/massa_acheta/blob/main/img/view_wallet.png?raw=true)
+![view_wallet](https://github.com/dex2code/massa_acheta/blob/main/img/view_wallet.png?raw=true)
 
 ### 👉 Remind you about its status
 Acheta sends heartbeat messages to your messenger every 6 hours.\
@@ -152,7 +152,7 @@ Acheta collects statistics on all your added wallets and can show visual charts:
 > `/massa_info`\
 > `/massa_chart`
 >
-![MASSA Chart](https://github.com/dex2code/massa_acheta/blob/main/img/massa_chart.jpg?raw=true)
+![massa_chart](https://github.com/dex2code/massa_acheta/blob/main/img/massa_chart.jpg?raw=true)
 ```
 Cycles collected: 34
 Total stakers: 1,934 (d: -6)
@@ -163,14 +163,14 @@ Total staked rolls: 363,222 (d: +1,551)
 > `/view_wallet`\
 > `/chart_wallet`
 >
-![Wallet chart](https://github.com/dex2code/massa_acheta/blob/main/img/wallet_staking_chart.jpg?raw=true)
+![chart_wallet](https://github.com/dex2code/massa_acheta/blob/main/img/wallet_staking_chart.jpg?raw=true)
 ```
 Cycles collected: 34
 Current balance: 583,777.8462 MAS (d: +7,639.1536)
 Number of rolls: 20,000 (d: 0)
 ```
 
-![Wallet chart](https://github.com/dex2code/massa_acheta/blob/main/img/wallet_blocks_chart.jpg?raw=true)
+![chart_wallet](https://github.com/dex2code/massa_acheta/blob/main/img/wallet_blocks_chart.jpg?raw=true)
 ```
 Cycles collected: 34
 Operated blocks: 6,663
@@ -183,7 +183,7 @@ Acheta can check provided MASSA wallet to display all future deferred credits (f
 >
 > `/view_credits`
 >
-
+![view_credits](https://github.com/dex2code/massa_acheta/blob/main/img/view_credits.png?raw=true)
 
 ## Notes
 Although you can install Acheta on the same host where your MASSA node is installed, I recommend using a different remote host for Acheta because in case the MASSA node fails, Acheta will be able to notify you about it.
