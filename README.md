@@ -154,7 +154,11 @@ Acheta collects statistics on all your added wallets and can show visual charts:
 > /massa_chart
 >
 ![MASSA Chart](https://github.com/dex2code/massa_acheta/blob/main/img/massa_chart.jpg?raw=true)
-
+```
+Cycles collected: 34
+Total stakers: 1,934 (d: -6)
+Total staked rolls: 363,222 (d: +1,551)
+```
 
 >
 > /view_wallet
