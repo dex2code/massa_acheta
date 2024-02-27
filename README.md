@@ -186,7 +186,7 @@ Acheta can check provided MASSA wallet to display all future deferred credits (f
 ![view_credits](https://github.com/dex2code/massa_acheta/blob/main/img/view_credits.png?raw=true)
 
 ## Notes
-Although you can install Acheta on the same host where your MASSA node is installed, I recommend using a different remote host for Acheta because in case the MASSA node fails, Acheta will be able to notify you about it.
+Although you can install Acheta on the same host where your MASSA node is installed, I recommend using a different remote host for Acheta because in case the whole MASSA host fails, Acheta will be able to notify you about it.
 
 
 
