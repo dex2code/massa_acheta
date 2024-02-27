@@ -101,7 +101,7 @@ You also can display actual node info using command:
 >
 > `/view_node`
 >
-
+![view_address](https://github.com/dex2code/massa_acheta/blob/main/img/view_node.png?raw=true)
 
 ### 👉 Watch your staking
 In order to watch your wallet and staking activity, you need to add it to the service configuration. To do this use the command:
@@ -121,7 +121,7 @@ You also can display actual wallet info using command:
 >
 > `/view_wallet`
 > 
-
+![view_address](https://github.com/dex2code/massa_acheta/blob/main/img/view_wallet.png?raw=true)
 
 ### 👉 Remind you about its status
 Acheta sends heartbeat messages to your messenger every 6 hours.\
