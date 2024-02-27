@@ -361,7 +361,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
         )
 
         total_cycles = len(wallet_stat_keycycle_sorted)
-        total_ok_blocks, total_nok_blocks = 0, 0
+        total_blocks = 0
         total_rewards_block_cycle = 0
         delta_balance, delta_rolls = 0, 0
         last_balance, last_rolls = 0, 0
@@ -382,9 +382,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
             total_rolls = wallet_stat_keycycle_sorted[cycle].get("total_rolls", 0)
             ok_blocks = wallet_stat_keycycle_sorted[cycle].get("ok_blocks", 0)
             nok_blocks = wallet_stat_keycycle_sorted[cycle].get("nok_blocks", 0)
-
-            total_ok_blocks += ok_blocks
-            total_nok_blocks += nok_blocks
+            total_blocks += (ok_blocks + nok_blocks)
 
             staking_chart_config['data']['labels'].append(cycle)
             staking_chart_config['data']['datasets'][0]['data'].append(rolls)
@@ -402,7 +400,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
             total_rewards_block_cycle += rewards_blocks_cycle
         
         fact_blocks_per_cycle = round(
-            (total_ok_blocks + total_nok_blocks) / total_cycles,
+            (total_blocks) / total_cycles,
             4
         )
 
@@ -411,19 +409,20 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
             4
         )
 
+        delta_balance = delta_rolls * app_globals.massa_network['values']['roll_price'] + delta_balance
         delta_balance = round(delta_balance, 4)
         caption_staking = as_list(
-            f"Cycles collected: {total_cycles}",
-            f"Current balance: {balance} MAS",
-            f"Number of rolls: {rolls}"
-            f"delta Balance: {delta_balance + delta_rolls * app_globals.massa_network['values']['roll_price']} MAS (including delta Rolls)"
+            f"Cycles collected: {total_cycles:,}",
+            f"Current balance: {balance:,} MAS",
+            f"Number of rolls: {rolls:,}"
+            f"delta Balance: {delta_balance:,} MAS (including delta Rolls)"
         )
 
         caption_blocks = as_list(
-            f"Cycles collected: {total_cycles}",
-            f"Operated blocks: {total_ok_blocks + total_nok_blocks}",
-            f"Estimated Blocks / Cycle: {est_blocks_per_cycle}",
-            f"Fact Blocks / Cycle: {fact_blocks_per_cycle}"
+            f"Cycles collected: {total_cycles:,}",
+            f"Operated blocks: {total_blocks:,}",
+            f"Estimated Blocks / Cycle: {est_blocks_per_cycle:,}",
+            f"Fact Blocks / Cycle: {fact_blocks_per_cycle:,}"
         )
 
         staking_chart = QuickChart()
