@@ -414,7 +414,7 @@ async def show_wallet(message: Message, state: FSMContext) -> None:
         caption_staking = as_list(
             f"Cycles collected: {total_cycles:,}",
             f"Current balance: {balance:,} MAS",
-            f"Number of rolls: {rolls:,}"
+            f"Number of rolls: {rolls:,}",
             f"delta Balance: {delta_balance:,} MAS (including delta Rolls)"
         )
 
