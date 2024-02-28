@@ -193,7 +193,7 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
                             url=f"{app_config['service']['mainnet_explorer_url']}/address/{wallet_address}"
                         )
                     ),
-                    f"👁 Blocks missed in last cycle: {wallet_last_cycle_missed_blocks}"
+                    f"👁 Blocks missed in last cycles: {wallet_missed_blocks}"
                 )
                 await queue_telegram_message(message_text=t.as_html())
 
