@@ -60,31 +60,23 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
         wallet_candidate_rolls = wallet_result.get("candidate_roll_count", 0)
         wallet_candidate_rolls = int(wallet_candidate_rolls)
 
-        wallet_active_rolls = 0
-        if type(wallet_result['cycle_infos'][-1].get("active_rolls", 0)) == int:
-            wallet_active_rolls = wallet_result['cycle_infos'][-1].get("active_rolls", 0)
+        wallet_cycle_infos = wallet_result.get("cycle_infos", None)
+        if not wallet_cycle_infos or type(wallet_cycle_infos) != list or len(wallet_cycle_infos) == 0:
+            raise Exception(f"Bad cycle_infos for wallet '{wallet_address}'")
 
-        wallet_last_cycle = 0
-        if type(wallet_result['cycle_infos'][-1].get("cycle", 0)) == int:
-            wallet_last_cycle = wallet_result['cycle_infos'][-1].get("cycle", 0)
+        wallet_active_rolls = 0
+        if type(wallet_cycle_infos[-1].get("active_rolls", 0)) == int:
+            wallet_active_rolls = wallet_cycle_infos[-1].get("active_rolls", 0)
 
         wallet_operated_blocks = 0
-        for cycle_info in wallet_result.get("cycle_infos", []):
+        for cycle_info in wallet_cycle_infos:
             if type(cycle_info.get("ok_count", 0)) == int:
                 wallet_operated_blocks += cycle_info.get("ok_count", 0)
 
-        wallet_last_cycle_operated_blocks = 0
-        if type(wallet_result['cycle_infos'][-1].get("ok_count", 0)) == int:
-            wallet_last_cycle_operated_blocks = wallet_result['cycle_infos'][-1].get("ok_count", 0)
-
         wallet_missed_blocks = 0
-        for cycle_info in wallet_result.get("cycle_infos", []):
+        for cycle_info in wallet_cycle_infos:
             if type(cycle_info.get("nok_count", 0)) == int:
                 wallet_missed_blocks += cycle_info.get("nok_count", 0)
-
-        wallet_last_cycle_missed_blocks = 0
-        if type(wallet_result['cycle_infos'][-1].get("nok_count", 0)) == int:
-            wallet_last_cycle_missed_blocks = wallet_result['cycle_infos'][-1].get("nok_count", 0)
 
     except BaseException as E:
         logger.warning(f"Error watching wallet '{wallet_address}' on '{node_name}': ({str(E)})")
@@ -132,7 +124,6 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
             await queue_telegram_message(message_text=t.as_html())
 
         else:
-
             # 1) Check if balance is decreased:
             if wallet_final_balance < app_globals.app_results[node_name]['wallets'][wallet_address]['final_balance']:
                 t = as_list(
@@ -209,6 +200,24 @@ async def check_wallet(node_name: str="", wallet_address: str="") -> None:
             app_globals.app_results[node_name]['wallets'][wallet_address]['missed_blocks'] = wallet_missed_blocks
 
             app_globals.app_results[node_name]['wallets'][wallet_address]['last_result'] = wallet_result
+
+            final_cycle = wallet_cycle_infos[-2]
+
+            wallet_last_cycle = 0
+            if type(final_cycle.get("cycle", 0)) == int:
+                wallet_last_cycle = final_cycle.get("cycle", 0)
+
+            wallet_active_rolls = 0
+            if type(final_cycle.get("active_rolls", 0)) == int:
+                wallet_active_rolls = final_cycle.get("active_rolls", 0)
+
+            wallet_last_cycle_operated_blocks = 0
+            if type(final_cycle.get("ok_count", 0)) == int:
+                wallet_last_cycle_operated_blocks = final_cycle.get("ok_count", 0)
+
+            wallet_last_cycle_missed_blocks = 0
+            if type(final_cycle.get("nok_count", 0)) == int:
+                wallet_last_cycle_missed_blocks = final_cycle.get("nok_count", 0)
 
             app_globals.app_results[node_name]['wallets'][wallet_address]['stat'].append(
                 {
