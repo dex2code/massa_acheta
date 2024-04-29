@@ -193,5 +193,5 @@ Although you can install Acheta on the same host where your MASSA node is instal
 ## Thank you!
 If You want to thank the author:
 ```
-AU1242WU5NazPti7e64jdVjrCS5r3o9znxQJMEUJjv4xG2G75dvwn
+AU1qLrbaC4vWNRLvTaRFY9SBRe7oDcrVqXrjiJmuMFy4eBknBgMV
 ```
