@@ -33,7 +33,7 @@ This command will install, configure and start your Bot automatically.
 >
 > How to create a new Telegam Bot and its API KEY: https://www.youtube.com/watch?v=UQrcOj63S2o
 >
-> You can get your own Telegram ID here: https://t.me/massa_acheta_bot (`/view_id` command)
+> You can get your own Telegram ID here: https://t.me/getmyid_bot
 >
 
 
